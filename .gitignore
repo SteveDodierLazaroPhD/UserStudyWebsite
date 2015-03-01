@@ -1,0 +1,8 @@
+app/config/parameters.yml
+app/cache/dev/*
+app/cache/prod/*
+app/logs/*
+app/store/*/*
+app/*.cache
+src/archive
+src/UCL/StudyBundle/Resources/public/images/background-image*.jpg

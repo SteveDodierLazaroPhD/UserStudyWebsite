@@ -1,0 +1,13 @@
+services:
+#    ucl_study.example:
+#        class: UCL\StudyBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    ucl_study:
+        class: UCL\StudyBundle\UCLStudyBundle
+        arguments: ["%ucl_study.site%"]
+        arguments: ["%ucl_study.globals%"]
+        
+    ucl_study.twig_extension:
+        class: UCL\StudyBundle\Twig\UCLStudyExtension
+        tags:
+            - { name: twig.extension }

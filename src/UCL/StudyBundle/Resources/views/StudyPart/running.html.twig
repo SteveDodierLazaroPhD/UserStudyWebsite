@@ -1,0 +1,16 @@
+{% set layout = "article" %}
+{% extends 'UCLStudyBundle::base.html.twig' %}
+
+{% block article_details %}
+{% endblock %}
+
+{% block article_body %}
+<p>You have completed {{ user.getCompletedTasks(_part) }} days of data collection out of {{ user.getNeededTasks(_part) }}. When you upload the collected data, you will earn {{ currency }}{{ user.getEarnedPayment(_part) }}.</p>
+
+<p class="bs-callout bs-callout-info small">If you don't upload your collected data, you will still receive {{ currency }}{{ user.getMinPayment(_part) }} as a compensation for your time.</p>
+
+{% endblock %}
+
+{% block article_appendix %}
+{% endblock %}
+

@@ -1,0 +1,97 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+framework:
+    #esi:             ~
+    #translator:      { fallback: "%locale%" }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    trusted_proxies: ~
+    session:
+        # handler_id set to null will use default session handler from php.ini
+        handler_id:  ~
+    fragments:       ~
+    http_method_override: true
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+    globals:
+        site:
+            title: 'UCL CS Study Server'
+            author: 'Steve Dodier-Lazaro'
+            subtitle: 'A Resource for CS Reseachers'
+
+# Assetic Configuration
+assetic:
+    debug:          "%kernel.debug%"
+    use_controller: false
+    bundles:        [ ]
+    filters:
+        cssrewrite: ~
+        less:
+            node: /usr/bin/node
+            node_paths: [/usr/lib/node_modules]
+            apply_to: "\.less$"
+
+braincrafted_bootstrap:
+    assets_dir: %kernel.root_dir%/../vendor/twbs/bootstrap
+    fonts_dir: %kernel.root_dir%/../web/fonts
+    less_filter: less
+    fontawesome_dir: %kernel.root_dir%/../vendor/bmatzner/fontawesome-bundle/Bmatzner/FontAwesomeBundle/Resources/public/
+    auto_configure:
+        assetic: true
+        twig: true
+        knp_menu: true
+        knp_paginator: true
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   "%database_driver%"
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #     path:     "%database_path%"
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        auto_mapping: true
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mail_transport%"
+    host:      "%mail_host%"
+    username:  "%mail_username%"
+    password:  "%mail_password%"
+    spool:     { type: memory }
+
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        screening:
+            uri_prefix:         /store/screening # note that this would work only if a symlink was created from app/store to web/store
+            upload_destination: "%upload_destination_screening%"
+            inject_on_load:     false  # impossible since the file storage area is write-only
+            delete_on_update:   false # doesn't make sense, not allowed
+            delete_on_remove:   true # should be true to let participants delete their screening data themselves 

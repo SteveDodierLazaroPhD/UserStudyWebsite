@@ -1,0 +1,33 @@
+{% extends 'UCLStudyBundle::base.html.twig' %}
+
+{% block body %}
+<p class="lead">Are you a Debian/Ubuntu Linux user? Do you use your Linux computer on a daily basis? Earn up to {{ globals.maxgain }} by letting me collect data on how you use your computer!</p>
+
+<p>Hi! My name is Steve Dodier-Lazaro and I'm a PhD student at <a href="http://www.cs.ucl.ac.uk/">UCL Computer Science</a> and a FOSS developer. I'm looking for people like you for a scientific study on Linux users' multitasking habits. I want to understand how people perform multiple activities at the same time, and how they reuse files and applications for different activities or tasks.</p>
+
+<hr />
+<p><strong>As a participant, all you have to do is install our study app on your device</strong>, which will collect data about which apps you use and the resources they access, for 3 weeks<sup>1</sup>. The data is collected on your computer so you can amend it and delete any part of it before you send it to UCL. You can also suspend collection if you want to keep something private during the study. You will then be invited to a one hour interview, either at our UCL offices or via Skype or Google Hangout, as you prefer. You can earn up to £30 for the data collection (£1.5 per day when the collection app was active) and £20 for the interview.<p>
+
+<p><strong>You can then join a second part in which I will provide you with a software tool to help you manage your multitasking</strong>. I will observe when and how you use the software, and you can influence its design by asking for features and reporting problems. After 5 weeks, you will be invited for a final debriefing. You can earn up to £40 for the software tool use (£1.5 per day when the data collection app was active, regardless of how often you use the software tool) and £10 for the interview.</p>
+
+<h3>Who can join?</h3>
+<p>To participate, you must be at least 18 year old, be a EU resident, and use Debian/Ubuntu, GNOME/Xfce/Unity as a desktop environment, and Chrome/Firefox as a Web browser. I will need a valid email address and some information about you, which is used to ensure participants from multiple backgrounds, genders and levels of Linux proficiency are represented in the study.
+I will ask for your age range, gender, Linux proficiency and occupation. This information will be kept encrypted on our servers at UCL and will only be readable by academic staff in our research group. It will deleted along with the collected data within 30 months for selected participants<sup>2</sup>, and within 3 weeks for ineligible participants.</p>
+
+<h3>How I protect your data</h3>
+<p>All the data collected on your computer is stored on your computer until you decide to send it. The collection app is based on <a href="http://zeitgeist-project.com/">GNOME Zeitgeist</a> which is commonly installed on Ubuntu systems. The data is sent to our servers via an encrypted connection. It will always be kept on those servers and is only available to me and my colleagues. If some of our colleagues collaborate with us to analyse non-anonymised data, they will be bound to respect the same confidentiality engagements as me, and your data will never be transported outside of UCL.</p>
+
+<p>Click the link below to register for the study. If you are selected, you will receive an email with a complete breakdown of what will happen. You can then decide if you want to start the study. If you are not selected, I will let you know within 3 weeks of you registering, and I will permanently delete the details you provided me with. You can register again at a later date if the study is advertised again.</p>
+
+<hr />
+<aside><sup>1</sup> At least 5 hours per week of data should be collected for the data to be usable. You earn money for each data where the collection software is active and collects data. If you believe you will not use the computer during the study, it is best not to participate as I will probably not be able to use your data and you will earn a small fraction of the reward. If you will use it only occasionally and would like to reach the full £30 reward, you can contact me and run the app for one or two more weeks, based on my availabilities for debriefing interviews.</aside>
+
+<aside><sup>2</sup> I must retain access study data until my graduation to allow for corrections in my thesis as they will be suggested by my examiners. This data will however only be used for the stated purposes, which are explained be explained to you in full details at the end of the study or at the moment you decide to withdraw from the study. If you disagree with the ways in which the data will be used, you can tell me at any time to have all your data permanently deleted.</aside>
+
+{% include ('UCLStudyBundle::dpa.html.twig') with {'prescreening': true} %}
+
+<a href="{{ url('ucl_study_infopre') }}" title="Learn more about the research protocol" class="btn btn-lg btn-default">More Details</a>
+<a href="{{ url('ucl_study_contact') }}" title="Contact the researchers behind this project" class="btn btn-lg btn-default">Contact Me</a>
+<a href="{{ url('ucl_study_screening_join') }}" title="Register to join the pre-screening participant pool" class="btn btn-lg btn-primary">Join the Study</a>
+
+{% endblock %}

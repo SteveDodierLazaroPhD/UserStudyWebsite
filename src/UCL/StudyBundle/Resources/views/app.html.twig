@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en-GB" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% if page.title is defined %}{{ page.title }} - {% endif %}{{ site.title }}</title>
+	  <meta name="author" content="{{ site.author }}">
+	  <meta name="HandheldFriendly" content="True">
+	  <meta name="MobileOptimized" content="640">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% block stylesheets %}
+    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen" />
+    <link rel="stylesheet" href="{{ asset('bundles/uclstudy/css/layout.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/uclstudy/css/app-layout.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/bmatznerfontawesome/css/font-awesome.min.css') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('bundles/uclstudy/images/favicon.ico') }}" />
+{% endblock %}
+
+  </head>
+
+{% if using_form is defined and using_form == "form" %}
+{% form_theme form _self 'UCLStudyBundle:Form:form.html.twig' %}
+{% endif %}
+
+  <body class="load">
+		<div class="photograph-wrapper">
+	    <main role="main">
+
+{% block flashbags %}
+        {% set flashIcons = {'success': 'fa-check-circle','error': 'fa-times-circle','notice': 'fa-info','warning': 'fa-warning'} %}
+        {% for label, flashes in app.session.flashbag.all %}
+          {% for flashMessage in flashes %}
+            <div class="flashbag {{ label }} alert alert-dismissable fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <span class="fa {{flashIcons[label] }} fa-2x fa-border"></span><span class="flashbag-content"> {{ flashMessage }}</span>
+            </div>
+              {% endfor %}
+        {% endfor %}
+{% endblock %}
+    	  
+{% if layout is defined and layout == "article" %}
+	      <article id="content">
+{% block article_preamble %}
+  <header>
+{% block article_header %}
+{% block article_title %}
+  {% if page.title is defined %}<h1>{{ page.title }}</h1>{% endif %}
+{% endblock %}
+{% block article_subtitle %}
+  {% if page.subtitle is defined %}<h2>{{ page.subtitle }}</h2>{% endif %}
+{% endblock %}
+  <details>
+{% block article_details %}
+{% endblock %}
+  </details>
+{% endblock %}
+  </header>
+{% endblock %}
+{% block article_body %}
+{% endblock %}
+
+{% block article_appendix %}
+{% endblock %}
+        </article>
+{% else %}
+	      <div id="content">
+	        {% if page.title is defined %}<h1>{{ page.title }}</h1>{% endif %}
+	        {% if page.subtitle is defined %}<h2>{{ page.subtitle }}</h2>{% endif %}
+        {% block body %}
+        {% endblock %}
+        </div>
+{% endif %}
+      </main>
+	  </div>
+
+{% block javascripts %}
+    <script type="text/javascript">
+    window.addEventListener('load',function load() {
+    window.removeEventListener('load', load, false);
+    document.body.classList.remove('load');
+    },false);
+    </script>
+    
+    <script src="{{ asset('js/jquery.js') }}"></script>
+    <script src="{{ asset('js/bootstrap_transition_1.js') }}"></script>
+    <script src="{{ asset('js/bootstrap_alert_2.js') }}"></script>
+{% if using_form is defined and using_form == "form" %}
+    <script src="{{ asset('js/bootstrap_button_3.js') }}"></script>
+    <script src="{{ asset('bundles/uclstudy/js/fix-bootstrap-button-input.js') }}"></script>
+{% endif %}
+{% endblock %}
+
+  </body>
+</html>
+

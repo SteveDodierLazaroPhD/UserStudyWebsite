@@ -1,0 +1,95 @@
+<nav>
+{# Authenticated user, which is either a participant or a participant's application #}
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+  {% if is_app is defined %} {# TODO could detect if _route is ucl_study_app_* too #}
+    {% set menu_space = 'application_space' %}
+  {% else %}
+    {% set menu_space = 'participant_space' %}
+  {% endif %}
+
+  {# Get the menu for the current part, since authenticated spaces have parts #}
+  {# We should normally use _part instead of user.getCurrentPart but we currently don't support showing multiple parts #}
+  {% set current_part_menu = 'part_#' | replace('#', user.getCurrentPart) %}
+  {% set current_part_steps = site[menu_space][current_part_menu].enabled_steps %}
+  {% set completed_steps_str %}{% for step in current_part_steps %}{% if step == user.getCurrentStep %}{% set seen_current = true %}{% endif %}{% if seen_current is not defined %}{{ step }},{% endif %}{% endfor %}{% endset %}
+  {% set completed_steps = completed_steps_str | split(',') %}
+
+{# Anonymous users get the anonymous space, with links to login, contact us, etc. #}
+{% else %}
+  {% set menu_space = 'anonymous_space' %}
+{% endif %}
+
+{# Get the menu items for pages we should always see -- this must exist in every space (but can contain no items) #}
+{% set always_visible_menu = 'always_visible' %}
+
+{# Get the current user step, which will determine what pages to display #}
+{% if user is defined and user is not null %}
+  {% set current_step = user.getCurrentStep %}
+{% else %}
+  {% set current_step = '' %}
+{% endif %}
+
+{# Get the current route's exact name, albeit we use a different strategy for "current" page calculation #}
+{#{% set current_route_name = ''~ _route | split(site.route_prefix) | last ~'' %}#}
+
+{# Get the pages to show in the current_part_menu and always_visible_menu, based on the current route #}
+{% if site[menu_space][always_visible_menu].navigation[current_step].visible_steps is defined %}
+  {% set always_visible_steps_for_route = site[menu_space][always_visible_menu].navigation[current_step].visible_steps %}
+{% else %}
+  {% set always_visible_steps_for_route = site[menu_space][always_visible_menu].default_visible %}
+{% endif %}
+
+{# Get the part-relevant menu items, for authenticated users only #}
+{% if current_part_menu is defined %}
+  {% if site[menu_space][current_part_menu].navigation[current_step].visible_steps is defined %}
+    {% set current_part_steps_for_route = site[menu_space][current_part_menu].navigation[current_step].visible_steps %}
+  {% else %}
+    {% set current_part_steps_for_route = site[menu_space][current_part_menu].default_visible %}
+  {% endif %}
+
+  {% if current_part_steps_for_route is not empty %}
+    {% if site[menu_space][current_part_menu].name is defined %}
+    <h1>{{ site[menu_space][current_part_menu].name }}</h1>
+    {% endif %}
+    <ul>
+    
+      {% for page_name in current_part_steps_for_route %}
+      {% set item = site[menu_space][current_part_menu].navigation[page_name] %}
+        {% if page_name in current_part_steps and page_name in completed_steps %}
+          {% set before_current_user_step = true %}
+        {% else %}
+          {% set before_current_user_step = false %}
+        {% endif %}
+        {% if item.href is defined %} {# undefined for when we just want the visible pages for the current route #}
+        <li {% if (_route | split(item.href) | first == '') %} id="current-page"{% endif %}>{% if before_current_user_step %}<s>{% endif %}
+          <a href="{% if item.href_params is defined %}{{ url(item.href, item.href_params) }}{% else %}{{ url(item.href) }}{% endif %}">{{ item.caption }}</a>
+          {#{% if item.tooltip is defined %}<span class="navtooltip">{{ item.tooltip }}</span>{% endif %}#}
+        {% if before_current_user_step %}</s>{% endif %}</li>
+        {% endif %}
+      {% endfor %}
+    
+    </ul>
+  {% endif %}
+{% endif %}
+
+{% if always_visible_steps_for_route is not empty %}
+  {% if (_route == "ucl_study_advert") %}
+  <h1><span class="fa fa-reply fa-rotate-270"></span> Click here to start!</h1>
+  {% elseif site[menu_space][always_visible_menu].name is defined %}
+  <h1>{{ site[menu_space][always_visible_menu].name }}</h1>
+  {% endif %}
+  <ul>
+  
+  {% for page_name in always_visible_steps_for_route %}
+  {% set item = site[menu_space][always_visible_menu].navigation[page_name] %}
+    {% if item.href is defined %} {# undefined for when we just want the visible pages for the current route #}
+    <li {% if (_route | split(item.href) | first == '') %} id="current-page"{% endif %}>
+      <a href="{% if item.href_params is defined %}{{ url(item.href, item.href_params) }}{% else %}{{ url(item.href) }}{% endif %}">{{ item.caption }}</a>
+      {#{% if item.tooltip is defined %}<span class="navtooltip">{{ item.tooltip }}</span>{% endif %}#}
+    </li>
+    {% endif %}
+  {% endfor %}
+  
+  </ul>
+{% endif %}
+</nav>

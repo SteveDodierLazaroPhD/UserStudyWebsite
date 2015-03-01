@@ -1,0 +1,85 @@
+{% set using_form = "form" %}
+{% extends 'UCLStudyBundle::base.html.twig' %}
+
+{% block body %}
+    <p class="lead">If you have a question about the study, don't hesitate!</p>
+    <p>You can also use this form for press enquiries, for technical support about the website, and data protection queries for current participants. If you write about your participant data, please provide your Participant ID to help me find you.</p>
+    <hr />
+    <h3>Contact Form</h3>
+    {#<form name="form" method="post" action="" onsubmit="return validation();">#}
+    {{ form_start(form) }}
+    <fieldset>
+
+    <div class="form-row">
+      {% if err_pseudonym is defined %}
+        <div class="form-group has-error">{{ form_row(form.pseudonym) }}<aside class="alert alert-warning">{{ err_pseudonym }}</aside></div>
+      {% else %}
+        {{ form_row(form.pseudonym) }}
+      {% endif %}
+    </div>
+    <div class="form-row">
+      {% if err_email is defined %}
+        <div class="form-group has-error">{{ form_row(form.email) }}<aside class="alert alert-warning">{{ err_email }}</aside></div>
+      {% else %}
+        {{ form_row(form.email) }}
+      {% endif %}
+    </div>
+
+    <div class="form-row">
+      {% if err_message is defined %}
+        <div class="form-group has-error">{{ form_row(form.message) }}<aside class="alert alert-warning">{{ err_message }}</aside></div>
+      {% else %}
+        {{ form_row(form.message) }}
+      {% endif %}
+    </div>
+
+    <div class="form-row">
+      {% if err_spamcheck is defined %}
+        <div class="form-group has-error">{{ form_row(form.spamcheck) }}<aside class="alert alert-warning">{{ err_spamcheck }}</aside></div>
+      {% else %}
+        {{ form_row(form.spamcheck) }}
+      {% endif %}
+    </div>
+    {#<div class="actions">
+      <input type="submit" value="Send Your Message" name="submit" id="submitButton" class="btn btn-info pull    -right" title="Click here to submit your message!" />
+    </div>	#}
+      {{ form_row(form.write, {}) }}
+    </fieldset>
+    {{ form_end(form) }}
+		
+    <hr />
+    <h3>Office Contact Details</h3>
+    
+    <div class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Name&nbsp;&nbsp;<span class="fa fa-user fa-fw"></span></label><!--
+      --><div class="col-sm-10 form-control-static">{{ site.author }}</div>
+    </div>
+    {% if site.author_phone is defined %}
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Phone&nbsp;&nbsp;<span class="fa fa-phone fa-fw"></span></label><!--
+      --><div class="col-sm-10 form-control-static">{{ site.author_phone }}</div>
+    </div>
+    {% endif %}
+  
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Address&nbsp;&nbsp;<span class="fa fa-university fa-fw"></span></label><!--
+      --><div class="col-sm-10 form-control-static">
+          {% if site.author_office is defined %}{{ site.author_office }}<br />{% endif %}
+          {% if site.author_address_1 is defined %}{{ site.author_address_1 }}<br />{% endif %}
+          {% if site.author_address_2 is defined %}{{ site.author_address_2 }}<br />{% endif %}
+          {% if site.author_address_3 is defined %}{{ site.author_address_3 }}{% endif %}
+      </div>
+    </div>
+    </div>
+    
+    <hr />
+    <h4>Looking for the UCL Research Ethics Committee?</h4>
+    <div class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-2 control-label"></label><!--
+      --><div class="col-sm-10 form-control-static"><a href="http://ethics.grad.ucl.ac.uk/contact.php" title="UCL REC Website" class="btn btn-default">Visit the UCL REC Website</a></div>
+    </div>
+    </div>
+
+{% endblock %}

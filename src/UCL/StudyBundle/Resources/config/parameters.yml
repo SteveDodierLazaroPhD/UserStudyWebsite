@@ -1,0 +1,220 @@
+# This file is auto-generated during the composer install
+parameters:
+    # Parameters accessed in Twig templates have a different naming scheme, so we must duplicate them
+    ucl_study.maxgain: '£100'
+    ucl_study.screening_max_wait: '3 weeks'
+    ucl_study.part_count: 2
+    
+    # Globals and Site must be imported inside the controller
+    # Global variables for the study
+    ucl_study.globals:
+      study_id:   'multitasking' # use the same as the root folder name
+      REC_number: '6079/001'
+      start_date: 2015
+      end_date: 2015
+      part_count: 2
+      parts:
+        p1:
+          name: 'Activity Data Collection'
+        p2:
+          name: 'Sandbox Appropriation & Co-Design'
+      spam_question: "Anti-spam: Where is UCL located?"
+      spam_correct_answer: London
+      spam_answer_bag: [Paris, London, Beijing, Mexico, Seoul]
+      maxgain: '£100'
+      screening_max_wait: '3 weeks'
+      participant_dpa_disclaimer: 'Any personal information you give to me will be processed in accordance with the UK Data Protection Act 1998. It will be used solely for the purposes of the study, and no information shall be published that can personally identify you. Your data will be stored within UCL at all times and deleted within three years of being collected. You can, at any time during the study, contact me to amend or delete the data I collected on you, or to opt out entirely from the study.'
+      prescreening_dpa_disclaimer: 'Any personal information you give to me will be processed in accordance with the UK Data Protection Act 1998. It will be used solely for the purposes of the study, and no information shall be published that can personally identify you. Your data will be stored within UCL at all times and deleted within three years of being collected. If you are not selected for the study, I will delete the information and email address you provided me within %ucl_study.screening_max_wait%.'
+    
+    
+    
+    
+    # Site-related variables
+    ucl_study.site:
+      title: "Linux Multitasking Field Study"
+      subtitle: "Participant Website"
+      author: "Steve Dodier-Lazaro"
+      author_email: "sidnioulz+study@gmail.com"
+      author_phone: "+44 (0)20 7679 3644"
+      author_office: "UCL MPEB 6.07"
+      author_address_1: "25 Gower Street, WC1E 6BT London, UK"
+      author_address_2: ""
+      author_address_3: ""
+      illustration:
+        asset_name: background-image-12.jpg #you must also update this in the CSS
+        url: http://www.ucl.ac.uk
+        author: UCL
+      
+      # Apply this prefix EVERYWHERE in all your routes, and remove it to obtain step/page names below (that's just to make the code base less verbose)
+      route_prefix: ucl_study_
+
+      # This space is used when people are not logged in. It offers prospective participants information about the study and enrollment process
+      anonymous_space:
+        # Generic links that are always shown (in contrast with 'part' links in some spaces)
+        always_visible:
+          # The name of the part, in case you are displaying multiple parts
+          #name: Name here
+          # The enabled_steps list represents the pages that are used when this part is active. Users will not be authorised to view pages outside this list
+          # Page names should exactly map the name of the corresponding route (e.g. ucl_study_contact is named contact). It is only used for part_# parts,
+          # but not for the always_visible special part. Enabled_steps define the natural order of processing steps (no support for parallel steps yet).
+          #enabled_steps: []
+          # Pages that are not study steps but informational. Are always accessible, but may be hidden from a specific menu (e.g. you might want to display
+          # nothing when on the consent form step)
+          additional_pages: [screening_join, login, infopre, contact]
+          # Default visible steps for when the visible_steps key has not been defined
+          default_visible: [screening_join,login,infopre,contact]
+          # The navigation key contains direct menu items pointing to pages. Other things can be contained (such as a part name, or a list of enabled pages for this part)
+          navigation:
+            screening_join:
+              href: "ucl_study_screening_join"
+              caption: "Join the Study"
+              tooltip: "Earn up %ucl_study.maxgain% by letting us collect data about what you do on your computer!"
+            login:
+              href: "ucl_study_login"
+              caption: "Participant Log In"
+              tooltip: "Manage your data, access the manuals, etc."
+            infopre:
+              href: "ucl_study_infopre"
+              caption: "Information Sheet"
+              tooltip: "Learn about the purpose of the study"
+            contact:
+              href: "ucl_study_contact"
+              caption: "Contact"
+              tooltip: "Get in touch with the researchers"
+
+      # Participants links
+      participant_space:
+        part_0:
+          name: "Enrollment"
+          enabled_steps: [waiting_enrollment]
+          additional_pages: []
+          default_visible: [waiting_enrollment]
+          navigation:
+            waiting_enrollment:
+              href: "ucl_study_part_waiting_enrollment"
+              caption: "What Happens Next?"
+              tooltip: "You must wait until you are enrolled into the study"
+              visible_steps: [consent]
+        part_1:
+          name: "Data Collection"
+          enabled_steps: [consent, start, running, debriefing, done]
+          additional_pages: [manual, info]
+          default_visible: [consent, manual, information]
+          navigation:
+            consent:
+              href: "ucl_study_part_consent"
+              href_params:
+                _part: 1
+              caption: "Give Consent"
+              tooltip: "Familiarise yourself with the project and decide if you want to proceed"
+              visible_steps: [consent]
+            start:
+              href: "ucl_study_part_start"
+              href_params:
+                _part: 1
+              caption: "Install the Software"
+              tooltip: "Instructions about the data collection software"
+              visible_steps: [consent, start, manual, information]
+            running:
+              href: "ucl_study_part_running"
+              href_params:
+                _part: 1
+              caption: "Current Status"
+              tooltip: "Record your process and check what your next task is"
+              visible_steps: [consent, start, running, manual, information]
+            debriefing:
+              href: "ucl_study_part_debriefing"
+              href_params:
+                _part: 1
+              caption: "Schedule Debriefing"
+              tooltip: "When you've finished every task assigned to you"
+              visible_steps: [consent, start, running, debriefing, manual, information]
+            done:
+              href: "ucl_study_part_done"
+              href_params:
+                _part: 1
+              caption: "Study Part Overview"
+              tooltip: "Review what happened in this part of the study"
+              visible_steps: [consent, done, manual, information]
+            manual:
+              href: "ucl_study_part_manual"
+              href_params:
+                _part: 1
+              caption: "App Manuals"
+              tooltip: "For the data collection, data upload and privacy protection apps"
+            information:
+              href: "ucl_study_part_information"
+              href_params:
+                _part: 1
+              caption: "Information Sheet"
+              tooltip: "Refresh your memory about the project"
+        part_2:
+          name: "Co-Design"
+          enabled_steps: [consent,briefing]
+          additional_pages: [manual, info]
+          default_visible: [consent, manual, information]
+          navigation:
+            consent:
+              href: "ucl_study_part_consent"
+              href_params:
+                _part: 2
+              caption: "Give Consent"
+              tooltip: "Learn about the co-design part of the study and decide if you want to proceed"
+              visible_steps: [consent]
+            briefing:
+              href: "ucl_study_part_briefing"
+              href_params:
+                _part: 2
+              caption: "Schedule Briefing"
+              tooltip: "So we can help you get started"
+              visible_steps: [consent, briefing, manual, information]
+            manual:
+              href: "ucl_study_part_manual"
+              href_params:
+                _part: 1
+              caption: "Sandbox Manual"
+              tooltip: "For the sandbox (probably not up-to-date)"
+            information:
+              href: "ucl_study_part_information"
+              href_params:
+                _part: 1
+              caption: "Information Sheet"
+              tooltip: "Refresh your memory about the project"
+        always_visible:
+#          name: "Other Links"
+          enabled_steps: []
+          additional_pages: [contact, logout]
+          default_visible: [contact, logout]
+          navigation:
+            contact:
+              href: "ucl_study_contact"
+              caption: "Contact Us"
+              tooltip: "If you have a question or a problem"
+            logout:
+              href: "ucl_study_logout"
+              caption: "Log Out"
+              tooltip: "We will miss you :'("
+
+      # Application space
+      application_space:
+        part_0:
+          enabled_steps: []
+          additional_pages: []
+          default_visible: []
+          navigation:
+        part_1:
+          enabled_steps: [start,running]
+          additional_pages: []
+          default_visible: []
+          navigation:
+            start:
+              caption: ""
+              visible_steps: [start]
+            running:
+              caption: ""
+              visible_steps: [running]
+        always_visible:
+          enabled_steps: []
+          additional_pages: []
+          default_visible: []
+          navigation: []

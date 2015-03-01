@@ -1,0 +1,46 @@
+{% set layout = "article" %}
+{% extends 'UCLStudyBundle::base.html.twig' %}
+
+{% block article_details %}
+    <p class="bs-callout-compact bs-callout-success">This study has been approved by the UCL Research Ethics Committee. <span class="nowrap">Project ID Number: {{globals.REC_number}}.</span> </p>
+    <div class="form-horizontal">
+    <div class="row">
+      <label class="col-sm-2 control-label">Title of Project</label><!--
+      --><div class="col-sm-10 form-control-static">{{ site.title }} – {{ globals.parts['p' ~ _part].name }}</div>
+    </div>
+    <div class="row">
+      <label class="col-sm-2 control-label">Main Researcher</label><!--
+      --><div class="col-sm-10 form-control-static">{{ site.author }}</div>
+    </div>
+    <div class="row">
+      <label class="col-sm-2 control-label">Research Institution</label><!--
+      --><div class="col-sm-10 form-control-static">University College London Department of Computer Science</div>
+    </div>
+    <div class="row">
+      <label class="col-sm-2 control-label">Office Address</label><!--
+      --><div class="col-sm-10 form-control-static">
+          {% if site.author_office is defined %}{{ site.author_office }}<br />{% endif %}
+          {% if site.author_address_1 is defined %}{{ site.author_address_1 }}<br />{% endif %}
+          {% if site.author_address_2 is defined %}{{ site.author_address_2 }}<br />{% endif %}
+          {% if site.author_address_3 is defined %}{{ site.author_address_3 }}{% endif %}
+      </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block article_body %}
+Content goes here.
+{% endblock %}
+
+{% block article_appendix %}
+<hr />
+<details>
+{% block infosheet_footnotes %}
+{% include ('UCLStudyBundle::dpa.html.twig') %}
+{% endblock %}
+</details>
+{% block infosheet_actions %}
+  <a href="{{ url('ucl_study_contact') }}" title="Contact the researchers behind this project" class="btn btn-lg btn-default">Contact the Researchers</a>
+{% endblock %}
+{% endblock %}
+

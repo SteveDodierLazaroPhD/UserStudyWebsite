@@ -1,0 +1,5 @@
+{% if prescreening is defined %}
+<div class="bs-callout bs-callout-default"><h4>How your data is processed</h4><p class="small">{{ globals.prescreening_dpa_disclaimer }}</p></div>
+{% else %}
+<div class="bs-callout bs-callout-default"><h4>How your data is processed</h4><p class="small">{{ globals.participant_dpa_disclaimer }}</p></div>
+{% endif %}

@@ -1,0 +1,30 @@
+{% set infosheet_template %}UCLStudyBundle:StudyPart:{% if step == 'Inform'%}infosheet{% else %}consent{% endif %}-p{{ _part }}.html.twig{% endset %}
+{% if step != "AlreadyDone" %}
+  {% set using_form = "form" %}
+{% endif %}
+{% set layout = "article" %}
+{% extends ''~infosheet_template~'' %}
+
+{% block infosheet_actions %}
+{% if step == "AlreadyDone" %}
+  <aside>You have already given your consent. If you would like clarifications on any of the above points, please <a href={{ url('ucl_study_contact') }}">contact us</a>.</aside>
+{% else %}
+  {{ form_start(form) }}
+      <fieldset>
+      {% if step == "Inform" %}
+      <div class="form-row">
+        {% if err_check is defined %}
+          <div class="form-group has-error">{{ form_row(form.check) }}<aside class="alert alert-warning">{{ err_check }}</aside></div>
+        {% else %}
+          {{ form_row(form.check) }}
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <div class="form-row">
+      <a href="{{ url('ucl_study_contact') }}" title="Contact the researchers behind this project" class="btn btn-lg btn-default">Contact the Researchers</a> {{ form_widget(form.button, {'attr': {'class': 'btn-lg'}})}}
+      </div>
+      </fieldset>
+  {{ form_end(form) }}
+{% endif %}
+{% endblock %}

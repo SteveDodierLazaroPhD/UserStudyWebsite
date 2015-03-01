@@ -1,0 +1,58 @@
+## Important note: this file is not actually processed by Symfony.
+## It is used as an example for you to know how to properly deploy
+## a study bundle in your own application. Make sure to match paths
+## with your routing.yml file.
+
+security:
+    encoders:
+        Symfony\Component\Security\Core\User\User: 
+            algorithm:            pbkdf2
+            hash_algorithm:       sha512
+            encode_as_base64:     true
+            iterations:           1000
+            key_length:           40
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        in_memory:
+            memory:
+                users:
+                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+                    studyadmin: { password: secdevadmin, roles: [ 'ROLE_ADMIN' ] }
+
+    firewalls:
+        default:
+            anonymous: ~
+            http_basic: ~
+    
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js|fonts)/
+            security: false
+        
+        ucl_study_login:
+            pattern:  ^/login
+            security: false
+
+        ucl_study_secured_area:
+            pattern:    ^/p[0-9]/
+            form_login:
+                check_path: ucl_study_security_check
+                login_path: ucl_study_login
+            logout:
+                path:   ucl_study_logout
+                target: ucl_study_homepage
+            security: true
+            stateless: true
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/logout, roles: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
+        - { path: ^/p[0-9]/, roles: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
+ 
+        - { path: ^/join, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/hello, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^//, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        

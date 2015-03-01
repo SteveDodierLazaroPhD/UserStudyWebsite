@@ -1,0 +1,75 @@
+{% extends 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block choice_widget_expanded %}
+    {% spaceless %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ '')}) %}
+        {% if expanded %}
+            {% set attr = attr|merge({'class': attr.class|default('') ~ ' '}) %}
+        {% endif %}
+        {% if required %}
+            {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) %}
+        {% endif %}
+        {% if multiple %}
+          {% set type = 'checkbox' %}
+        {% else %}
+          {% set type = 'radio' %}
+        {% endif %}
+            <div class="">
+            <div class="btn-group" data-toggle="buttons-nojs">
+        {% for child in form %}
+                {% set label_attr = attr|default({})|merge({'class': 'btn btn-default' ~ attr.class|default('')}) %}
+            {# Better done in JS, so that clients without JS see a checkbox and no decoration
+            {% if child.vars.checked %}
+                {% set label_attr_copy = label_attr|default({})|merge({'class': 'active ' ~ label_attr.class|default('')}) %}
+            {% else %} #}
+                {% set label_attr_copy = label_attr|default({}) %}
+            {# {% endif %} #}
+            <label{% for attrname, attrvalue in label_attr_copy %} {{ attrname }}="{{ attrvalue }}"{% endfor %} for="{{ child.vars.id }}">
+                <input type="{{type}}" id="{{ child.vars.id }}" data-toggle="button" name="{{ child.vars.full_name }}"{% if child.vars.required %} required="required"{% endif %} {% if child.vars.checked %} checked="checked"{% endif %} value="{{ child.vars.value }}" /> {{ child.vars.label|trans({}, translation_domain)|raw }}
+            </label>
+        {% endfor %}
+            </div>
+            </div>
+    {% endspaceless %}
+{% endblock choice_widget_expanded %}
+
+{% block repeated_row -%}
+    {% set attr = attr|merge({'class': attr.class|default('')}) %}
+    {#
+    No need to render the errors here, as all errors are mapped
+    to the first child (see RepeatedTypeValidatorExtension).
+    #}
+        <div class="form-row">
+            {{ form_row(form.first) }}
+        </div>
+        <div class="form-row">
+            {{ form_row(form.second) }}
+        </div>
+{%- endblock repeated_row %}
+
+
+{% block submit_widget %}
+    {% spaceless %}
+        {% set type = type|default('submit') %}
+        {{ block('button_widget') }}
+    {% endspaceless %}
+{% endblock submit_widget %}
+
+{% block button_widget %}
+    {% spaceless %}
+        {% if label is empty and label is not sameas(false) %}
+            {% set label = name|humanize %}
+        {% endif %}
+        {% if type is defined and type == 'submit' %}
+            {% set attr = attr|merge({ 'class': (attr.class|default('') ~ ' btn btn-'~button_class|default('primary'))|trim }) %}
+        {% else %}
+            {% set attr = attr|merge({ 'class': (attr.class|default('') ~ ' btn btn-'~button_class|default('default'))|trim }) %}
+        {% endif %}
+        {% if as_link is defined and as_link == true %}
+            <a {{ block('button_attributes') }}>{% if attr.icon is defined and attr.icon != '' %}{{ icon(attr.icon) }}{% endif %}{{ label|trans({}, translation_domain) }}</a>
+        {% else %}
+            <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>{% if attr.icon is defined and attr.icon != '' %}{{ icon(attr.icon) }}{% endif %}{{ label|trans({}, translation_domain) }}</button>
+        {% endif %}
+    {% endspaceless %}
+{% endblock button_widget %}
+

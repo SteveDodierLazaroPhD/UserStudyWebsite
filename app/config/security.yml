@@ -1,0 +1,81 @@
+security:
+    encoders:
+        Symfony\Component\Security\Core\User\User:
+            algorithm: bcrypt
+            cost:      15
+        UCL\StudyBundle\Entity\Participant: 
+            algorithm: bcrypt
+            cost:      15
+#            algorithm:            pbkdf2
+#            hash_algorithm:       sha512
+#            encode_as_base64:     true
+#            iterations:           1000
+#            key_length:           40
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        entity_provider:
+            entity:
+                class: UCLStudyBundle:Participant
+                property: email
+
+    firewalls:
+        application_space:
+            anonymous: ~
+            pattern:   ^/study/a/
+            context: participant
+            simple_form:
+                authenticator: stubborn_authenticator
+                login_path: ucl_study_app_login
+                check_path: ucl_study_app_login_check
+                default_target_path: ucl_study_app_next
+                csrf_parameter: _csrf_token
+                csrf_provider: form.csrf_provider
+                intention:      authenticate
+            logout:
+                path:   ucl_study_app_logout
+                target: ucl_study_app_login
+            security: true
+            provider: entity_provider
+            remember_me:
+                key:      "%secret%"
+                lifetime: 31536000 # 365 days in seconds
+                path:     /
+                domain:   ~
+        participant_space:
+            anonymous: ~
+            pattern:   ^/study/p/
+            context: participant
+            simple_form:
+                authenticator: stubborn_authenticator
+                login_path: ucl_study_login
+                check_path: ucl_study_login_check
+                default_target_path: ucl_study_part_next
+                csrf_parameter: _csrf_token
+                csrf_provider: form.csrf_provider
+                intention:      authenticate
+            logout:
+                path:   ucl_study_logout
+                target: ucl_study_homepage
+            security: true
+            provider: entity_provider
+            remember_me:
+                key:      "%secret%"
+                lifetime: 31536000 # 365 days in seconds
+                path:     /
+                domain:   ~
+        default:
+            anonymous: ~
+            pattern:   ~
+            context: participant
+
+    access_control:
+        - { path: ^/study/p/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/study/a/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/study/p/, roles: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
+        - { path: ^/study/a/, roles: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
+        - { path: ^/study/, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

@@ -1,0 +1,23 @@
+ucl_study:
+    resource: "@UCLStudyBundle/Controller"
+    type:     annotation
+    
+ucl_study_login:
+    path:     /p/login
+    defaults: { _controller: UCLStudyBundle:Auth:login }
+    
+ucl_study_login_check:
+    path:     /p/login_check
+
+ucl_study_logout:
+    path:     /p/logout
+
+ucl_study_app_login:
+    path:     /a/login
+    defaults: { _controller: UCLStudyBundle:Auth:appLogin }
+
+ucl_study_app_login_check:
+    path:     /a/login_check
+
+ucl_study_app_logout:
+    path:     /a/logout

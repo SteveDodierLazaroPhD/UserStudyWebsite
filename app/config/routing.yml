@@ -1,0 +1,6 @@
+ucl_study:
+    resource: "@UCLStudyBundle/Resources/config/routing.yml"
+    prefix:   /study
+    schemes:  [https]
+   
+

@@ -1,0 +1,19 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver:      pdo_mysql
+    database_host:        127.0.0.1
+    database_port:        null
+    database_name:     ~~~FOLDER NAME (e.g. multitasking if your site is on study.cs.uck.ac.uk/multitasking~~~
+    database_user:     ~~~FOLDER NAME, and create the user in mysql manually~~~
+    database_password: ~~~SOME UNIQUE STRING, make it same as secret below~~~
+    mailer_transport:     smtp
+    mailer_host:          127.0.0.1
+    mailer_user:          null
+    mailer_password:      null
+    locale:               en
+    secret:            ~~~SOME UNIQUE STRING~~~
+    mail_transport:       "smtp"
+    mail_host:            "study.cs.ucl.ac.uk"
+    mail_username:        "noreply"
+    mail_password:        ""
+    upload_destination_screening: "%kernel.root_dir%/store/screening"
