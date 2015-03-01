@@ -1,0 +1,10 @@
+You must create a directory called app/store to get started.
+This folder (and children folders) must be created so that apache cannot read it. It must be write-only.
+This is critically important: it will prevent exploited apaches from being used to steal participant data.
+Remember that we do not encrypt the data in the store for convenience, hence we rely on good practice with
+Linux access control for the security to hold. DO NOT DEPLOY A WEBSITE WITH A READABLE STORE!
+
+If you use a screening phase, you must also create app/store/screening.
+If you use an upload phase, you must also create app/store/upload.
+
+These names are subject to changing. Grep "store" on the UCL StudyBundle for updated or custom names, and create folders accordingly.
