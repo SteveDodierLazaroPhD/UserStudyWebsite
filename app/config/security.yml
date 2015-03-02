@@ -25,7 +25,7 @@ security:
     firewalls:
         application_space:
             anonymous: ~
-            pattern:   ^/study/a/
+            pattern:   ^/a/
             context: participant
             simple_form:
                 authenticator: stubborn_authenticator
@@ -47,7 +47,7 @@ security:
                 domain:   ~
         participant_space:
             anonymous: ~
-            pattern:   ^/study/p/
+            pattern:   ^/p/
             context: participant
             simple_form:
                 authenticator: stubborn_authenticator
@@ -73,9 +73,8 @@ security:
             context: participant
 
     access_control:
-        - { path: ^/study/p/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/study/a/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/study/p/, roles: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
-        - { path: ^/study/a/, roles: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
-        - { path: ^/study/, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/p/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/a/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/p/, roles: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
+        - { path: ^/a/, roles: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
