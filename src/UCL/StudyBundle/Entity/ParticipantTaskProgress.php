@@ -13,15 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="study_participant_progress")
  */
-class ParticipantTaskProgress implements UserInterface, AdvancedUserInterface, \Serializable
+class ParticipantTaskProgress
 {
-  /**
-   * @ORM\Column(type="integer")
-   * @ORM\Id
-   * @ORM\GeneratedValue(strategy="AUTO")
-   */
-  private $id;
-
   /**
    * @ORM\ManyToMany(targetEntity="Participant", mappedBy="id")
    */
@@ -29,12 +22,12 @@ class ParticipantTaskProgress implements UserInterface, AdvancedUserInterface, \
 
   /**
    * @ORM\Column(type="string", length=255, unique=true)
-   * @ORM\ManyToMany(targetEntity="StudyPart", mappedBy="id")
+   * @ORM\ManyToMany(targetEntity="Participant", mappedBy="currentPart")
    */
   private $part;
 
   /**
-   * @ORM\ManyToMany(targetEntity="StudyStep", mappedBy="part,name")
+   * @ORM\ManyToMany(targetEntity="Participant", mappedBy="currentStep")
    */
   private $step;
 
@@ -42,4 +35,14 @@ class ParticipantTaskProgress implements UserInterface, AdvancedUserInterface, \
    * @ORM\Column(name="task_progress", type="integer")
    */
   private $task_progress;
+  
+  public function getParticipant()
+  {
+    return $this->participant;
+  }  
+  
+  public function setParticipant($participant)
+  {
+    $this->participant = $participant;
+  }  
 }
