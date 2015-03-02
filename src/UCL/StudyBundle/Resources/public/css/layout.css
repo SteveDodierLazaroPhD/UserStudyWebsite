@@ -420,7 +420,7 @@ main {
 
 #content {
   padding: 1em 2em 2em;
-  min-height:600px;
+  min-height: 100px;
   transition: margin 0.3s ease-out;
 }
 
