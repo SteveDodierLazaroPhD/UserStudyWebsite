@@ -27,7 +27,7 @@ class UCLStudyController extends Controller
     $this->space   = 'anonymous_space';
   }
   
-  /*    private function injectErrors($form, $params, $request, $add_flashbag = true, $custom_processor = null)
+  /*    protected function injectErrors($form, $params, $request, $add_flashbag = true, $custom_processor = null)
     {
       $iter = $form->getErrors(true, true);
       $has_seen_local_errors = false;
@@ -64,7 +64,7 @@ class UCLStudyController extends Controller
     }*/
 
 
-  private function getEmailAddress()
+  protected function getEmailAddress()
   {
     return $this->container->getParameter('mail_username').'@'.$this->container->getParameter('mail_host');
   }
