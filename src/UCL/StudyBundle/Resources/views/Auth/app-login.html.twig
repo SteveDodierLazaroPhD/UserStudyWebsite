@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <p>This application is for research participants enrolled in the '{{ site.title }}' study. To get an invitation, you should first <a href="{{ url('ucl_study_screening_join') }}">register on our website</a>.</p>
+    <p>This application is for enrolled research participants only. To get an invitation, you should first <a href="{{ url('ucl_study_screening_join') }}">register on our website</a>.</p>
     <hr />
     
     <form name="login" method="post" action="{{ path('ucl_study_app_login_check') }}" class="form-horizontal">

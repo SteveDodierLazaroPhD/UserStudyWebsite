@@ -22,7 +22,7 @@ class AuthController extends UCLStudyController
     {
       return $this->forward('UCLStudyBundle:Auth:login', array(
                        'twig'    => 'UCLStudyBundle:Auth:app-login.html.twig',
-                       'title'   => 'Log In to Continue',
+                       'title'   => $this->container->getParameter('ucl_study.site')['title'],
                        'request' => $request));
     }
 
