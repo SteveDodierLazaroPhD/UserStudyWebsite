@@ -59,8 +59,8 @@
 
 .nowrap {white-space: nowrap;}
 
-.row:before {content: none !important;}
-.row:after {content: none !important;}
+/*.row:before {content: none !important;}
+.row:after {content: none !important;} */
 
 body {
 	font-family: "PT Sans", "Helvetica Neue", Helvetica, "Liberation Sans", Arial, sans-serif;
