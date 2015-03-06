@@ -170,6 +170,13 @@ class DefaultController extends UCLStudyController
     public function contactAction(Request $request)
     {
       $params = $this->setupParameters($request, false);
+      
+      $token = $this->get('security.token_storage')->getToken();
+      if (is_a ($token, 'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken'))
+      {
+        $params['space'] = $token->getProviderKey();
+      }
+      
       $params['page'] = array('title' => 'Contact the Researchers');
 
       $previous = $request->request->get('form');
@@ -234,7 +241,7 @@ class DefaultController extends UCLStudyController
             'success',
             'Thank you for your message. I will be in touch with you as soon as I read it.'
         );
-        return $this->redirect($this->generateUrl('ucl_study_homepage'));
+        return $this->redirect($this->generateUrl('ucl_study_next'));
       }
       else if($form->isSubmitted())
       {
@@ -277,5 +284,25 @@ class DefaultController extends UCLStudyController
       $params['page'] = array('title' => 'Join a Study about Multitasking on Linux');
       
       return $this->render('UCLStudyBundle:Default:advert.html.twig', $params);
+    }
+
+    /**
+     * @Route("/next", name="ucl_study_next")
+     */
+    public function nextAction(Request $request)
+    {
+      $token = $this->get('security.token_storage')->getToken();
+      if (is_a ($token, 'Symfony\Component\Security\Core\Authentication\Token\AnonymousToken'))
+      {
+        return $this->redirect($this->generateUrl('ucl_study_homepage'));
+      }
+      else if ($token->getProviderKey() == 'application_space')
+      {
+        return $this->redirect($this->generateUrl('ucl_study_app_next'));
+      }
+      else if ($token->getProviderKey() == 'participant_space')
+      {
+        return $this->redirect($this->generateUrl('ucl_study_part_next'));
+      }
     }
 }

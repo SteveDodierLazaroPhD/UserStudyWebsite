@@ -146,4 +146,12 @@ class AppPartController extends UCLStudyController
                                                  ));
       }
     }
+
+    /**
+     * @Route("/a/contact", name="ucl_study_app_contact")
+     */
+    public function contactAction(Request $request)
+    {
+        return $this->forward('UCLStudyBundle:Default:contact', array('request' => $request));
+    }
 }
