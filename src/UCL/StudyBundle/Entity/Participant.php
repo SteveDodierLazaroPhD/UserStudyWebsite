@@ -21,11 +21,13 @@ define("PARTICIPANT_INVALID", -2);        // We can use this as a catch-all stat
 /* Again, Symfony forces us to be very careful. DO NOT MODIFY these constants without also modifying the validation
    annotation of the currentStep variable. We would need at some point to build up the annotation in PHP to remove
    this duplication. Also, you do not need to use all states. Sometimes you have no briefing/install actions, etc. */
-define("PARTICIPANT_WAITING_ENROLLMENT", "waiting-enrollment");     // Must collect informed consent for this part to start
+define("PARTICIPANT_WAITING_ENROLLMENT", "waiting_enrollment");     // Must collect informed consent for this part to start
 define("PARTICIPANT_MUST_CONSENT",       "consent");                // Must collect informed consent for this part to start
 define("PARTICIPANT_READY_BRIEFING",     "briefing");               // Must arrange briefing meeting with participant
 define("PARTICIPANT_MUST_START",         "start");                  // Must have participant take action to start
 define("PARTICIPANT_IS_RUNNING",         "running");                // Running the study
+define("PARTICIPANT_PRIMARY_TASK",       "primary_task");           // Performing some primary task
+define("PARTICIPANT_UPLOAD",             "upload");                 // Uploading collected data
 define("PARTICIPANT_READY_DEBRIEFING",   "debriefing");             // Must meet for debriefing
 define("PARTICIPANT_FINISHED_PART",      "done");                   // Must pay participant and switch to next part based on communication with her
 
