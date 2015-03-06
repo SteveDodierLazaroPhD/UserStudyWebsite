@@ -1,11 +1,18 @@
 {% set using_form = "form" %}
-{% extends 'UCLStudyBundle::base.html.twig' %}
+{% if space is defined and space == 'application_space' %}
+{% set base = 'UCLStudyBundle::app.html.twig' %}
+{% else %}
+{% set base = 'UCLStudyBundle::base.html.twig' %}
+{% endif %}
+{% extends base %}
 
 {% block body %}
+{% if not (space is defined and space == 'application_space') %}
     <p class="lead">If you have a question about the study, don't hesitate!</p>
     <p>You can also use this form for press enquiries, for technical support about the website, and data protection queries for current participants. If you write about your participant data, please provide your Participant ID to help me find you.</p>
     <hr />
     <h3>Contact Form</h3>
+{% endif %}
     {#<form name="form" method="post" action="" onsubmit="return validation();">#}
     {{ form_start(form) }}
     <fieldset>
@@ -33,7 +40,7 @@
       {% endif %}
     </div>
 
-    <div class="form-row">
+    <div class="form-row"{% if space is defined and (space == 'application_space' or space == 'participant_space') %} hidden{% endif %}>
       {% if err_spamcheck is defined %}
         <div class="form-group has-error">{{ form_row(form.spamcheck) }}<aside class="alert alert-warning">{{ err_spamcheck }}</aside></div>
       {% else %}
