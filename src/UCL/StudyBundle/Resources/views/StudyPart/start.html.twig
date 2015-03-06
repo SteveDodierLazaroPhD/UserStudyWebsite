@@ -12,9 +12,9 @@
 
 {% block article_appendix %}
 <hr />
-<details>
+<p>
   You must install the application {% if app_install_verification is defined %} and log in from within the application {% endif %} to continue with the study. If you cannot progress through this step, or if you have already followed the instructions and the site has not updated, please contact us.
-</details>
+</p>
 <br />
 <a href="{{ url('ucl_study_contact') }}" title="Contact the researchers behind this project" class="btn btn-lg btn-default">Contact the Researchers</a>
 {% endblock %}

@@ -34,11 +34,11 @@ Content goes here.
 
 {% block article_appendix %}
 <hr />
-<details>
+<div>
 {% block infosheet_footnotes %}
 {% include ('UCLStudyBundle::dpa.html.twig') %}
 {% endblock %}
-</details>
+</div>
 {% block infosheet_actions %}
   <a href="{{ url('ucl_study_contact') }}" title="Contact the researchers behind this project" class="btn btn-lg btn-default">Contact the Researchers</a>
 {% endblock %}
