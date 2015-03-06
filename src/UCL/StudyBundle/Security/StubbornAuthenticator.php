@@ -27,8 +27,6 @@ class StubbornAuthenticator implements SimpleFormAuthenticatorInterface
 
   public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
   {
-    \Doctrine\Common\Util\Debug::dump($token);
-
     try
     {
       $user = $userProvider->loadUserByUsername($token->getUsername());
