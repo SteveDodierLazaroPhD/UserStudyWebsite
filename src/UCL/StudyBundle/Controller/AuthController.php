@@ -29,9 +29,9 @@ class AuthController extends UCLStudyController
     /**
      * @Route("/p/login", name="ucl_study_login")
      */
-    public function loginAction($twig  = 'UCLStudyBundle:Auth:login.html.twig', 
-                                $title = 'Log In to the Participant Website',
-                                Request $request)
+    public function loginAction(Request $request,
+                                $twig  = 'UCLStudyBundle:Auth:login.html.twig', 
+                                $title = 'Log In to the Participant Website')
     {
       $session = $request->getSession();
       $params = $this->setupParameters($request, false);
