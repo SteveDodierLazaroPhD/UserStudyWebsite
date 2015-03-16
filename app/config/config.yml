@@ -95,3 +95,26 @@ swiftmailer:
 #            inject_on_load:     false  # impossible since the file storage area is write-only
 #            delete_on_update:   false # doesn't make sense, not allowed
 #            delete_on_remove:   true # should be true to let participants delete their screening data themselves 
+
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: critical
+            handler:      grouped
+        grouped:
+            type:    group
+            members: [streamed, buffered]
+        streamed:
+            type:  stream
+            path:  "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+        buffered:
+            type:    buffer
+            handler: swift
+        swift:
+            type:       swift_mailer
+            from_email: "%mail_username%@%mail_host%"
+            to_email:   "s.dodier-lazaro@cs.ucl.ac.uk"
+            subject:    "UCL Study Website -- Critical Error"
+            level:      debug
