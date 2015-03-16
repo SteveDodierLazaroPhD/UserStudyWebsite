@@ -82,7 +82,7 @@
   
   {% for page_name in always_visible_steps_for_route %}
   {% set item = site[menu_space][always_visible_menu].navigation[page_name] %}
-    {% if item.href is defined item.caption is defined  %} {# undefined for when we just want the visible pages for the current route #}
+    {% if item.href is defined and item.caption is defined  %} {# undefined for when we just want the visible pages for the current route #}
     <li {% if (_route | split(item.href) | first == '') %} id="current-page"{% endif %}>
       <a href="{% if item.href_params is defined %}{{ url(item.href, item.href_params) }}{% else %}{{ url(item.href) }}{% endif %}">{{ item.caption }}</a>
       {#{% if item.tooltip is defined %}<span class="navtooltip">{{ item.tooltip }}</span>{% endif %}#}
