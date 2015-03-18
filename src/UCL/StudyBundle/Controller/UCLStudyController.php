@@ -71,6 +71,13 @@ class UCLStudyController extends Controller
     return $this->container->getParameter('mail_username').'@'.$this->container->getParameter('mail_host');
   }
 
+  protected function persistObject($obj)
+  {
+    $em = $this->getDoctrine()->getManager();
+    $em->persist($obj);
+    $em->flush($obj);
+  }
+
   protected function getEnabledStepsForPart($part)
   {
     $logger = $this->get('logger');
