@@ -46,6 +46,7 @@ assetic:
             node_paths: [/usr/lib/node_modules]
             apply_to: "\.less$"
 
+# Bootstrap Configuration
 braincrafted_bootstrap:
     assets_dir: %kernel.root_dir%/../vendor/twbs/bootstrap
     fonts_dir: %kernel.root_dir%/../web/fonts
@@ -56,6 +57,7 @@ braincrafted_bootstrap:
         twig: true
         knp_menu: true
         knp_paginator: true
+
 # Doctrine Configuration
 doctrine:
     dbal:
@@ -96,11 +98,12 @@ swiftmailer:
 #            delete_on_update:   false # doesn't make sense, not allowed
 #            delete_on_remove:   true # should be true to let participants delete their screening data themselves 
 
+# Monolog Configuration
 monolog:
     handlers:
         main:
             type:         fingers_crossed
-            action_level: critical
+            action_level: debug
             handler:      grouped
         grouped:
             type:    group
