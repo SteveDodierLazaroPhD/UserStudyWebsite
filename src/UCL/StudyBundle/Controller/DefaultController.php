@@ -62,47 +62,50 @@ class DefaultController extends UCLStudyController
         }
         else
         {
-          // TODO perform some action, such as saving the task to the database
-          // TODO email participant AND ME
+        
+          try {
+            $store = $this->get('screening_store');
+            $yaml = $task->makeScreeningYaml();
+            if (!$yaml)
+              $request->getSession()->getFlashBag()->add('error', 'Could not process your registration, because of an unknown error when saving the form you filled. This is a bug, please inform the researchers.');
+            else
+            {
+              $filename = $store->makeFile($yaml, "yaml", $this->getUser()->getEmail());
+              $em = $this->getDoctrine()->getManager();
+              $em->persist($task);
+              $em->flush();
+              
+              $mailer = $this->get('mailer');
+              $message = $mailer->createMessage()
+                  ->setSubject('['.$this->globals['study_id'].'.study] New Registration from \''.$task->getPseudonym().'\' on ('.date('Y-m-d').')')
+                  ->setFrom($this->getEmailAddress())
+                  ->setReplyTo($task->getEmail())
+                  ->setTo($this->site['author_email'])
+                  ->setBody($this->renderView('UCLStudyBundle:Mail:registrationform.txt.twig',
+                                  array('site'    => $this->site,
+                                        'globals' => $this->globals,
+                                        'name'    => $task->getPseudonym(),
+                                        'email'   => $task->getEmail(),
+                                        'date'    => date('r'))));
+              $mailer->send($message);
+              $message = $mailer->createMessage()
+                  ->setSubject('['.$this->globals['study_id'].'.study] Thank you for registering!')
+                  ->setFrom($this->getEmailAddress())
+                  ->setReplyTo($this->site['author_email'])
+                  ->setTo($task->getEmail())
+                  ->setBody($this->renderView('UCLStudyBundle:Mail:registrationform-participant.txt.twig',
+                                  array('site'    => $this->site,
+                                        'globals' => $this->globals,
+                                        'name'    => $task->getPseudonym(),
+                                        'email'   => $task->getEmail(),
+                                        'date'    => date('r'))));
+              $mailer->send($message);
 
-          $file = $task->makeScreeningFile($request);
-          if ($file)
-          {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($task);
-            $em->flush();
-            
-            $mailer = $this->get('mailer');
-            $message = $mailer->createMessage()
-                ->setSubject('['.$this->globals['study_id'].'.study] New Registration from \''.$task->getPseudonym().'\' on ('.date('Y-m-d').')')
-                ->setFrom($this->getEmailAddress())
-                ->setReplyTo($task->getEmail())
-                ->setTo($this->site['author_email'])
-                ->setBody($this->renderView('UCLStudyBundle:Mail:registrationform.txt.twig',
-                                array('site'    => $this->site,
-                                      'globals' => $this->globals,
-                                      'name'    => $task->getPseudonym(),
-                                      'email'   => $task->getEmail(),
-                                      'date'    => date('r'))));
-            $mailer->send($message);
-            $message = $mailer->createMessage()
-                ->setSubject('['.$this->globals['study_id'].'.study] Thank you for registering!')
-                ->setFrom($this->getEmailAddress())
-                ->setReplyTo($this->site['author_email'])
-                ->setTo($task->getEmail())
-                ->setBody($this->renderView('UCLStudyBundle:Mail:registrationform-participant.txt.twig',
-                                array('site'    => $this->site,
-                                      'globals' => $this->globals,
-                                      'name'    => $task->getPseudonym(),
-                                      'email'   => $task->getEmail(),
-                                      'date'    => date('r'))));
-            $mailer->send($message);
-
-            $request->getSession()->getFlashBag()->add(
-                'success',
-                'Thank you for your interest in this study. A confirmation email was sent to you. I will be in touch with you within 3 weeks.'
-            );
-            return $this->redirect($this->generateUrl('ucl_study_homepage'));
+              $request->getSession()->getFlashBag()->add('success','Thank you for your interest in this study. A confirmation email was sent to you. I will be in touch with you shortly.');
+              return $this->redirect($this->generateUrl('ucl_study_homepage'));
+            }
+          } catch (Exception $e) {
+            $request->getSession()->getFlashBag()->add('error', 'The registration process was interrupted by an error on the server ('.$e->getMessage().')');
           }
         }
       }
@@ -171,12 +174,6 @@ class DefaultController extends UCLStudyController
     {
       $params = $this->setupParameters($request, false);
       
-      $token = $this->get('security.token_storage')->getToken();
-      if (is_a ($token, 'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken'))
-      {
-        $params['space'] = $token->getProviderKey();
-      }
-      
       $params['page'] = array('title' => 'Contact the Researchers');
 
       $previous = $request->request->get('form');
@@ -241,7 +238,7 @@ class DefaultController extends UCLStudyController
             'success',
             'Thank you for your message. I will be in touch with you as soon as I read it.'
         );
-        return $this->redirect($this->generateUrl('ucl_study_next'));
+        return $this->redirect($this->generateUrl('ucl_study_contact'));
       }
       else if($form->isSubmitted())
       {
@@ -298,7 +295,7 @@ class DefaultController extends UCLStudyController
       }
       else if ($token->getProviderKey() == 'application_space')
       {
-        return $this->redirect($this->generateUrl('ucl_study_app_next'));
+        return $this->redirect($this->generateUrl('ucl_study_app_status'));
       }
       else if ($token->getProviderKey() == 'participant_space')
       {

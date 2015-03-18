@@ -23,7 +23,7 @@ use Symfony\Component\Yaml\Dumper;
  *     message="This nickname is already in use."
  * )
  */
-class RegistrationJob //TODO extends User!?
+class RegistrationJob
 {
   /* Public properties (unique db id, nickname and email) */
   /**
@@ -296,7 +296,7 @@ class RegistrationJob //TODO extends User!?
    *
    * @return string The YAML representation.
    */
-  protected function makeScreeningYaml()
+  function makeScreeningYaml()
   {
     $array = array(
         'id' => $this->id,
@@ -322,53 +322,13 @@ class RegistrationJob //TODO extends User!?
     }
   }
 
-  public function makeScreeningFile($request)
+  /**
+   * Get id
+   *
+   * @return integer 
+   */
+  public function getId()
   {
-    //TODO ensure all data is valid
-    {
-      //TODO get a validator
-      //TODO validate the whole object
-    }
-
-    $yaml = $this->makeScreeningYaml($request);
-    if(!$yaml)
-    {
-      // Error already treated in makeScreeningYaml
-      return False;
-    }
-    else
-    {
-      $fs = new Filesystem();
-      $filepath = $this->registration_folder.'/'.$this->makeFileName();
-
-      if (!$fs->exists($this->registration_folder))
-      {
-        if ($request) 
-           $request->getSession()->getFlashBag()->add('error', 'An error occurred while processing your registration: The storage directory is missing. Please let us know about this error.');
-        return False;
-      }
-      else
-      {
-        try {
-          $fs->dumpFile($filepath, $yaml);
-          return True;
-        } catch (IOException $e) {
-          if ($request)
-           $request->getSession()->getFlashBag()->add('error', 'An error occurred while processing your registration: '.$e->getMessage().'. Please try again later, or contact us if it keeps happening.');
-            return False;
-        }
-      }
-
-    }
+    return $this->id;
   }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 }
