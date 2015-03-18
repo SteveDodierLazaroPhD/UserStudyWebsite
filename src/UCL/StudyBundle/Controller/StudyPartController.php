@@ -13,9 +13,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Constraints\True;
 
 use UCL\StudyBundle\Controller\UCLStudyController as UCLStudyController;
-
-use UCL\StudyBundle\Form\Type\DataUploadType;
-use UCL\StudyBundle\Entity\DataUploadJob;
 use UCL\StudyBundle\Entity\Participant;
 
 class StudyPartController extends UCLStudyController
@@ -99,10 +96,10 @@ class StudyPartController extends UCLStudyController
         {
           $this->session->getFlashBag()->add(
               'success',
-              'Thank you. You are now enrolled in the study and can start the tasks assigned to you.'
+              'Thank you. You are now enrolled in the study!'
           );
           $this->session->remove('ucl_study_part_consent_step');
-          $this->takeParticipantToNextStep();
+          $this->takeParticipantToNextStep($_part, 'consent');
           return $this->redirect($this->generateUrl('ucl_study_part_next'));
         }
         else /* if ($params['step'] == "Inform") */
@@ -161,66 +158,17 @@ class StudyPartController extends UCLStudyController
     }
     
     /**
-     * @Route("/p/{_part}/start", name="ucl_study_part_start",
+     * @Route("/p/{_part}/install", name="ucl_study_part_install",
      *    defaults={"_part" = 1},
      *    requirements={"_part": "\d+"})
      */
-    public function startAction($_part, Request $request)
+    public function installAction($_part, Request $request)
     {
-      $params = $this->setupParameters($request, true, 'start', $_part);
+      $params = $this->setupParameters($request, true, 'install', $_part);
       $params['page'] = array('title' => 'Software Installation Instructions');
-      
-      $app = $request->query->get('app');
-      
-      if ($app)
-      {
-        $email_hash = hash('sha256', $this->getUser()->getEmail());
-        if ($app == $email_hash)
-        {
-          $params['is_app'] = true;
-          $this->session->getFlashBag()->add('success', 'Congratulations! The study application is correctly installed.');
-          $this->takeParticipantToNextStep();
-          return $this->redirect($this->generateUrl('ucl_study_part_next'));
-        }
-      }
 
       return $this->render('UCLStudyBundle:StudyPart:start-p'.$_part.'.html.twig', $params);
     }
-
-    /**
-     * @Route("/p/{_part}/upload", name="ucl_study_part_upload",
-     *    defaults={"_part" = 1},
-     *    requirements={"_part": "\d+"})
-     */
-    public function uploadAction($_part, Request $request)
-    {
-      $params = $this->setupParameters($request, true, 'upload', $_part);
-      $params['page'] = array('title' => 'Upload Your Collected Data');
-      
-      $previous = $request->request->get('form');
-      $task = new DataUploadJob($this->getUser()->getEmail());
-
-      $form = $this->createForm(new DataUploadType(), $task);
-
-      $params['form'] = $form->createView();
-      
-      $form->handleRequest($request);
-
-      if($form->isValid())
-      {
-        //TODO custom code
-        
-        //TODO take user to next step
-        //TODO redirect to next
-        return $this->redirect($this->generateUrl('ucl_study_part_next')); //FIXME get user's actual part and best location?
-      }
-      else
-      {
-        //TODO process errors
-      }
-
-      return $this->render('UCLStudyBundle:StudyPart:upload.html.twig', $params);
-    } 
 
     /**
      * @Route("/p/{_part}/running", name="ucl_study_part_running",

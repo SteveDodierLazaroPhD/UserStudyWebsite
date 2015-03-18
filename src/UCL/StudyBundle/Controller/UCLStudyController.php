@@ -7,7 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use UCL\StudyBundle\Entity\Participant;
@@ -82,13 +84,13 @@ class UCLStudyController extends Controller
       $logger->error('This study is misconfigured (missing part '.$part.' for \''.$this->space.'\' section). This is a bug, please inform the researchers.');
       return null;
     }
-    if (!isset ($this->site[$this->space]['part_'.$part]['enabled_steps']))
+    if (!isset ($this->site['participant_space']['part_'.$part]['enabled_steps']))
     {
-      $logger->error('This study is misconfigured (missing \'enabled_steps\' section for part '.$part.'). This is a bug, please inform the researchers.');
+      $logger->error('This study is misconfigured (missing \'participant_space\' \'enabled_steps\' section for part '.$part.'). This is a bug, please inform the researchers.');
       return null;
     }
 
-    return $this->site[$this->space]['part_'.$part]['enabled_steps'];
+    return $this->site['participant_space']['part_'.$part]['enabled_steps'];
   }
 
   protected function getVisiblePagesForPartAndStep($part, $step)
@@ -111,8 +113,13 @@ class UCLStudyController extends Controller
     }
     if (!isset ($this->site[$this->space]['part_'.$part]['navigation'][$step]))
     {
-      $logger->error('This study is misconfigured (missing step \''.$step.'\' for \'navigation\' section and part '.$part.'). This is a bug, please inform the researchers.');
-      return null;
+      if (!isset ($this->site[$this->space]['part_'.$part]['default_visible']))
+      {
+        $logger->error('This study is misconfigured (missing step \''.$step.'\' and \'default_visible\' sections for part '.$part.' and step \''.$step.'\'). This is a bug, please inform the researchers.');
+        return null;
+      }
+  
+      return $this->site[$this->space]['part_'.$part]['default_visible'];
     }
     if (!isset ($this->site[$this->space]['part_'.$part]['navigation'][$step]['visible_steps']))
     {
@@ -188,6 +195,12 @@ class UCLStudyController extends Controller
                    'user'        => $this->getUser(),
                    '_route'      => $request->get('_route'));
 
+    $token = $this->get('security.token_storage')->getToken();
+    if (is_a ($token, 'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken'))
+    {
+      $params['space'] = $token->getProviderKey();
+    }
+
     if ($authenticated)
     {
       $this->checkLoggedIn($this);
@@ -260,7 +273,35 @@ class UCLStudyController extends Controller
     return $userpos > $_steppos;
   }
 
-  protected function takeParticipantToNextStep()
+  protected function takeParticipantToNextPart($currentPart)
+  {
+    $logger = $this->get('logger');
+    $em     = $this->getDoctrine()->getManager();
+    $user   = $this->getUser();
+    
+    if (!$user)
+    {
+      $logger->error('takeParticipantToNextPart: No user found.');
+      return;
+    }
+
+    $enabledSteps = $this->getEnabledStepsForPart($currentPart);
+    $val = current($enabledSteps);
+    reset($enabledSteps);
+
+    if (!$enabledSteps || !$val)
+    {
+      $logger->critical('takeParticipantToNextPart: Failed to retrieve a list of enabled steps for study part '.$currentPart.', whilst updating user \''.$user->getUsername().'\' ('.$user->getEmail().') from part '.$currentPart.'. This is a bug.');
+      $this->session->getFlashBag()->add('warning', 'Because of an unexpected problem, we were unable to take you to the next part of the study. Please try again later or contact us.');
+      return;
+    }
+
+    $user->setCurrentStep ($val);
+    $user->setCurrentPart($currentPart + 1);
+    $em->flush();
+  }
+
+  protected function takeParticipantToNextStep($currentPart, $currentStep)
   {
     $logger = $this->get('logger');
     $em     = $this->getDoctrine()->getManager();
@@ -271,11 +312,17 @@ class UCLStudyController extends Controller
       $logger->error('takeParticipantToNextStep: No user found.');
       return;
     }
+    
+    if ($this->isParticipantDone($currentPart, $currentStep))
+    {
+      $logger->debug('takeParticipantToNextStep: Participant has already progressed further in the study (currently at part '.$user->getCurrentPart().' and step \''.$user->getCurrentStep().'\').');
+      return;
+    }
 
-    $enabledSteps = $this->getEnabledStepsForPart($user->getCurrentPart());
+    $enabledSteps = $this->getEnabledStepsForPart($currentPart);
     if (!$enabledSteps)
     {
-      $logger->critical('takeParticipantToNextStep: Failed to retrieve a list of enabled steps for study part '.$user->getCurrentPart().', whilst updating user \''.$user->getUsername().'\' ('.$user->getEmail().') from part '.$user->getCurrentPart().' and step '.$user->getCurrentStep().'. This is a bug.');
+      $logger->critical('takeParticipantToNextStep: Failed to retrieve a list of enabled steps for study part '.$currentPart.', whilst updating user \''.$user->getUsername().'\' ('.$user->getEmail().') from part '.$currentPart.' and step '.$currentStep.'. This is a bug.');
       $this->session->getFlashBag()->add('warning', 'Because of an unexpected problem, we were unable to take you to the next step of the study. Please try again later or contact us.');
       return;
     }
@@ -283,7 +330,7 @@ class UCLStudyController extends Controller
     $nextStep = FALSE;
     while ($val = current($enabledSteps))
     {
-      if ($val == $user->getCurrentStep())
+      if ($val == $currentStep)
         $nextStep = next($enabledSteps);
       next($enabledSteps);
     }
@@ -296,10 +343,7 @@ class UCLStudyController extends Controller
     }
     else
     {
-      $user->setCurrentPart($user->getCurrentPart() + 1);
-      //FIXME get first step of next part, in case enrollment is not automatic.
-      $user->setCurrentStep ('consent');
-      $em->flush();
-    }  
+      takeParticipantToNextPart($currentPart);
+    }
   }
 }

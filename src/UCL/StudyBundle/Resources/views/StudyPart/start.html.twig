@@ -2,7 +2,7 @@
 {% extends 'UCLStudyBundle::base.html.twig' %}
 
 {% block article_details %}
-{% if user.hasDoneStep(_part, 'start') %}
+{% if user.hasDoneStep(_part, 'install') %}
 <p class="bs-callout bs-callout-success">You have already activated the study application, but you can use the instructions below to reinstall your application if necessary.</p>
 {% endif %}
 {% endblock %}

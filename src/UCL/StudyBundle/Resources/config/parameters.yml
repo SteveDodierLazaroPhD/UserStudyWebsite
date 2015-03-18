@@ -13,15 +13,10 @@ parameters:
       start_date: 2015
       end_date: 2015
       part_count: 2
-      parts:
-        p1:
-          name: 'Activity Data Collection'
-        p2:
-          name: 'Sandbox Appropriation & Co-Design'
       spam_question: "Anti-spam: Where is UCL located?"
       spam_correct_answer: London
       spam_answer_bag: [Paris, London, Beijing, Mexico, Seoul]
-      maxgain: '£100'
+      maxgain: '%ucl_study.maxgain%'
       screening_max_wait: '3 weeks'
       participant_dpa_disclaimer: 'Any personal information you give to me will be processed in accordance with the UK Data Protection Act 1998. It will be used solely for the purposes of the study, and no information shall be published that can personally identify you. Your data will be stored within UCL at all times and deleted within three years of being collected. You can, at any time during the study, contact me to amend or delete the data I collected on you, or to opt out entirely from the study.'
       prescreening_dpa_disclaimer: 'Any personal information you give to me will be processed in accordance with the UK Data Protection Act 1998. It will be used solely for the purposes of the study, and no information shall be published that can personally identify you. Your data will be stored within UCL at all times and deleted within three years of being collected. If you are not selected for the study, I will delete the information and email address you provided me within %ucl_study.screening_max_wait%.'
@@ -34,7 +29,7 @@ parameters:
       title: "Linux Multitasking Field Study"
       subtitle: "Participant Website"
       author: "Steve Dodier-Lazaro"
-      author_email: "sidnioulz+study@gmail.com"
+      author_email: "s.dodier-lazaro@cs.ucl.ac.uk"
       author_phone: "+44 (0)20 7679 3644"
       author_office: "UCL MPEB 6.07"
       author_address_1: "25 Gower Street, WC1E 6BT London, UK"
@@ -59,10 +54,10 @@ parameters:
           # but not for the always_visible special part. Enabled_steps define the natural order of processing steps (no support for parallel steps yet).
           #enabled_steps: []
           # Pages that are not study steps but informational. Are always accessible, but may be hidden from a specific menu (e.g. you might want to display
-          # nothing when on the consent form step)
-          additional_pages: [screening_join, login, infopre, contact]
+          # nothing when on the consent form step); There is no access control, hence you don't actually have to define additional_pages.
+          #additional_pages: [screening_join, login, infopre, contact, hello]
           # Default visible steps for when the visible_steps key has not been defined
-          default_visible: [screening_join,login,infopre,contact]
+          default_visible: [screening_join, login, infopre, contact]
           # The navigation key contains direct menu items pointing to pages. Other things can be contained (such as a part name, or a list of enabled pages for this part)
           navigation:
             screening_join:
@@ -86,8 +81,10 @@ parameters:
       participant_space:
         part_0:
           name: "Enrollment"
+          # The enabled steps in the participant space represent the workflow of the study.
+          # All steps (even the ones managed by the app) must be included here, or the site
+          # will be broken!
           enabled_steps: [waiting_enrollment]
-          additional_pages: []
           default_visible: [waiting_enrollment]
           navigation:
             waiting_enrollment:
@@ -97,9 +94,33 @@ parameters:
               visible_steps: [consent]
         part_1:
           name: "Data Collection"
-          enabled_steps: [consent, start, running, debriefing, done]
-          additional_pages: [manual, info]
+          title: 'Activity Data Collection'
+          # The enabled steps in the participant space represent the workflow of the study.
+          # All steps (even the ones managed by the app) must be included here, or the site
+          # will be broken!
+          enabled_steps: [consent, install, running, debriefing, done]
+          #additional_pages: [manual, information]
           default_visible: [consent, manual, information]
+          # The gains of participants for reaching the step (pre) or completing it (post)
+          # e.g. participants gain £5 for having successfully installed the app (reaching
+          # the 'running' step), and up to £30 for completing it. If the pre and post gains
+          # should not be cumulated (e.g. you pay participants per task/day/week), use the
+          # overrides_pre key.
+          gains:
+            running:
+              pre: 5
+              post:
+                per_day: 1.5
+                min_days: 2
+                max_days: 20
+                max: 30
+                overrides_pre: true
+            debriefing:
+              pre: 0
+              post: 
+                min_days: 0
+                fixed: 20
+                overrides_pre: false
           navigation:
             consent:
               href: "ucl_study_part_consent"
@@ -108,27 +129,28 @@ parameters:
               caption: "Give Consent"
               tooltip: "Familiarise yourself with the project and decide if you want to proceed"
               visible_steps: [consent]
-            start:
-              href: "ucl_study_part_start"
+            install:
+              href: "ucl_study_part_install"
               href_params:
                 _part: 1
               caption: "Install the Software"
               tooltip: "Instructions about the data collection software"
-              visible_steps: [consent, start, manual, information]
+              visible_steps: [consent, install, manual, information]
             running:
               href: "ucl_study_part_running"
               href_params:
                 _part: 1
               caption: "Current Status"
               tooltip: "Record your process and check what your next task is"
-              visible_steps: [consent, start, running, manual, information]
+              visible_steps: [consent, install, running, manual, information]
             debriefing:
               href: "ucl_study_part_debriefing"
               href_params:
                 _part: 1
               caption: "Schedule Debriefing"
               tooltip: "When you've finished every task assigned to you"
-              visible_steps: [consent, start, running, debriefing, manual, information]
+              # Having "running" here means the participant can still check their status and upload a new tarball
+              visible_steps: [consent, install, running, debriefing, manual, information]
             done:
               href: "ucl_study_part_done"
               href_params:
@@ -150,9 +172,24 @@ parameters:
               tooltip: "Refresh your memory about the project"
         part_2:
           name: "Co-Design"
+          title: 'Sandbox Appropriation & Co-Design'
           enabled_steps: [consent,briefing]
-          additional_pages: [manual, info]
-          default_visible: [consent, manual, information]
+          #additional_pages: [manual, info]
+          default_visible: [consent, install, running, debriefing, done]
+          gains:
+            running:
+              pre: 0
+              post: 
+                per_day: 1.5
+                min_days: 14
+                max_days: 30
+                max: 40
+                overrides_pre: true
+            debriefing:
+              pre: 0
+              post: 
+                fixed: 10
+                overrides_pre: false
           navigation:
             consent:
               href: "ucl_study_part_consent"
@@ -182,8 +219,7 @@ parameters:
               tooltip: "Refresh your memory about the project"
         always_visible:
 #          name: "Other Links"
-          enabled_steps: []
-          additional_pages: [contact, logout]
+          #additional_pages: [contact, logout]
           default_visible: [contact, logout]
           navigation:
             contact:
@@ -195,26 +231,24 @@ parameters:
               caption: "Log Out"
               tooltip: "We will miss you :'("
 
-      # Application space
+      # Application space (a specialisation of participant_space for app APIs)
+      # The application space uses the participant space's list of enabled_steps
+      # to determine the legal steps of each part. When you take a user to the
+      # next study step from within the application API handlers, it is the
+      # participant_space's enabled_steps that are used again to determine progression.
       application_space:
         part_0:
-          enabled_steps: []
-          additional_pages: []
           default_visible: []
-          navigation:
+          navigation: []
         part_1:
-          enabled_steps: [start,running]
-          additional_pages: []
-          default_visible: []
+          default_visible: [running,manual,information]
           navigation:
-            start:
-              caption: ""
-              visible_steps: [start]
+            consent:
+              visible_steps: [manual,information]
+            install:
+              visible_steps: [install,manual,information]
             running:
-              caption: ""
-              visible_steps: [running]
+              visible_steps: [running,manual,information]
         always_visible:
-          enabled_steps: []
-          additional_pages: []
           default_visible: []
           navigation: []

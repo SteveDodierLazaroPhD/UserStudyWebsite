@@ -5,6 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,10 +22,10 @@ define("PARTICIPANT_INVALID", -2);        // We can use this as a catch-all stat
 /* Again, Symfony forces us to be very careful. DO NOT MODIFY these constants without also modifying the validation
    annotation of the currentStep variable. We would need at some point to build up the annotation in PHP to remove
    this duplication. Also, you do not need to use all states. Sometimes you have no briefing/install actions, etc. */
-define("PARTICIPANT_WAITING_ENROLLMENT", "waiting_enrollment");     // Must collect informed consent for this part to start
+define("PARTICIPANT_WAITING_ENROLLMENT", "waiting_enrollment");     // Waiting for researcher to decide whether to recruit
 define("PARTICIPANT_MUST_CONSENT",       "consent");                // Must collect informed consent for this part to start
 define("PARTICIPANT_READY_BRIEFING",     "briefing");               // Must arrange briefing meeting with participant
-define("PARTICIPANT_MUST_START",         "start");                  // Must have participant take action to start
+define("PARTICIPANT_MUST_START",         "install");                // Must have participant install study software alone
 define("PARTICIPANT_IS_RUNNING",         "running");                // Running the study
 define("PARTICIPANT_PRIMARY_TASK",       "primary_task");           // Performing some primary task
 define("PARTICIPANT_UPLOAD",             "upload");                 // Uploading collected data
@@ -41,7 +42,7 @@ define("PARTICIPANT_FINISHED_PART",      "done");                   // Must pay 
  *     message="This email address is already in use."
  * )
  */
-class Participant implements UserInterface, AdvancedUserInterface, \Serializable
+class Participant implements UserInterface, AdvancedUserInterface, EquatableInterface, \Serializable
 {
   /**
    * @ORM\Column(type="integer")
@@ -73,7 +74,7 @@ class Participant implements UserInterface, AdvancedUserInterface, \Serializable
   /**
    * @ORM\Column(name="current_status", type="string", length=25)
    * @Assert\Choice(
-   *     choices = { "consent", "briefing", "start", "running", "debriefing", "done" },
+   *     choices = { "consent", "briefing", "install", "running", "debriefing", "done" },
    *     message = "There is a bug in the application, we cannot currently determine your progress in the study. Please contact us if you see this message."
    * )
    */
@@ -205,9 +206,9 @@ class Participant implements UserInterface, AdvancedUserInterface, \Serializable
      */
     public function setUsername($username)
     {
-        $this->username = $username;
+      $this->username = $username;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -230,7 +231,7 @@ class Participant implements UserInterface, AdvancedUserInterface, \Serializable
      */
     public function getEmail()
     {
-        return $this->email;
+      return $this->email;
     }
 
     /**
@@ -241,9 +242,9 @@ class Participant implements UserInterface, AdvancedUserInterface, \Serializable
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+      $this->password = $password;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -254,9 +255,9 @@ class Participant implements UserInterface, AdvancedUserInterface, \Serializable
      */
     public function setIsActive($isActive)
     {
-        $this->isActive = $isActive;
+      $this->isActive = $isActive;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -266,7 +267,7 @@ class Participant implements UserInterface, AdvancedUserInterface, \Serializable
      */
     public function getIsActive()
     {
-        return $this->isActive;
+      return $this->isActive;
     }
 
     /**
@@ -289,7 +290,7 @@ class Participant implements UserInterface, AdvancedUserInterface, \Serializable
      */
     public function getcurrentStep()
     {
-        return $this->currentStep;
+      return $this->currentStep;
     }
 
     /**
@@ -313,9 +314,9 @@ class Participant implements UserInterface, AdvancedUserInterface, \Serializable
      */
     public function setCurrentPart($currentPart)
     {
-        $this->currentPart = $currentPart;
+      $this->currentPart = $currentPart;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -325,6 +326,11 @@ class Participant implements UserInterface, AdvancedUserInterface, \Serializable
      */
     public function getCurrentPart()
     {
-        return $this->currentPart;
+      return $this->currentPart;
+    }
+    
+    public function isEqualTo(UserInterface $user)
+    {
+      return $this->email === $user->getEmail();
     }
 }

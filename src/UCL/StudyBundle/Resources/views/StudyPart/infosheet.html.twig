@@ -1,12 +1,17 @@
 {% set layout = "article" %}
-{% extends 'UCLStudyBundle::base.html.twig' %}
+{% if space is defined and space == 'application_space' %}
+{% set base = 'UCLStudyBundle::app.html.twig' %}
+{% else %}
+{% set base = 'UCLStudyBundle::base.html.twig' %}
+{% endif %}
+{% extends base %}
 
 {% block article_details %}
     <p class="bs-callout-compact bs-callout-success">This study has been approved by the UCL Research Ethics Committee. <span class="nowrap">Project ID Number: {{globals.REC_number}}.</span> </p>
     <div class="form-horizontal">
     <div class="row">
       <label class="col-sm-2 control-label">Title of Project</label><!--
-      --><div class="col-sm-10 form-control-static">{{ site.title }} – {{ globals.parts['p' ~ _part].name }}</div>
+      --><div class="col-sm-10 form-control-static">{{ site.title }} – {{ site.participant_space['part_' ~ _part].title }}</div>
     </div>
     <div class="row">
       <label class="col-sm-2 control-label">Main Researcher</label><!--
@@ -40,7 +45,7 @@ Content goes here.
 {% endblock %}
 </div>
 {% block infosheet_actions %}
-  <a href="{{ url('ucl_study_contact') }}" title="Contact the researchers behind this project" class="btn btn-lg btn-default">Contact the Researchers</a>
+  <a href="{% if space is defined and space == 'application_space' %}{{ url('ucl_study_app_contact') }}{% else %}{{ url('ucl_study_contact') }}{% endif %}" title="Contact the researchers behind this project" class="btn btn-lg btn-default">Contact the Researchers</a>
 {% endblock %}
 {% endblock %}
 
