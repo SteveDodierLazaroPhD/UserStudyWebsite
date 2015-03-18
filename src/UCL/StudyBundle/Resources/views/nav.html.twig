@@ -1,7 +1,7 @@
 <nav>
 {# Authenticated user, which is either a participant or a participant's application #}
 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-  {% if is_app is defined %} {# TODO could detect if _route is ucl_study_app_* too #}
+  {% if false %} {# Currently, the application space does not use the navigation system (clients build their own navigation and request controller) #}
     {% set menu_space = 'application_space' %}
   {% else %}
     {% set menu_space = 'participant_space' %}
