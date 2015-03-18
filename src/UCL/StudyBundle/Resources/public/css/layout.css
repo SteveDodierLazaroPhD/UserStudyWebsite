@@ -561,6 +561,26 @@ aside.alert {
   font-size: .95em;
 }
 
+.disabled {
+  opacity: .65;
+}
+
+.cursor-disabled {
+  cursor: not-allowed;
+}
+
+.progressbar-wrapper {
+  position: relative;
+}
+
+.progressbar-marker {
+  width: 2px;
+  height: 24px;
+  position: absolute;
+  top: -2px;
+  background-color: #555;
+}
+
 .bs-callout {
   padding: 15px 20px 15px;
   margin: 20px 0;
