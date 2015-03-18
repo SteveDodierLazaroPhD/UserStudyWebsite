@@ -10,3 +10,9 @@ services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    upload_store:
+        class:        UCL\StudyBundle\Service\FileStore
+        arguments:    ["%file_store.upload%"]
+    screening_store:
+        class:        UCL\StudyBundle\Service\FileStore
+        arguments:    ["%file_store.screening%"]
