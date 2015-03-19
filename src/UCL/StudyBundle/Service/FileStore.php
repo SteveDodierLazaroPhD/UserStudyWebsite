@@ -42,7 +42,7 @@ class FileStore
     return $time.'_'.$participantEmail.'_'.uniqid('', false).'.'.$extension;
   }
 
-  protected function makeFullPath($filename)
+  function makeFullPath($filename)
   {
     if (!$this->fs->exists($this->store))
     {
