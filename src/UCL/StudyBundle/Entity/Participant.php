@@ -125,7 +125,6 @@ class Participant implements UserInterface, AdvancedUserInterface, EquatableInte
     return $this->id;
   }
 
-
   /**
    * @inheritDoc
    */
