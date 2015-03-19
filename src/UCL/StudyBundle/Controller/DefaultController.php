@@ -36,8 +36,7 @@ class DefaultController extends UCLStudyController
       $params['page'] = array('title' => 'Register for Participant Screening');
       
       $previous = $request->request->get('form');
-      $registration_folder = $this->container->getParameter('upload_destination_screening');
-      $task = new RegistrationJob($registration_folder, $previous != null ? $previous : array());
+      $task = new RegistrationJob($previous != null ? $previous : array());
 
       $prev_email = $previous ? (array_key_exists('email', $previous) ? $previous['email']['first'] : '') : '';
       $prev_browser = $previous ? (array_key_exists('browser', $previous) ? $previous['browser'] : array()) : array();

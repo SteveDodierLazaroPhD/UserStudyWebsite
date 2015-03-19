@@ -103,10 +103,8 @@ class RegistrationJob
   
   
   /* Methods */
-  function __construct ($registration_folder, $initial = array())
+  function __construct ($initial = array())
   {
-    $this->registration_folder = $registration_folder;
-  
     // Note that email (repeated) and browser (choices multiple) are not automatically managed and need manual data instantiation in the controller
     $this->pseudonym    = $initial ? (array_key_exists('pseudonym', $initial) ? $initial['pseudonym'] : '') : '';
     $this->email        = $initial ? (array_key_exists('email', $initial) ? $initial['email'] : '') : '';
