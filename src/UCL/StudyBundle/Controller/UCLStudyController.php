@@ -78,6 +78,13 @@ class UCLStudyController extends Controller
     $em->flush($obj);
   }
 
+  protected function removeObject($obj)
+  {
+    $em = $this->getDoctrine()->getManager();
+    $em->remove($obj);
+    $em->flush();
+  }
+
   protected function getEnabledStepsForPart($part)
   {
     $logger = $this->get('logger');
