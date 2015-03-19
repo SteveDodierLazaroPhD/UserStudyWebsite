@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity
  * @ORM\Table(name="study_datauploadjob")
+ * Uploaded files can be up to 2.147GB large on 32 bit servers.
  */
 class DataUploadJob
 {
@@ -51,6 +52,11 @@ class DataUploadJob
    */
   protected $obtainedSize;
   
+  /**
+   * @ORM\Column(type="string", name="checksum", nullable=true, length=64, options={"comment":"A checksum of the complete file for a final verification"})
+   */
+  protected $checksum;
+  
 
   protected function clearPreviousFile()
   {
@@ -66,6 +72,7 @@ class DataUploadJob
     $this->dayCount = $dayCount;
     $this->expectedSize = 0;
     $this->obtainedSize = 0;
+    $this->checksum = null;
   }
   function __construct ($participant, $part, $step, $dayCount = 0)
   {
@@ -142,6 +149,16 @@ class DataUploadJob
   public function setObtainedSize($obtainedSize)
   {
       $this->obtainedSize = $obtainedSize;
+  }
+
+  public function getChecksum()
+  {
+      return $this->checksum;
+  }
+
+  public function setChecksum($checksum)
+  {
+      $this->checksum = $checksum;
   }
 }
 
