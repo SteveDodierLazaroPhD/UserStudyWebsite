@@ -8,10 +8,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="study_datacollectionstepprogress")
+ * @ORM\Table(name="study_stepprogress")
  * Uploaded files can be up to 2.147GB large on 32 bit servers.
  */
-class DataCollectionStepProgress
+class StepProgress
 {
   /**
    * @ORM\Column(type="string", length=255)
@@ -42,13 +42,25 @@ class DataCollectionStepProgress
    */
   protected $goal;
 
-  function __construct ($participant, $part, $step, $progress = 0, $goal = 0)
+  /**
+   * @ORM\Column(type="string", name="counter_name", nullable=false)
+   */
+  protected $counterName;
+
+  /**
+   * @ORM\Column(type="integer", name="counter_plural", nullable=true)
+   */
+  protected $counterPlural;
+
+  function __construct ($participant, $part, $step, $progress = 0, $goal = 0, $counterName = "day", $counterPlural = "days")
   {
     $this->participant = $participant;
     $this->part = $part;
     $this->step = $step;
     $this->progress = $progress;
     $this->goal = $goal;
+    $this->counterName = $counterName;
+    $this->counterPlural = $counterPlural;
   }
 
   public function getParticipant()
@@ -100,6 +112,26 @@ class DataCollectionStepProgress
   public function setGoal($goal)
   {
       $this->goal = $goal;
+  }
+
+  public function getCounterName()
+  {
+      return $this->counterName;
+  }
+
+  public function setCounterName($counterName)
+  {
+      $this->counterName = $counterName;
+  }
+
+  public function getCounterPlural()
+  {
+      return $this->counterPlural;
+  }
+
+  public function setCounterPlural($counterPlural)
+  {
+      $this->counterPlural = $counterPlural;
   }
 }
 
