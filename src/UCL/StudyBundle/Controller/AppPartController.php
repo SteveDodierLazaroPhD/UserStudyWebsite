@@ -19,7 +19,6 @@ use UCL\StudyBundle\Entity\Participant;
 //TODO create API with basic json parsing to read the current dayCount
 //TODO create full JSON API for login? 
 //TODO remove daysCollected from DataUploadJob and all the *uploadjob methods here
-//TODO FIX THE DAMN HEADERS/NAV.
 
 //TODO write authenticator that bypasses the password field (uses the username twice)
 //TODO write global parameter to toggle the use of passwords, if passwords disabled then hide password field from login Twigs and inject some data there to avoid blocking the form submission
