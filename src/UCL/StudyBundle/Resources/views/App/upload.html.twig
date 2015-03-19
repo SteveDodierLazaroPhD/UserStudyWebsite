@@ -3,7 +3,7 @@
 
 {% block body %}
     <h3>Reminder</h3>
-    <p>You are about to upload your collected data to UCL for analysis. Please keep in mind that you can amend the collected data using the <span class="fa fa-gear fa-fw"></span>{% if space is defined and space == "application_space" %}<a href="app://ucl-study-journal">UCL Study Journal</a>{% else %}UCL Study Journal{% endif %} prior to uploading{% if resuming %} <span class="warning">(<strong>warning:</strong> you must start a new upload job for your changes to take effect)</span>{% endif %}. You can also write to the researchers if you wish to edit or delete some of your data after uploading it. You can also drop out from the study now, or later, without prejudice to the rewards you have already earned. {#As a reminder, your rights on the collected data are protected by the Data Protection Act 1998.#}</p>
+    <p>You are about to upload your collected data to UCL for analysis. Please keep in mind that you can amend the collected data using the <span class="fa fa-gear fa-fw"></span>{% if space is defined and space == "application_space" %}<a href="app://ucl-study-journal">UCL Study Journal</a>{% else %}UCL Study Journal{% endif %} prior to uploading{% if resuming %} <span class="warning">(<strong>attention:</strong> you must start a new upload job for your changes to take effect)</span>{% endif %}. You can also write to the researchers if you wish to edit or delete some of your data after uploading it. You can also drop out from the study now, or later, without prejudice to the rewards you have already earned. {#As a reminder, your rights on the collected data are protected by the Data Protection Act 1998.#}</p>
     
 {% include ('UCLStudyBundle::dpa.html.twig') %}
     
