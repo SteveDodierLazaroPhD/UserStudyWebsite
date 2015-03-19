@@ -16,6 +16,16 @@ use UCL\StudyBundle\Entity\DataUploadJob;
 use UCL\StudyBundle\Entity\Participant;
 
 
+//TODO create API with basic json parsing to read the current dayCount
+//TODO create full JSON API for login? 
+//TODO create full UI for seeing the current status
+//TODO remove daysCollected from DataUploadJob and all the *uploadjob methods here
+
+//TODO write authenticator that bypasses the password field (uses the username twice)
+//TODO write global parameter to toggle the use of passwords, if passwords disabled then hide password field from login Twigs and inject some data there to avoid blocking the form submission
+
+//TODO in client make object that manages all requests, and separate from UI. Use signals to navigate the view based on outcomes of requests, and a LoadingUI in the MainWindow instead of existing architecture
+
 /**
  * WARNING: using this class to upload files over 2GB on a 32-bit server is considered undefined behaviour.
  */
@@ -51,7 +61,7 @@ class AppPartController extends UCLStudyController
       return '"Participant":{'.$logged.','.$status.'}';
     }
     
-    protected function getDataUploadJobJSON($job)
+    protected function getUploadJobJSON($job)
     {
       $expectedSize = ($job->getExpectedSize() != 0) ? ''.$job->getExpectedSize().'':'null';
       $checksum = ($job->getChecksum()) ? '"'.$job->getChecksum().'"':'null';
@@ -63,7 +73,20 @@ class AppPartController extends UCLStudyController
                                 '"ObtainedSize": '.$job->getObtainedSize().', '.
                                 '"Checksum": '.$checksum.'}';
     }
-
+    
+    protected function getUploadJob(Participant $participant, $part, $step, $daysCollected)
+    {
+      $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:DataUploadJob');
+      $uploadjob = $repository->findOneBy(array("participant" => $participant,
+                                                "part"        => $part,
+                                                "step"        => $step));
+      
+      if (!$uploadjob)
+        $uploadjob = new DataUploadJob($participant, $part, $step, $daysCollected);
+        
+      return $uploadjob;
+    }
+    
     /**
      * @Route("/a/logged_in", name="ucl_study_app_logged_in")
      */
@@ -98,8 +121,7 @@ class AppPartController extends UCLStudyController
     
     protected function abortUploadJob(DataUploadJob $uploadjob, $_part, $cause='Aborting the job', $extraData=null)
     {
-      $uploadjob->reset();
-      $this->persistObject($uploadJob);
+      $this->removeObject($uploadjob);
       if (empty($extraData))
         return $this->jResponse('"Uploading":"Failure","FailureCause":"'.$cause.'}');
       else
@@ -109,7 +131,7 @@ class AppPartController extends UCLStudyController
     protected function parseUploadingInit(DataUploadJob $uploadjob, $_part, Request $request)
     {
       $request->getSession()->set('Uploading', 'JobParameters');
-      return $this->jResponse('"Uploading":"ReadyJobParameters", '.$this->getDataUploadJobJSON($uploadjob));
+      return $this->jResponse('"Uploading":"ReadyJobParameters", '.$this->getUploadJobJSON($uploadjob));
     }
     
     protected function parseUploadingJobParameters(DataUploadJob $uploadjob, $_part, Request $request)
@@ -132,7 +154,7 @@ class AppPartController extends UCLStudyController
 
           $this->persistObject($uploadjob);
           $request->getSession()->set('Uploading', 'Uploading');
-          return $this->jResponse('"Uploading":"ReadyData", '.$this->getDataUploadJobJSON($uploadjob));
+          return $this->jResponse('"Uploading":"ReadyData", '.$this->getUploadJobJSON($uploadjob));
         }
         else
           return $this->jResponse('"Uploading":"Failure", "FailureCause":"Received data contained a syntax error or was not the expected JobParameters message."');
@@ -197,9 +219,9 @@ class AppPartController extends UCLStudyController
           $logger->error('Error while updating DataUploadJob for participant '.$this->getParticipantJSON().'; job P'.$uploadjob->getPart().' S'.$uploadjob->getStep().' D'.$uploadjob->getDayCount().'; '.$diagnostic);
           
           if ($recovered)
-            return $this->jResponse('"Uploading":"ReadyData", '.$diagnostic.', '.$this->getDataUploadJobJSON($uploadjob));
+            return $this->jResponse('"Uploading":"ReadyData", '.$diagnostic.', '.$this->getUploadJobJSON($uploadjob));
           else
-            return $this->abortUploadJob($uploadJob, "An error occurred while writing the uploaded data, and the error could not be recovered. Aborting the job.", $diagnostic);
+            return $this->abortUploadJob($uploadjob, "An error occurred while writing the uploaded data, and the error could not be recovered. Aborting the job.", $diagnostic);
         }
 
         $uploadjob->setObtainedSize($uploadjob->getObtainedSize() + $length);
@@ -215,17 +237,17 @@ class AppPartController extends UCLStudyController
           if ($fileChecksum == $uploadjob->getChecksum())
           {
             $this->takeParticipantToNextStep($_part, 'running');
-            return $this->jResponse('"Uploading":"Done", '.$this->getDataUploadJobJSON($uploadjob));
+            return $this->jResponse('"Uploading":"Done", '.$this->getUploadJobJSON($uploadjob));
           }
           else
-            return $this->abortUploadJob($uploadJob, 'Final checksum failed on data upload job. This usually happens if the client mismatched some of the parts it sent. Aborting the job."');
+            return $this->abortUploadJob($uploadjob, 'Final checksum failed on data upload job. This usually happens if the client mismatched some of the parts it sent. Aborting the job."');
         }
         else
-          return $this->jResponse('"Uploading":"ReadyData", '.$this->getDataUploadJobJSON($uploadjob));
+          return $this->jResponse('"Uploading":"ReadyData", '.$this->getUploadJobJSON($uploadjob));
       }
       catch (Exception $e)
       {
-        return $this->abortUploadJob($uploadJob, 'Could not open the file to write your data to ('.$e->getMessage().'). This is a bug in the server. Aborting the job."');
+        return $this->abortUploadJob($uploadjob, 'Could not open the file to write your data to ('.$e->getMessage().'). This is a bug in the server. Aborting the job."');
       }
 
       return $this->jResponse('"Uploading":"Failure", "FailureCause":"Could not determine what to do with the received packet. This is a bug in the server."');
@@ -241,9 +263,7 @@ class AppPartController extends UCLStudyController
       $params = $this->setupParameters($request, true, 'running', $_part);
 
       $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:DataUploadJob');
-      $uploadjob = $repository->findOneBy(array("participant" => $this->getUser()->getId(),
-                                                "part"        => $this->getUser()->getCurrentPart(),
-                                                "step"        => 'running'));
+      $uploadjob = $this->getUploadJob($this->getUser(), $_part, 'running', 11); //FIXME
       $uploadingState = $request->getSession()->get('Uploading', 'Init');
       
       /* First, inform the client that we need some job initialisation done */
@@ -269,7 +289,22 @@ class AppPartController extends UCLStudyController
       
       return $this->jResponse('"Uploading":"Failure", "FailureCause":"An unknown error occurred while uploading."');
     }
-
+    
+    /**
+     * @Route("/a/{_part}/uploadreset", name="ucl_study_app_upload_reset",
+     *    defaults={"_part" = 1},
+     *    requirements={"_part": "\d+"})
+     */
+    public function uploadResetAction($_part, Request $request)
+    {
+      $params = $this->setupParameters($request, true, 'running', $_part);
+      $uploadjob = $this->getUploadJob($this->getUser(), $_part, 'running', 11); //FIXME
+      $this->removeObject($uploadjob);
+      $request->getSession()->remove('Uploading');
+      
+      return $this->jResponse('"UploadReset":"Success"');
+    }
+    
     /**
      * @Route("/a/{_part}/upload_direct", name="ucl_study_app_upload_direct",
      *    defaults={"_part" = 1},
@@ -311,14 +346,7 @@ class AppPartController extends UCLStudyController
       
       /* Fetch the current upload job, or start a new one */
       $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:DataUploadJob');
-      $uploadjob = $repository->findOneBy(array("participant" => $this->getUser()->getId(),
-                                                "part"        => $this->getUser()->getCurrentPart(),
-                                                "step"        => "running"));
-
-      if (!$uploadjob)
-      {
-        $uploadjob = new DataUploadJob($this->getUser(), $_part, 'running', $daysCollected);
-      }
+      $uploadjob = $this->getUploadJob($this->getUser(), $_part, 'running', $daysCollected);
         
       /* Setup page parameters for the Twig template */
       $params['daysCollected'] = $daysCollected;
