@@ -52,7 +52,7 @@
               <div class="progressbar-marker" style="right: {{ 100 - (minDays * 100 / target) }}%;" title="Min {{ minDays }} Days"></div>
               {% endif %} 
             </div>
-            <a class="btn btn-default" href="{{ path('ucl_study_app_running', {'_part': _part}) }}" title="Refresh day count">Refresh Day Count (takes a few minutes)</a>
+            <a class="btn btn-default" href="{{ path('ucl_study_app_running', {'_part': _part}) }}" title="Refresh day count"><i class="fa fa-refresh"></i> Refresh</a><small><em> (takes a few minutes)</em></small>
           </div>
       </div>
       
