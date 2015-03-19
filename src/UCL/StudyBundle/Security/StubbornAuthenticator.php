@@ -10,6 +10,9 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+//TODO check isActive and refuse auth if its set to 0
+//TODO make RegistrationJob create the Participant for me with is_active 0
+
 /* I put this class together, even though it implements a behaviour achievable
    by default, because I wanted the ability to *debug* my code and see what
    Symfony was doing with my credentials and Symfony form. It's highly

@@ -18,7 +18,6 @@ use UCL\StudyBundle\Entity\Participant;
 
 //TODO create API with basic json parsing to read the current dayCount
 //TODO create full JSON API for login? 
-//TODO create full UI for seeing the current status
 //TODO remove daysCollected from DataUploadJob and all the *uploadjob methods here
 //TODO FIX THE DAMN HEADERS/NAV.
 
