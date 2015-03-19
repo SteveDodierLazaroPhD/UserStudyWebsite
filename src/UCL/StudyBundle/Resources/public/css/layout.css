@@ -231,10 +231,13 @@ nav a {
   padding: 2px;
 }
 
+nav s {
+  text-decoration: none;
+}
 nav s>a {
   font-weight: thin;
   color: #a0a0aa;
-  text-decoration: line-through;
+  text-decoration: none; /*line-through;*/
 }
 nav s>a:after {
   content: "  \f00c";
@@ -559,6 +562,115 @@ aside {
 aside.alert {
   padding: .3em !important;
   font-size: .95em;
+}
+
+#status s {
+  text-decoration: none;
+}
+#status s>h4 {
+  font-weight: thin;
+  opacity: .65;
+  text-decoration: none;
+}
+#status s>h4:after {
+  content: "  \f00c";
+  font-family: FontAwesome;
+}
+
+ol.progtrckr {
+  margin: 0 0 1em;
+  padding: 0;
+  list-style-type none;
+}
+ol.progtrckr li {
+  vertical-align: text-top;
+  display: inline-block;
+  line-height: 1em;
+  margin: 1em 0 0;
+  padding: 1em 0;
+  min-width: 140px;
+  text-align: center;
+}
+ol.progtrckr[data-progtrckr-steps="2"] li { width: 49.99%; }
+ol.progtrckr[data-progtrckr-steps="3"] li { width: 33.32%; }
+ol.progtrckr[data-progtrckr-steps="4"] li { width: 24.99%; }
+ol.progtrckr[data-progtrckr-steps="5"] li { width: 19.99%; }
+ol.progtrckr[data-progtrckr-steps="6"] li { width: 16.65%; }
+ol.progtrckr[data-progtrckr-steps="7"] li { width: 14.28%; }
+ol.progtrckr[data-progtrckr-steps="8"] li { width: 12.49%; }
+ol.progtrckr[data-progtrckr-steps="9"] li { width: 11.11%; }
+ol.progtrckr li:before {
+  position: relative;
+  text-align: center;
+  top: -1.8em;
+  float: left;
+  left: 50%;
+  font-family: FontAwesome;
+  height: 1.4em;
+  width: 1.4em;
+  line-height: 1.1em;
+  border-radius: 1.4em;
+}
+ol.progtrckr li.progtrckr-done:before {
+  content: "\f00c";
+  color: white;
+  border: .2em solid transparent;
+  background-color: yellowgreen;
+}
+ol.progtrckr li.progtrckr-current:before {
+  content: "\f041";
+  color: #666;
+  border: .2em solid #666;
+  background-color: #fbfbfb;
+}
+ol.progtrckr li.progtrckr-todo:before {
+  content: "\f111";
+  color: #fbfbfb;
+  border: .2em solid silver;
+  background-color: #fbfbfb;
+}
+ol.progtrckr li.progtrckr-done {
+  color: black;
+  border-top: 4px solid yellowgreen;
+}
+ol.progtrckr li.progtrckr-current {
+  color: black;
+  text-decoration: underline;
+  border-top: 4px solid silver;
+  -moz-border-image: -moz-linear-gradient(left, yellowgreen 50%, silver 50%);
+  -webkit-border-image: -webkit-linear-gradient(left, yellowgreen 50%, silver 50%);
+  border-image: linear-gradient(to right, yellowgreen 50%, silver 50%);
+  border-image-slice: 1;
+}
+ol.progtrckr li.progtrckr-todo {
+  color: silver;
+  border-top: 4px solid silver;
+}
+
+ol.progtrckr li.progtrckr-done:last-child, ol.progtrckr li.progtrckr-current:last-child {
+  -moz-border-image: -moz-linear-gradient(left, yellowgreen 50%, transparent 50%);
+  -webkit-border-image: -webkit-linear-gradient(left, yellowgreen 50%, transparent 50%);
+  border-image: linear-gradient(to right, yellowgreen 50%, transparent 50%);
+  border-image-slice: 1;
+}
+ol.progtrckr li.progtrckr-todo:last-child {
+  -moz-border-image: -moz-linear-gradient(left, silver 50%, transparent 50%);
+  -webkit-border-image: -webkit-linear-gradient(left, silver 50%, transparent 50%);
+  border-image: linear-gradient(to right, silver 50%, transparent 50%);
+  border-image-slice: 1;
+}
+
+hr.progtrckr-todo {
+  padding: 1em 0 0;
+  margin: 0 0 4em;
+  border: 0px solid transparent;
+  color: transparent;
+  background-color: transparent;
+  border-top: 4px solid silver;
+  -moz-border-image: -moz-linear-gradient(left, silver 40%, transparent 90%);
+  -webkit-border-image: -webkit-linear-gradient(left, silver 40%, transparent 90%);
+  border-image: linear-gradient(to right, silver 40%, transparent 90%);
+  border-image-slice: 1;
 }
 
 .disabled {

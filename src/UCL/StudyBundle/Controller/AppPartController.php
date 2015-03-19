@@ -20,6 +20,7 @@ use UCL\StudyBundle\Entity\Participant;
 //TODO create full JSON API for login? 
 //TODO create full UI for seeing the current status
 //TODO remove daysCollected from DataUploadJob and all the *uploadjob methods here
+//TODO FIX THE DAMN HEADERS/NAV.
 
 //TODO write authenticator that bypasses the password field (uses the username twice)
 //TODO write global parameter to toggle the use of passwords, if passwords disabled then hide password field from login Twigs and inject some data there to avoid blocking the form submission
@@ -117,6 +118,16 @@ class AppPartController extends UCLStudyController
     {
       $params = $this->setupParameters($request, true);
       return $this->jResponse('"Status":"Success"');
+    }
+
+    /**
+     * @Route("/a/showstatus", name="ucl_study_app_show_status")
+     */
+    public function showStatusAction(Request $request)
+    {
+      $params = $this->setupParameters($request, true);
+      $params['page'] = array('title' => 'Your Current Progress');
+      return $this->render('UCLStudyBundle:App:status.html.twig', $params);
     }
     
     protected function abortUploadJob(DataUploadJob $uploadjob, $_part, $cause='Aborting the job', $extraData=null)
