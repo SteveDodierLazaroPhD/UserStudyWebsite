@@ -39,7 +39,7 @@
       <div class="form-horizontal">
       <p>You have collected {{ daysCollected }} days of data so far. {% if minDays > daysCollected %}You must collect at least {{ minDays - daysCollected }} more days before you can upload your data and claim a reward{% else %}You can upload your data now{% if maxDays is defined and maxDays > daysCollected %}, or you can wait until you reach {{ maxDays }} days of participation{% endif %}{% endif %}.</p>
       
-      <div class="form-group">
+      <div class="form-row">
         <label class="col-sm-3 control-label">Your progress</label><!--
         --><div class="col-sm-9 form-control-static">
             <div class="progressbar-wrapper">
@@ -61,12 +61,12 @@
         <p>You will earn a fixed reward for completing the task assigned to you:</p>
         <div class="form-group">
           {# Reward for dropping out, mask if completed #}
-          <div class="clearfix{% if completed %} disabled{% endif %}">
+          <div class="form-row{% if completed %} disabled{% endif %}">
             <label class="col-sm-3 control-label">If you drop out</label><!--
             --><div class="col-sm-9 form-control-static">£{{ preReward }}</div>
           </div>
           {# Fixed reward, for completing or starting a new job #}
-          <div class="clearfix">
+          <div class="form-row">
             <span{% if (not completed) and notEnoughDays %} class="disabled"{% endif %}>
             <label class="col-sm-3 control-label">{% if completed %}Earned so far{% else %}If you {% if resuming %}finish the current upload job{% else %}upload your data{% endif %}{% endif %}</label><!--
             --><div class="col-sm-9 form-control-static">£{{ fixedReward }}</div>
@@ -79,12 +79,12 @@
         <p>You will earn £{{ perDay }} per day of uploaded data, up to £{{ maxGain }}. Your reward so far:
         <div class="form-group">
           {# Reward for dropping out, mask if completed #}
-          <div class="clearfix{% if completed %} disabled{% endif %}">
+          <div class="form-row{% if completed %} disabled{% endif %}">
           <label class="col-sm-3 control-label">If you drop out</label><!--
           --><div class="col-sm-9 form-control-static">£{{ preReward }}</div>
           </div>
           
-          <div class="clearfix">
+          <div class="form-row">
             <span{% if (not completed) and notEnoughDays %} class="disabled"{% endif %}>
             <label class="col-sm-3 control-label">{% if completed %}Earned so far{% else %}If you {% if resuming %}finish the current upload job{% else %}upload your data{% endif %}{% endif %}</label><!--
             --><div class="col-sm-9 form-control-static">£{% if resuming or completed %}{{ min (maxGain, perDay * daysInCurrentJob) }}{% else %}{{ min (maxGain, perDay * daysCollected) }}{% endif %} <div class="progress"><div class="progress-bar progress-bar-default" role="progressbar" aria-valuenow="{{ obtainedSize }}" aria-valuemin="0" aria-valuemax="{{ expectedSize }}" style="width: {% if expectedSize != 0 %}{{ obtainedSize * 100 / expectedSize }}{% else %}0{% endif %}%"><span class="">{{ (obtainedSize / 1000000) | round(0, 'ceil')  }} / {{ (expectedSize / 1000000) | round(0, 'ceil')  }} MB</span></div></div></div>
@@ -92,7 +92,7 @@
           </div>
           
           {% if proposeErasing %}
-          <div class="clearfix">
+          <div class="form-row">
             <span{% if daysCollected < minDays %} class="disabled"{% endif %}>
             <label class="col-sm-3 control-label">If you start a new upload</label><!--
             --><div class="col-sm-9 form-control-static">£{{ min (maxGain, perDay * daysCollected) }}</div>
@@ -107,7 +107,7 @@
     
     {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
     <fieldset>
-      <div class="form-group">
+      <div class="form-row">
         <div class="col-sm-3"></div>
         {# Job already finished #}
         {% if completed %}
@@ -121,7 +121,7 @@
     		{% endif %}
       </div>
       {% if proposeErasing %}
-      <div class="form-group">
+      <div class="form-row">
         <div class="col-sm-3"></div>
         {# Not enough days collected #}
         {% if minDays is defined and daysCollected < minDays %}
