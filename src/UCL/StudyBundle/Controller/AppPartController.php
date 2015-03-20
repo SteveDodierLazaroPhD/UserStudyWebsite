@@ -14,6 +14,7 @@ use UCL\StudyBundle\Controller\UCLStudyController as UCLStudyController;
 use UCL\StudyBundle\Form\Type\DataUploadType;
 use UCL\StudyBundle\Entity\DataUploadJob;
 use UCL\StudyBundle\Entity\Participant;
+use UCL\StudyBundle\Entity\StepProgress;
 
 
 //TODO create API with basic json parsing to read the current dayCount
@@ -76,7 +77,7 @@ class AppPartController extends UCLStudyController
     {
       return '"StepProgress":{"Part": '.$progress->getPart().', '.
                              '"Step": "'.$progress->getStep().'", '.
-                             '"Counter": '.$progress->getCounter().', '.
+                             '"Progress": '.$progress->getProgress().', '.
                              '"Goal": '.$progress->getGoal().', '.'}';
     }
     
@@ -96,14 +97,14 @@ class AppPartController extends UCLStudyController
     protected function getStepProgress(Participant $participant, $part, $step, $progress, $goal)
     {
       $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:StepProgress');
-      $progress = $repository->findOneBy(array("participant" => $participant,
+      $prg = $repository->findOneBy(array("participant" => $participant,
                                                "part"        => $part,
                                                "step"        => $step));
       
-      if (!$progress)
-        $progress = new StepProgress($participant, $part, $step, $progress, $goal);
+      if (!$prg)
+        $prg = new StepProgress($participant, $part, $step, $progress, $goal);
         
-      return $progress;
+      return $prg;
     }
     
     /**
@@ -453,7 +454,7 @@ class AppPartController extends UCLStudyController
 
         if (is_array($data) && is_array($data['ReportProgress']))
         {
-          if (!array_key_exists ('Step', $data['ReportProgress']) || !is_str($data['ReportProgress']['Step']))
+          if (!array_key_exists ('Step', $data['ReportProgress']) || !is_string($data['ReportProgress']['Step']))
             return $this->jResponse('"ReportProgress":"Failure", "FailureCause":"Missing Step."');
             
           if (!array_key_exists ('Progress', $data['ReportProgress']) || !is_int($data['ReportProgress']['Progress']))

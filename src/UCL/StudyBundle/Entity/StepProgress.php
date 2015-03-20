@@ -49,7 +49,7 @@ class StepProgress
 
   function __construct ($participant, $part, $step, $progress = 0, $goal = 0)//, $counterName = "day")
   {
-    $this->participant = $participant;
+    $this->participant = $participant->getId();
     $this->part = $part;
     $this->step = $step;
     $this->progress = $progress;
