@@ -17,9 +17,7 @@ use UCL\StudyBundle\Entity\Participant;
 use UCL\StudyBundle\Entity\StepProgress;
 
 
-//TODO create API with basic json parsing to read the current dayCount
 //TODO create full JSON API for login? 
-//TODO remove daysCollected from DataUploadJob and all the *uploadjob methods here
 
 //TODO write authenticator that bypasses the password field (uses the username twice)
 //TODO write global parameter to toggle the use of passwords, if passwords disabled then hide password field from login Twigs and inject some data there to avoid blocking the form submission
@@ -81,20 +79,22 @@ class AppPartController extends UCLStudyController
                              '"Goal": '.$progress->getGoal().', '.'}';
     }
     
-    protected function getUploadJob(Participant $participant, $part, $step, $daysCollected)
+    protected function getUploadJob(Participant $participant, $part, $step)
     {
+      $prg = $this->getStepProgress($participant, $part, $step);
+    
       $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:DataUploadJob');
       $uploadjob = $repository->findOneBy(array("participant" => $participant,
                                                 "part"        => $part,
                                                 "step"        => $step));
       
       if (!$uploadjob)
-        $uploadjob = new DataUploadJob($participant, $part, $step, $daysCollected);
+        $uploadjob = new DataUploadJob($participant, $part, $step, $prg);
         
       return $uploadjob;
     }
     
-    protected function getStepProgress(Participant $participant, $part, $step, $progress, $goal)
+    protected function getStepProgress(Participant $participant, $part, $step, $progress = 0, $goal = 0)
     {
       $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:StepProgress');
       $prg = $repository->findOneBy(array("participant" => $participant,
@@ -291,7 +291,7 @@ class AppPartController extends UCLStudyController
       $params = $this->setupParameters($request, true, 'running', $_part);
 
       $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:DataUploadJob');
-      $uploadjob = $this->getUploadJob($this->getUser(), $_part, 'running', 11); //FIXME
+      $uploadjob = $this->getUploadJob($this->getUser(), $_part, 'running');
       $uploadingState = $request->getSession()->get('Uploading', 'Init');
       
       /* First, inform the client that we need some job initialisation done */
@@ -326,7 +326,7 @@ class AppPartController extends UCLStudyController
     public function uploadResetAction($_part, Request $request)
     {
       $params = $this->setupParameters($request, true, 'running', $_part);
-      $uploadjob = $this->getUploadJob($this->getUser(), $_part, 'running', 11); //FIXME
+      $uploadjob = $this->getUploadJob($this->getUser(), $_part, 'running');
       $this->removeObject($uploadjob);
       $request->getSession()->remove('Uploading');
       
@@ -370,14 +370,13 @@ class AppPartController extends UCLStudyController
     {
       $params = $this->setupParameters($request, true, 'running', $_part);
       
-      $daysCollected = 11; //TODO get from user!$participant->getTaskProgress($this->part, $this->step)->getCollectedDayCount();
-      
       /* Fetch the current upload job, or start a new one */
       $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:DataUploadJob');
-      $uploadjob = $this->getUploadJob($this->getUser(), $_part, 'running', $daysCollected);
+      $prg = $this->getStepProgress($this->getUser(), $_part, 'running');
+      $uploadjob = $this->getUploadJob($this->getUser(), $_part, 'running');
         
       /* Setup page parameters for the Twig template */
-      $params['daysCollected'] = $daysCollected;
+      $params['daysCollected'] = $prg->getProgress();
       $params['daysInCurrentJob'] = $uploadjob->getDayCount();
       $params['obtainedSize'] = $uploadjob->getObtainedSize();
       $params['expectedSize'] = $uploadjob->getExpectedSize();
@@ -406,7 +405,7 @@ class AppPartController extends UCLStudyController
           {
             $this->deleteFile($uploadjob->getFilename());
           }
-          $uploadjob->reset($this->getUser(), $_part, 'running', $daysCollected);
+          $uploadjob->reset($this->getUser(), $_part, 'running', $prg->getProgress());
         }
         
         /* Make the new file and set the job's filename */
