@@ -91,9 +91,7 @@ class AppPartController extends UCLStudyController
      */
     public function loggedInAction(Request $request)
     {
-      $params = $this->setupParameters($request, true, null, null);
-      
-      return $this->jResponse('"LoggedIn":"Success"');
+      return $this->forward('UCLStudyBundle:App:status', array('request' => $request));
     }
 
     /**
