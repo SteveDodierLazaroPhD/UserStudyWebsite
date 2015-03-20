@@ -169,7 +169,7 @@ class AppPartController extends UCLStudyController
           return $this->jResponse('"Uploading":"Failure", "FailureCause":"Received data contained a syntax error or was not the expected JobParameters message."');
       }
       else
-        return $this->jResponse('"Uploading":"Failure", "FailureCause":"Was expecting JSON-formatted content."');
+        return $this->jResponse('"Uploading":"ReadyForContent"');
     }
     
     protected function parseUploadingUploading(DataUploadJob $uploadjob, $_part, Request $request)
@@ -420,32 +420,45 @@ class AppPartController extends UCLStudyController
     }
     
     /**
-     * @Route("/a/{_part}/running/update", name="ucl_study_app_running_update",
+     * @Route("/a/{_part}/reportprogress", name="ucl_study_app_report_progress",
      *    defaults={"_part" = 1},
      *    requirements={"_part": "\d+"})
      */
-    public function runningUpdateAction($_part, Request $request)
+    public function reportProgressAction($_part, Request $request)
     {
-      $params = $this->setupParameters($request, true, 'running', $_part);
+      $params = $this->setupParameters($request, true, null, $_part);
+      $content = $request->getContent();
       
-      //TODO analyse crafted request
-      //TODO update internal completion stats
-        
-      return $this->jResponse('content: ...', Response::HTTP_NOT_IMPLEMENTED);
-    }
+      if (0 === strpos($request->headers->get('Content-Type'), 'application/json'))
+      {
+        $data = json_decode($content, true);
 
-    /**
-     * @Route("/a/{_part}/running", name="ucl_study_app_running",
-     *    defaults={"_part" = 1},
-     *    requirements={"_part": "\d+"})
-     */
-    public function runningAction($_part, Request $request)
-    {
-      $params = $this->setupParameters($request, true, 'running', $_part);
-      
-      //TODO pull out completion stats
-        
-      return $this->jResponse('content: ...', Response::HTTP_NOT_IMPLEMENTED);
+        if (is_array($data) && is_array($data['ReportProgress']))
+        {
+          if (!array_key_exists ('Step', $data['ReportProgress']) || !is_str($data['ReportProgress']['Step']))
+            return $this->jResponse('"ReportProgress":"Failure", "FailureCause":"Missing Step."');
+            
+          if (!array_key_exists ('Progress', $data['ReportProgress']) || !is_int($data['ReportProgress']['Progress']))
+            return $this->jResponse('"ReportProgress":"Failure", "FailureCause":"Missing progress counter."');
+            
+          if (!array_key_exists ('Goal', $data['ReportProgress']) || !is_int($data['ReportProgress']['Goal']))
+            return $this->jResponse('"ReportProgress":"Failure", "FailureCause":"Missing goal counter."');
+
+          $step = $data['ReportProgress']['Step'];
+          $progress = $data['ReportProgress']['Progress'];
+          $goal = $data['ReportProgress']['Goal'];
+
+          $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:StepProgress');
+          $stepprogress = $this->getStepProgress($this->getUser(), $_part, $step, $progress, $goal);
+          $this->persistObject($stepprogress);
+          
+          return $this->jResponse('"ReportProgress":"ReadyData", '.$this->getStepProgressJSON($stepprogress));
+        }
+        else
+          return $this->jResponse('"ReportProgress":"Failure", "FailureCause":"Received data contained a syntax error or was not the expected ReportProgress message."');
+      }
+      else
+        return $this->jResponse('"ReportProgress":"ReadyForContent"');
     }
 
     /**
