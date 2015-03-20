@@ -336,7 +336,7 @@ class AppPartController extends UCLStudyController
       }
       
       if ($length == 0)
-        return $this->jResponse('"DirectUpload":"Failure", "FailureCause":"No content found inside your request."');
+        return $this->jResponse('"DirectUpload":"ReadyForContent"');
       
       $this->takeParticipantToNextStep($_part, 'running');
       return $this->jResponse('"DirectUpload":"Success", "DataLength":'.$length.', "DataType":"'.$type.'"');
