@@ -56,7 +56,6 @@ class AppPartController extends UCLStudyController
         $status = '"Status":{"Part":'.$user->getCurrentPart().',"Step":"'.$user->getCurrentStep().'"}';
       }
       
-      
       return '"Participant":{'.$logged.','.$status.'}';
     }
     
@@ -73,6 +72,14 @@ class AppPartController extends UCLStudyController
                                 '"Checksum": '.$checksum.'}';
     }
     
+    protected function getStepProgressJSON($progress)
+    {
+      return '"StepProgress":{"Part": '.$progress->getPart().', '.
+                             '"Step": "'.$progress->getStep().'", '.
+                             '"Counter": '.$progress->getCounter().', '.
+                             '"Goal": '.$progress->getGoal().', '.'}';
+    }
+    
     protected function getUploadJob(Participant $participant, $part, $step, $daysCollected)
     {
       $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:DataUploadJob');
@@ -84,6 +91,19 @@ class AppPartController extends UCLStudyController
         $uploadjob = new DataUploadJob($participant, $part, $step, $daysCollected);
         
       return $uploadjob;
+    }
+    
+    protected function getStepProgress(Participant $participant, $part, $step, $progress, $goal)
+    {
+      $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:StepProgress');
+      $progress = $repository->findOneBy(array("participant" => $participant,
+                                               "part"        => $part,
+                                               "step"        => $step));
+      
+      if (!$progress)
+        $progress = new StepProgress($participant, $part, $step, $progress, $goal);
+        
+      return $progress;
     }
     
     /**
