@@ -42,25 +42,19 @@ class StepProgress
    */
   protected $goal;
 
-  /**
-   * @ORM\Column(type="string", name="counter_name", nullable=false)
+  /*
+   * @ORM\Column(type="string", name="counter_name", nullable=false, options={"comment":"Name of the stuff being counted. You must implement per-locale methods to manipulate this word, as not all languages have a simple singular/plural structure for words"})
    */
-  protected $counterName;
+  //protected $counterName;
 
-  /**
-   * @ORM\Column(type="integer", name="counter_plural", nullable=true)
-   */
-  protected $counterPlural;
-
-  function __construct ($participant, $part, $step, $progress = 0, $goal = 0, $counterName = "day", $counterPlural = "days")
+  function __construct ($participant, $part, $step, $progress = 0, $goal = 0)//, $counterName = "day")
   {
     $this->participant = $participant;
     $this->part = $part;
     $this->step = $step;
     $this->progress = $progress;
     $this->goal = $goal;
-    $this->counterName = $counterName;
-    $this->counterPlural = $counterPlural;
+    //$this->counterName = $counterName;
   }
 
   public function getParticipant()
@@ -114,7 +108,7 @@ class StepProgress
       $this->goal = $goal;
   }
 
-  public function getCounterName()
+  /*public function getCounterName()
   {
       return $this->counterName;
   }
@@ -122,17 +116,7 @@ class StepProgress
   public function setCounterName($counterName)
   {
       $this->counterName = $counterName;
-  }
-
-  public function getCounterPlural()
-  {
-      return $this->counterPlural;
-  }
-
-  public function setCounterPlural($counterPlural)
-  {
-      $this->counterPlural = $counterPlural;
-  }
+  }*/
 }
 
 ?>
