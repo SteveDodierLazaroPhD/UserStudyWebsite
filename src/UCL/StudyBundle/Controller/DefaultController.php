@@ -117,7 +117,6 @@ class DefaultController extends UCLStudyController
         {
           $err = $iter->current();
           $offender = $err->getCause();
-            \Doctrine\Common\Util\Debug::dump($err);
           
           if($offender && DefaultController::startsWith($offender->getPropertyPath(), 'data.'))
           {
