@@ -341,14 +341,14 @@ main {
   font-weight: bold;
   position: relative;
   padding: .5em 2em .5em 1em;
-  min-height: 3em;
+  min-height: 4em;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
   vertical-align: middle;
 }
 
-.flashbag, .fa {
+.flashbag .fa {
   box-sizing: content-box !important;
 }
 
