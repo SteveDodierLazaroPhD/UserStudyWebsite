@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\IOException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 
 use UCL\StudyBundle\Controller\UCLStudyController as UCLStudyController;
 
@@ -112,7 +113,7 @@ class AppPartController extends UCLStudyController
      */
     public function loggedInAction(Request $request)
     {
-      return $this->forward('UCLStudyBundle:App:status', array('request' => $request));
+      return $this->forward('UCLStudyBundle:AppPart:status', array('request' => $request));
     }
 
     /**
@@ -349,7 +350,11 @@ class AppPartController extends UCLStudyController
         $store = $this->get('upload_store');
         list ($filename, $length) = $store->makeFileFromBinary($handle, $request->getContentType(), $this->getUser()->getEmail());
       }
-      catch (Exception $e)
+      catch (IOException $e)
+      {
+        return $this->jResponse('"DirectUpload":"Failure", "FailureCause":"'.$e->getMessage().'"');
+      }
+      catch (UnexpectedValueException $e)
       {
         return $this->jResponse('"DirectUpload":"Failure", "FailureCause":"'.$e->getMessage().'"');
       }
