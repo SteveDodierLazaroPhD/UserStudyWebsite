@@ -1,0 +1,11 @@
+Permission setup:
+-464/575 for almost everything with apache:webdev owner (allows staff and interns in webdev to code)
+-664/775 for app/cache and app/logs (must be writable by apache)
+-300 for app//store (must be writable but not readable -- for study data uploads)
+
+Things to do:
+- create the appropriate user in the MySQL db, with a password of your choice
+- create app/config/parameters.yml and add your MySQL user/password information
+- make sure app/store/ is configured as desired
+- [tweak app/config/ further if necessary, normally it is not]
+- go to src/UCL/StudyBundle/Resources/config/ and hack your project into shape!
