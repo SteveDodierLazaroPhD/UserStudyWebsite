@@ -1,8 +1,8 @@
 body {
   margin: 0 auto;
-	padding: 0;
+  padding: 0;
   max-width:1470px;
-	background: #38323f;
+  background: #38323f;
 }
 
 .photograph-wrapper {
@@ -10,7 +10,7 @@ body {
   top:0;
   width:100%;
   min-height: 100%;
-	height: 100%;
+  height: 100%;
   max-width:1470px;
   margin: 0 auto;
   padding: 1.5em;
@@ -34,14 +34,14 @@ main {
 }
 
 #content, .flashbag {
-  max-width: 90%;
+  width: 90%;
   margin: 0.5em 5%;
-  float: none;
+  float: none !important;
   background: #fbfbfb;
 }
 
 @media screen and (max-width: 800px) {
   #content, .flashbag {
-	  margin: 0 4%;
+    margin: 0 4%;
   }
 }

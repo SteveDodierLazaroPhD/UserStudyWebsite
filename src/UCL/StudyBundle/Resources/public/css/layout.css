@@ -429,7 +429,7 @@ main {
 
 #content, .flashbag {
   box-shadow: 0px 0px 20px #223;
-  max-width: 72%;
+  width: 72%;
   margin: 1em 4% 0.5em 2%;
   background: #fbfbfb;
   float: right;
