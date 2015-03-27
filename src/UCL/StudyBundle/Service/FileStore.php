@@ -10,6 +10,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 
 use UCL\StudyBundle\Entity\Participant;
 
@@ -79,27 +80,31 @@ class FileStore
   {
     if (empty($extension))
       $extension = "dat";
+    
+    $verifyContents = true; /* FIXME this might turn ugly */
 
     $filename = $this->makeFileName($participantEmail, $extension);
-    $filepath = makeFullPath($filename);
+    $filepath = $this->makeFullPath($filename);
 
     $buffer = "";
     $fp = fopen($filepath, 'wb');
+    $length = 0;
     while (!feof($handle))
     {
         $contents = fread($handle, 8192);
         fwrite($fp, $contents);
+        $length += 8192; // grossly overestimate for now
         
-        if ($verifyContents and $length < MAX_BUFFER_LENGTH_CONTENT_CHECK)
+        if ($verifyContents and $length < FileStore::MAX_BUFFER_LENGTH_CONTENT_CHECK)
           $buffer .= $contents;
     }
     $length = ftell($fp);
     fclose($handle);
     fclose($fp);
 
-    if ($verifyContents and $length < MAX_BUFFER_LENGTH_CONTENT_CHECK)
+    if ($verifyContents and $length < FileStore::MAX_BUFFER_LENGTH_CONTENT_CHECK)
     {
-      if ($type == "json")
+      if ($extension == "json")
       {
         if (!json_decode($buffer, true))
           throw new UnexpectedValueException("The uploaded data does not appear to be using the JSON format.");
