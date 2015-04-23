@@ -38,7 +38,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ ]
+    bundles:        [UCLStudyBundle, BmatznerFontAwesomeBundle]
     filters:
         cssrewrite: ~
         less:

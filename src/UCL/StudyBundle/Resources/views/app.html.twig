@@ -9,10 +9,14 @@
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
 
 {% block stylesheets %}
-    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen" />
-    <link rel="stylesheet" href="{{ asset('bundles/uclstudy/css/layout.css') }}" />
-    <link rel="stylesheet" href="{{ asset('bundles/uclstudy/css/app-layout.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/bmatznerfontawesome/css/font-awesome.min.css') }}" />
+    {% stylesheets
+        'css/bootstrap.css'
+        'bundles/uclstudy/css/layout.css'
+        'bundles/uclstudy/css/app-layout.css'
+        'bundles/bmatznerfontawesome/css/font-awesome.min.css'
+        filter='cssrewrite' output='layout-generated-app.css' %}
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
     <link rel="icon" type="image/x-icon" href="{{ asset('bundles/uclstudy/images/favicon.ico') }}" />
 {% endblock %}
 
@@ -81,13 +85,24 @@
     },false);
     </script>
     
-    <script src="{{ asset('js/jquery.js') }}"></script>
-    <script src="{{ asset('js/bootstrap_transition_1.js') }}"></script>
-    <script src="{{ asset('js/bootstrap_alert_2.js') }}"></script>
-{% if using_form is defined and using_form == "form" %}
-    <script src="{{ asset('js/bootstrap_button_3.js') }}"></script>
-    <script src="{{ asset('bundles/uclstudy/js/fix-bootstrap-button-input.js') }}"></script>
-{% endif %}
+    
+    {% if using_form is defined and using_form == "form" %}
+    {% javascripts
+        'js/jquery.js'
+        'js/bootstrap_transition_1.js'
+        'js/bootstrap_alert_2.js'
+        'js/bootstrap_button_3.js'
+        'bundles/uclstudy/js/fix-bootstrap-button-input.js' output='scripts-generated-form.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    {% else %}
+    {% javascripts
+        'js/jquery.js'
+        'js/bootstrap_transition_1.js'
+        'js/bootstrap_alert_2.js'  output='scripts-generated.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    {% endif %}
 {% endblock %}
 
   </body>
