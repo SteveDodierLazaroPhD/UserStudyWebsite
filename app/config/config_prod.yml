@@ -30,7 +30,7 @@ monolog:
             handler: swift
         swift:
             type:       swift_mailer
-	    from_email: "%mail_username%@%mail_host%"
+            from_email: "%mail_username%@%mail_host%"
             to_email:   "s.dodier-lazaro@cs.ucl.ac.uk"
             subject:    "UCL Study Website -- Critical Error"
             level:      debug
