@@ -168,7 +168,7 @@ nav {
   nav li {
     display: inline-block;
     vertical-align: text-top;
-    padding-right: 1.6em;
+    padding-right: 1.4em;
   }
   
   nav li:last-of-type {
@@ -184,6 +184,10 @@ nav {
   nav .navtooltip {
 	  max-height: 0 !important;
 	  opacity: 0;
+  }
+  nav li {
+    margin-bottom: .5em;
+    padding-right: .8em;
   }
 }
 
@@ -246,6 +250,7 @@ nav s>a:after {
 
 nav li {
   margin: 0 0 1.8em;
+  transition: margin 0.4s ease-out, padding 0.6s ease-out;
 }
   
 nav li#current-page a {
@@ -302,6 +307,22 @@ nav li:last-of-type {
   nav li {
     font-size: 1em;
 	  margin-bottom: .4em;
+  }
+  
+  #content h1 {
+    font-size: 1.6em;
+  }
+  
+  #content h2 {
+    font-size: 1.4em;
+  }
+  
+  #content h3 {
+    font-size: 1.2em;
+  }
+  
+  #content h4 {
+    font-size: 1.1em;
   }
 }
 
@@ -424,22 +445,30 @@ main {
 #content {
   padding: 1em 2em 2em;
   min-height: 100px;
-  transition: margin 0.3s ease-out;
+  transition: margin 0.6s ease-out, padding 0.8s ease-out;
 }
 
 #content, .flashbag {
   box-shadow: 0px 0px 20px #223;
   width: 72%;
-  margin: 1em 4% 0.5em 2%;
+  margin: 0 4% 0.5em 2%;
   background: #fbfbfb;
   float: right;
+}
+
+@media screen and (max-width: 540px) {
+  #content, .flashbag {
+    padding: .3em .6em .6em;
+  }
 }
 
 @media screen and (max-width: 800px) {
   #content, .flashbag {
 	  margin: 0.5em 4%;
-    max-width: 90% !important;
+    max-width: 92% !important;
+    padding: .6em 1.2em .8em;
     float: none;
+    width: 92%;
   }
 }
 
