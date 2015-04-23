@@ -17,14 +17,6 @@ use UCL\StudyBundle\Entity\DataUploadJob;
 use UCL\StudyBundle\Entity\Participant;
 use UCL\StudyBundle\Entity\StepProgress;
 
-
-//TODO create full JSON API for login? 
-
-//TODO write authenticator that bypasses the password field (uses the username twice)
-//TODO write global parameter to toggle the use of passwords, if passwords disabled then hide password field from login Twigs and inject some data there to avoid blocking the form submission
-
-//TODO in client make object that manages all requests, and separate from UI. Use signals to navigate the view based on outcomes of requests, and a LoadingUI in the MainWindow instead of existing architecture
-
 /**
  * WARNING: using this class to upload files over 2GB on a 32-bit server is considered undefined behaviour.
  */
