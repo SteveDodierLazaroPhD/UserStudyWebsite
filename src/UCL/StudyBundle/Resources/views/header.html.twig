@@ -4,7 +4,9 @@
       	<h2>{% if page.subtitle is defined %}{{ page.subtitle|upper }}{% else %}{% if page.title is defined %}{{ site.title|upper }}{% endif %}{%if site.subtitle is defined %}{% if page.title is defined %} – {% endif %}{{ site.subtitle|upper }}{% endif %}</h2>
 	          {% endif %}
 #}
+      	<a href="{{ url('ucl_study_homepage')}}">
       	<h1>{{ site.title|upper }}</h1><div></div>
       	<h2>{%if site.subtitle is defined %}{{ site.subtitle|upper }}{% endif %}</h2>
+      	</a>
 		  </header>
 			<div class="clearfix"></div>
