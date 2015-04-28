@@ -12,8 +12,9 @@ parameters:
     mailer_password:      null
     locale:               en
     secret:            ~~~SOME UNIQUE STRING~~~
-    mail_transport:       "smtp"
+    mail_transport:       "sendmail"
     mail_host:            "study.cs.ucl.ac.uk"
     mail_username:        "noreply"
     mail_password:        ""
-    upload_destination_screening: "%kernel.root_dir%/store/screening"
+    file_store.screening: "%kernel.root_dir%/store/screening"
+    file_store.upload:    "%kernel.root_dir%/store/upload"
