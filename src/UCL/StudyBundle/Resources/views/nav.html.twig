@@ -61,7 +61,7 @@
           {% set user_current_step = (page_name == user.getCurrentStep) and (current_part_menu == 'part_#' | replace('#', user.getCurrentPart)) %}
           {% if item.href is defined and item.caption is defined %} {# undefined for when we just want the visible pages for the current route #}
           <li {% if current_item %} id="current-page"{% endif %}{% if user_current_step %} class="user-current-step"{% endif %}>{% if before_current_user_step and not current_item %}<s>{% endif %}
-            <{% if current_item %}span{% else %}a href="{% if item.href_params is defined %}{{ url(item.href, item.href_params) }}{% else %}{{ url(item.href) }}{% endif %}"{% endif %}>{{ item.caption }}</{% if current_item %}span{% else %}a{% endif %}>
+            <{% if current_item %}span{% else %}a href="{% if item.href_params is defined %}{{ url(item.href, item.href_params) }}{% else %}{{ url(item.href) }}{% endif %}"{% endif %}{% if item.tooltip %} title="{{ item.tooltip }}"{% endif %}>{{ item.caption }}</{% if current_item %}span{% else %}a{% endif %}>
             {#{% if item.tooltip is defined %}<span class="navtooltip">{{ item.tooltip }}</span>{% endif %}#}
           {% if before_current_user_step and current_item %}<div class="menu-icon disabled"><i class="fa fa-check fa-fw"></i></div>
           {% elseif before_current_user_step %}</s><div class="menu-icon disabled"><i class="fa fa-check fa-fw"></i></div>
@@ -88,7 +88,7 @@
     {% set current_item = (_route | split(item.href) | first == '') %}
       {% if item.href is defined and item.caption is defined  %} {# undefined for when we just want the visible pages for the current route #}
       <li {% if current_item %} id="current-page"{% endif %}>
-        <{% if current_item %}span{% else %}a href="{% if item.href_params is defined %}{{ url(item.href, item.href_params) }}{% else %}{{ url(item.href) }}{% endif %}"{% endif %}>{{ item.caption }}</{% if current_item %}span{% else %}a{% endif %}>
+        <{% if current_item %}span{% else %}a href="{% if item.href_params is defined %}{{ url(item.href, item.href_params) }}{% else %}{{ url(item.href) }}{% endif %}"{% endif %}{% if item.tooltip %} title="{{ item.tooltip }}"{% endif %}>{{ item.caption }}</{% if current_item %}span{% else %}a{% endif %}>
         {#{% if item.tooltip is defined %}<span class="navtooltip">{{ item.tooltip }}</span>{% endif %}#}
         {% if current_item %}<div class="menu-icon"></div>{% endif %}
       </li>
