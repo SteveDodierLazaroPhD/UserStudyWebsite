@@ -318,7 +318,7 @@ class Configuration implements ConfigurationInterface
             );
 
             foreach ($urls as $i => $url) {
-                if (is_integer($i)) {
+                if (is_int($i)) {
                     if (0 === strpos($url, 'https://') || 0 === strpos($url, '//')) {
                         $urls['http'][] = $urls['ssl'][] = $url;
                     } else {
@@ -449,8 +449,13 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('translator')
                     ->info('translator configuration')
                     ->canBeEnabled()
+                    ->fixXmlConfig('fallback')
                     ->children()
-                        ->scalarNode('fallback')->defaultValue('en')->end()
+                        ->arrayNode('fallbacks')
+                            ->beforeNormalization()->ifString()->then(function ($v) { return array($v); })->end()
+                            ->prototype('scalar')->end()
+                            ->defaultValue(array('en'))
+                        ->end()
                         ->booleanNode('logging')->defaultValue($this->debug)->end()
                     ->end()
                 ->end()
