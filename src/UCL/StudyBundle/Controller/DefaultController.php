@@ -23,7 +23,7 @@ class DefaultController extends UCLStudyController
     public function indexAction(Request $request)
     {
       $params = $this->setupParameters($request, false);
-      $params['page'] = array('title' => 'Under Development');
+      $params['page'] = array('title' => 'Welcome to the '.$params['site']['title'].' website.');
       return $this->render('UCLStudyBundle:Default:index.html.twig', $params);
     }
 

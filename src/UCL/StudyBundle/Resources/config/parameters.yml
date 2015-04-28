@@ -17,6 +17,8 @@ parameters:
       spam_correct_answer: London
       spam_answer_bag: [Paris, London, Beijing, Mexico, Seoul]
       maxgain: '%ucl_study.maxgain%'
+      currency: '£'
+      join_icon: 'flag-checkered' # can be a currency (btc, eur, gbp, ils, inr, money (generic), rmb, rub, rupee, try, usd, won, yen), or 'heartbeat' or any other FontAwesome icon
       screening_max_wait: '3 weeks'
       participant_dpa_disclaimer: 'Any personal information you give to me will be processed in accordance with the UK Data Protection Act 1998. It will be used solely for the purposes of the study, and no information shall be published that can personally identify you. Your data will be stored within UCL at all times and deleted within three years of being collected. You can, at any time during the study, contact me to amend or delete the data I collected on you, or to opt out entirely from the study.'
       prescreening_dpa_disclaimer: 'Any personal information you give to me will be processed in accordance with the UK Data Protection Act 1998. It will be used solely for the purposes of the study, and no information shall be published that can personally identify you. Your data will be stored within UCL at all times and deleted within three years of being collected. If you are not selected for the study, I will delete the information and email address you provided me within %ucl_study.screening_max_wait%.'

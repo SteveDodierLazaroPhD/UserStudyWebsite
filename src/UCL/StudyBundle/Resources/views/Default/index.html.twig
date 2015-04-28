@@ -1,7 +1,44 @@
 {% extends 'UCLStudyBundle::base.html.twig' %}
 
 {% block body %}
-    <h3>Welcome to the {{ site.title }} website.</h3>
+  <p class="lead">We are recruiting participants, who can earn up to {{ globals.maxgain }} by letting us collect data on their computers.</p>
     
-    <p>This website is still under development. Please come again later!</p>
+  <div class="row">
+    <div class="col-md-4 col-lg-3 text-center">
+      <div class="bs-callout-card bs-callout-info">
+        <a href="{{ url('ucl_study_screening_join') }}" class="unstyled"><i class="fa fa-{{ globals.join_icon }} fa-4x"></i></a>
+        <h4>Join the Study</h4>
+        <p>Earn money by running our data collection software</p>
+        <a href="{{ url('ucl_study_screening_join') }}" class="btn btn-block btn-primary"><strong>Get an invite</strong></a>
+      </div>
+    </div>
+
+    <div class="col-md-4 col-lg-3 text-center">
+      <div class="bs-callout-card">
+        <a href="{{ url('ucl_study_advert') }}" class="unstyled"><i class="fa fa-info fa-4x"></i></a>
+        <h4>Find Out More</h4>
+        <p>Learn what you can get out of the study as a participant</p>
+        <a href="{{ url('ucl_study_advert') }}" class="btn btn-block btn-default">Read about the study</a>
+      </div>
+    </div>
+  
+    <div class="col-md-4 col-lg-3 text-center">
+      <div class="bs-callout-card">
+        {#<a href="{{ url('ucl_study_login') }}" class="unstyled"><i class="fa fa-sign-in fa-4x"></i></a>#}
+        <a href="{{ url('ucl_study_login') }}" class="unstyled"><i class="fa fa-street-view fa-4x"></i></a>
+        <h4>Participant Space{# Participant Login #}</h4>
+        <p>Already enrolled? Monitor your progress in the study</p>
+        <a href="{{ url('ucl_study_login') }}" class="btn btn-block btn-default">Log in</a>
+      </div>
+    </div>
+    
+    <div class="col-md-4 col-lg-3 text-center">
+      <div class="bs-callout-card">
+        <a href="{{ url('ucl_study_advert') }}" class="unstyled"><i class="fa fa-bullhorn fa-4x"></i></a>
+        <h4>Advertise Us</h4>
+        <p>Use this link to tell your friends about the study</p>
+        <a href="{{ url('ucl_study_advert') }}" class="btn btn-block btn-default">Link to advert</a>
+      </div>
+    </div>
+  </div>
 {% endblock %}
