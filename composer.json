@@ -31,7 +31,7 @@
         "sensio/distribution-bundle": "~3.0",
         "sensio/framework-extra-bundle": "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
-        "bmatzner/fontawesome-bundle": "~4.2",
+        "bmatzner/fontawesome-bundle": "~4.3",
         "twbs/bootstrap": "~3.3",
         "jquery/jquery":  "1.11.*",
         "braincrafted/bootstrap-bundle": "dev-master",
