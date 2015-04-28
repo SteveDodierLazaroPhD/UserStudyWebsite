@@ -1,10 +1,10 @@
 {% extends 'UCLStudyBundle::base.html.twig' %}
 
 {% block body %}
-{# TODO if the app's configuration does not include screening_join or automatic_join, then recruitment is closed and this page should be adapted #}
+{# TODO if the app's configuration does not include join_screening or join_automatic, then recruitment is closed and this page should be adapted #}
 
     <p class="lead">Please log in with the email address you gave the researchers when you were enrolled.</p>
-    <p>If you are not enrolled yet, you must <a href="{{ url('ucl_study_screening_join') }}">register your interest</a> first and wait to be invited.</p>
+    <p>If you are not enrolled yet, you must <a href="{{ url('ucl_study_join_screening') }}">register your interest</a> first and wait to be invited.</p>
     <hr />
 
     <form name="login" method="post" action="{{ path('ucl_study_login_check') }}" class="form-horizontal">

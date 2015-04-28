@@ -1,16 +1,16 @@
 {% extends 'UCLStudyBundle::base.html.twig' %}
 
 {% block body %}
-{# TODO if the app's configuration does not include screening_join or automatic_join, then recruitment is closed and this page should be adapted #}
+{# TODO if the app's configuration does not include join_screening or join_automatic, then recruitment is closed and this page should be adapted #}
   <p class="lead">We are recruiting participants, who can earn up to {{ globals.maxgain }} by letting us collect data on their computers.</p>
     
   <div class="row">
     <div class="col-md-4 col-lg-3 text-center">
       <div class="bs-callout-card bs-callout-info">
-        <a href="{{ url('ucl_study_screening_join') }}" class="unstyled"><i class="fa fa-{{ globals.join_icon }} fa-4x"></i></a>
+        <a href="{{ url('ucl_study_join') }}" class="unstyled"><i class="fa fa-{{ globals.join_icon }} fa-4x"></i></a>
         <h4>Join the Study</h4>
         <p>Earn money by running our data collection software</p>
-        <a href="{{ url('ucl_study_screening_join') }}" class="btn btn-block btn-primary"><strong>Get an invite</strong></a>
+        <a href="{{ url('ucl_study_join') }}" class="btn btn-block btn-primary"><strong>Get an invite</strong></a>
       </div>
     </div>
 

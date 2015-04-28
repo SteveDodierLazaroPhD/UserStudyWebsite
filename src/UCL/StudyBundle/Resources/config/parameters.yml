@@ -57,13 +57,13 @@ parameters:
           #enabled_steps: []
           # Pages that are not study steps but informational. Are always accessible, but may be hidden from a specific menu (e.g. you might want to display
           # nothing when on the consent form step); There is no access control, hence you don't actually have to define additional_pages.
-          #additional_pages: [screening_join, login, infopre, contact, hello]
+          #additional_pages: [join, login, infopre, contact, hello]
           # Default visible steps for when the visible_steps key has not been defined
-          default_visible: [screening_join, login, infopre, contact]
+          default_visible: [join, login, infopre, contact]
           # The navigation key contains direct menu items pointing to pages. Other things can be contained (such as a part name, or a list of enabled pages for this part)
           navigation:
-            screening_join:
-              href: "ucl_study_screening_join"
+            join:
+              href: "ucl_study_join"
               caption: "Join the Study"
               tooltip: "Earn up %ucl_study.maxgain% by letting us collect data about what you do on your computer!"
             login:

@@ -28,9 +28,9 @@ class DefaultController extends UCLStudyController
     }
 
     /**
-     * @Route("/join", name="ucl_study_screening_join")
+     * @Route("/join_screening", name="ucl_study_join_screening")
      */
-    public function joinAction(Request $request)
+    public function joinScreeningAction(Request $request)
     {
       $params = $this->setupParameters($request, false);
       $params['page'] = array('title' => 'Register for Participant Screening');
@@ -152,7 +152,15 @@ class DefaultController extends UCLStudyController
             $request->getSession()->getFlashBag()->add('error', "There are errors in the form, please see the messages below.");
       }
       return $this->render('UCLStudyBundle:Default:join.html.twig', $params);
-    } 
+    }
+    
+    /**
+     * @Route("/join", name="ucl_study_join")
+     */
+    public function joinAction(Request $request)
+    {
+        return $this->redirect($this->generateUrl('ucl_study_join_screening'));
+    }
 
     /**
      * @Route("/information", name="ucl_study_infopre")
