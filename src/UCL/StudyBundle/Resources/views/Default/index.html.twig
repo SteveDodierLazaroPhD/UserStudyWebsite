@@ -1,6 +1,7 @@
 {% extends 'UCLStudyBundle::base.html.twig' %}
 
 {% block body %}
+{# TODO if the app's configuration does not include screening_join or automatic_join, then recruitment is closed and this page should be adapted #}
   <p class="lead">We are recruiting participants, who can earn up to {{ globals.maxgain }} by letting us collect data on their computers.</p>
     
   <div class="row">

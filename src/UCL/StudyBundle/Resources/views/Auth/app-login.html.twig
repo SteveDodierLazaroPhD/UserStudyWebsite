@@ -1,6 +1,7 @@
 {% extends 'UCLStudyBundle::app.html.twig' %}
 
 {% block body %}
+{# TODO if the app's configuration does not include screening_join or automatic_join, then recruitment is closed and this page should be adapted #}
 
     <p>This application is for enrolled research participants only. To get an invitation, you should first <a href="{{ url('ucl_study_screening_join') }}">register on our website</a>.</p>
     <hr />
