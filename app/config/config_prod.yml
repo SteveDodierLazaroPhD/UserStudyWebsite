@@ -24,7 +24,7 @@ monolog:
         streamed:
             type:  stream
             path:  "%kernel.logs_dir%/%kernel.environment%.log"
-            level: debug
+            level: error
         buffered:
             type:    buffer
             handler: swift
@@ -33,6 +33,6 @@ monolog:
             from_email: "%mail_username%@%mail_host%"
             to_email:   "s.dodier-lazaro@cs.ucl.ac.uk"
             subject:    "UCL Study Website -- Critical Error"
-            level:      debug
+            level:      error
 
 
