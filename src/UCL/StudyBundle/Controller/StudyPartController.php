@@ -178,7 +178,9 @@ class StudyPartController extends UCLStudyController
     public function runningAction($_part, Request $request)
     {
       $params = $this->setupParameters($request, true, 'running', $_part);
-        
+      $params['page'] = array('title' => 'Check your Current Progress');
+      
+      #TODO
       return $this->render('UCLStudyBundle:StudyPart:running.html.twig', $params);
     }
 
@@ -190,7 +192,9 @@ class StudyPartController extends UCLStudyController
     public function manualAction($_part, Request $request)
     {
       $params = $this->setupParameters($request, true, 'manual', $_part);
-        
+      $params['page'] = array('title' => 'Software Manuals');
+      
+      #TODO
       return $this->render('UCLStudyBundle:StudyPart:manual.html.twig', $params);
     }
 
@@ -202,7 +206,6 @@ class StudyPartController extends UCLStudyController
       $params = $this->setupParameters($request, true, 'waiting_enrollment', null);
       $params['_part'] = 0; /* manually injecting this, since we told setupParameters this was not a 'normal' part page and it didn't */
       $params['page'] = array('title' => 'You Are Not Enrolled Yet');
-      
       
       /* Verify not showing waiting_enrollment to an enrolled user */
       if($this->getUser()->getCurrentPart() == 0)
