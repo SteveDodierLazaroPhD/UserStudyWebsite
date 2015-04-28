@@ -6,3 +6,12 @@ app/store/*/*
 app/*.cache
 src/archive
 src/UCL/StudyBundle/Resources/public/images/background-image*.jpg
+web/css
+web/js
+web/css
+web/layout-generated-app.css
+web/layout-generated-web.css
+web/js
+web/scripts-generated-form.js
+web/scripts-generated.js
+web/bundles
