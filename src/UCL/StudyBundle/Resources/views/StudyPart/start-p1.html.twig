@@ -7,9 +7,39 @@
 
 {% block article_body %}
 <h3>1. Add our repository to your software sources</h3>
-    <p>TODO</p>
+<div class="alert alert-danger"><h4>TODO</h4></div>
 
-<h3>2. Install the app</h3>
+<h3>2. Install the UCL Study Manager</h3>
 
-<h3>3. Open the app and log in</h3>
+    <p>You must install the <code>ucl-study-manager</code> package from your newly added repository. You can do so by clicking the button below or using the Ubuntu App Store.</p>
+    <div class="btn-toolbar">
+      <a class="btn btn-primary" href="apt://ucl-study-manager">Install Study Manager</a>
+    </div>
+
+    <div class="bs-callout bs-callout-default"><p class="small">The study manager will replace some libraries and applications on your system, including Unity, Nautilus, GTK+ and the GLib. This is normal, as we use modified versions of these libraries and applications to collect data about your multitasking habits. You will be able to return to the original applications the next time they are updated by Ubuntu once the study is over.</p></div>
+    
+
+<h3>3. Install the study extension into your browser</h3>
+    <img src="{{ asset ('bundles/uclstudy/images/chrome.png') }}" alt="" class=""/>
+<h4>Google Chrome</h4>
+    <ol class="list-group">
+    <li class="list-group-item">Open your Chrome Web browser, and visit our <a href="https://chrome.google.com/webstore/detail/ucl-study-zeitgeist-plugi/hhccdfafffjclmgjdokgijhccpcjcehd">Chrome Web Store page</a>.</li>
+    <li class="list-group-item">On that page, click on the <button class="btn btn-primary btn-sm disabled text-uppercase" disabled><i class="fa fa-plus"></i> Add to Chrome</button> button.</li>
+    <li class="list-group-item">The extension should now be installed and running. Please <a href="{{ url ('ucl_study_contact') }}">contact us</a> if Chrome displays an error message.</li>
+    </ol>
+<h4>Mozilla Firefox</h4>
+<div class="alert alert-danger"><h4>TODO</h4></div>
+
 {% endblock %}
+
+{% block article_appendix %}
+<hr />
+<p class="bs-callout bs-callout-success lead">
+<span class="fa-stack fa-lg">
+  <i class="fa fa-certificate fa-stack-2x"></i>
+  <i class="fa fa-trophy fa-stack-1x fa-inverse"></i>
+</span>
+Congratulations! You're ready to start the study.</p>
+
+{% endblock %}
+
