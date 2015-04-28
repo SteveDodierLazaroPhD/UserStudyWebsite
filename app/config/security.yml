@@ -28,7 +28,7 @@ security:
             pattern:   ^/a/
             context: participant
             simple_form:
-                authenticator: stubborn_authenticator
+                authenticator: email_only_authenticator
                 login_path: ucl_study_app_login
                 check_path: ucl_study_app_login_check
                 always_use_default_target_path: true
@@ -51,7 +51,7 @@ security:
             pattern:   ^/p/
             context: participant
             simple_form:
-                authenticator: stubborn_authenticator
+                authenticator: email_only_authenticator
                 login_path: ucl_study_login
                 check_path: ucl_study_login_check
                 default_target_path: ucl_study_part_next

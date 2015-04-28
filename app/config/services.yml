@@ -7,6 +7,9 @@ services:
     stubborn_authenticator:
         class:     UCL\StudyBundle\Security\StubbornAuthenticator
         arguments: ["@security.password_encoder"]
+    email_only_authenticator:
+        class:     UCL\StudyBundle\Security\EmailOnlyAuthenticator
+        arguments: ["@security.password_encoder"]
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
