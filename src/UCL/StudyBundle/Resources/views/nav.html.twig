@@ -78,9 +78,7 @@
 
 {% if always_visible_steps_for_route is not empty %}
   <div class="menu">
-    {% if (_route == "ucl_study_advert") and ('join' == always_visible_steps_for_route | first) %}
-    <h4><span class="fa fa-reply fa-rotate-270"></span> Click here to start!</h4>
-    {% elseif site[menu_space][always_visible_menu].name is defined %}
+    {% if site[menu_space][always_visible_menu].name is defined %}
     <h1>{{ site[menu_space][always_visible_menu].name }}</h1>
     {% endif %}
     <ul>
