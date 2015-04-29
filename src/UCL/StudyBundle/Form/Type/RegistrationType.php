@@ -60,7 +60,7 @@ class RegistrationType extends AbstractType
       $builder->add('distro', 'choice', array(
           'label' => 'Linux Distribution',
           'choices'   => array(
-              'debian'   => 'Debian',
+              //'debian'   => 'Debian',
               'ubuntu' => 'Ubuntu',
               'other'   => 'Other',
           ),
@@ -80,9 +80,9 @@ class RegistrationType extends AbstractType
       $builder->add('de', 'choice', array(
           'label' => 'Desktop Environment',
           'choices'   => array(
-              'xfce'   => 'Xfce',
+              //'xfce'   => 'Xfce',
               'unity' => 'Unity',
-              'gnome' => 'GNOME',
+              //'gnome' => 'GNOME',
               'other'   => 'Other (unsupported)',
           ),
           'required'  => true,
@@ -92,7 +92,7 @@ class RegistrationType extends AbstractType
       $builder->add('browser', 'choice', array(
           'label' => 'Web Browser',
           'choices'   => array(
-              'firefox'   => 'Firefox/Iceweasel',
+              //'firefox'   => 'Firefox/Iceweasel',
               'chrome' => 'Chrome/Chromium',
               'other'   => 'Other (unsupported)',
           ),
