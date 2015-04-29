@@ -46,7 +46,7 @@ class DefaultController extends UCLStudyController
       $params = $this->setupParameters($request, false);
       $params['page'] = array('title' => 'Register for Participant Screening');
       
-      $previous = $request->request->get('form');
+      $previous = $request->request->get('registration');
       $task = new RegistrationJob($previous != null ? $previous : array());
 
       $prev_email = $previous ? (array_key_exists('email', $previous) ? $previous['email']['first'] : '') : '';
@@ -80,7 +80,7 @@ class DefaultController extends UCLStudyController
               $request->getSession()->getFlashBag()->add('error', 'Could not process your registration, because of an unknown error when saving the form you filled. This is a bug, please inform the researchers.');
             else
             {
-              $filename = $store->makeFile($yaml, "yaml", $this->getUser()->getEmail());
+              $filename = $store->makeFile($yaml, "yaml", $task->getEmail());
               $em = $this->getDoctrine()->getManager();
               $em->persist($task);
               $em->flush();
@@ -194,23 +194,30 @@ class DefaultController extends UCLStudyController
       $params['page'] = array('title' => 'Contact the Researchers');
 
       $previous = $request->request->get('form');
-      $task = new ContactJob($this->globals['spam_correct_answer'], $previous != null ? $previous : array());
 
+      if (!$previous)
+      {
+        $previous = array();
+        
+        if ($this->getUser())
+        {
+          $previous['pseudonym'] = $this->getUser()->getUsername();
+          $previous['email'] = $this->getUser()->getEmail();
+          $previous['spamcheck'] = $this->globals['spam_correct_answer'];
+        }
+      }
+
+      $task = new ContactJob($this->globals['spam_correct_answer'], $previous);
       $builder = $this->createFormBuilder($task);
-      $username = ($this->getUser() != null) ? $this->getUser()->getUsername() : '';
-      $email = $this->getUser() ? $this->getUser()->getEmail() : '';
-      $selected_answer = $this->getUser() ? $this->globals['spam_correct_answer'] : '';
       
       $builder->add('pseudonym', 'text', array(
           'required'  => true,
           'label'     => 'Name',
-          'data'      => $username,
       ));
 
       $builder->add('email', 'email', array(
           'label'     => 'Email address',
           'required'  => true,
-          'data'      => $email,
       ));
       
       $builder->add('message', 'textarea', array(
@@ -221,7 +228,6 @@ class DefaultController extends UCLStudyController
       $builder->add('spamcheck', 'choice', array(
           'label'     => $this->globals['spam_question'],
           'choices'   => array_combine($this->globals['spam_answer_bag'], $this->globals['spam_answer_bag']),
-          'data'      => $selected_answer,
           'multiple'  => false,
           'required'  => true,
           'expanded'  => true,
