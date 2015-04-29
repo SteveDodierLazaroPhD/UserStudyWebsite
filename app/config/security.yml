@@ -60,7 +60,7 @@ security:
                 intention:      authenticate
             logout:
                 path:   ucl_study_logout
-                target: ucl_study_homepage
+                target: ucl_study_logged_out
             security: true
             provider: entity_provider
             remember_me:

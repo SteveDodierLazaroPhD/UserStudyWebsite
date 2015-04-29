@@ -26,6 +26,17 @@ class DefaultController extends UCLStudyController
       $params['page'] = array('title' => 'Welcome to the '.$params['site']['title'].' website.');
       return $this->render('UCLStudyBundle:Default:index.html.twig', $params);
     }
+    /**
+     * @Route("/logged_out", name="ucl_study_logged_out")
+     */
+    public function loggedOutAction(Request $request)
+    {
+      $request->getSession()->getFlashBag()->add(
+          'notice',
+          'You have been logged out. See you soon!'
+      );
+      return $this->redirect($this->generateUrl('ucl_study_homepage'));
+    }
 
     /**
      * @Route("/join_screening", name="ucl_study_join_screening")
