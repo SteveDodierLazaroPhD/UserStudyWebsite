@@ -85,18 +85,22 @@ class Participant implements UserInterface, AdvancedUserInterface, EquatableInte
    */
   private $currentPart;
 
-  public function __construct()
+  public function __construct($active = true, $username = null, $email = null, $password = null, $part = PARTICIPANT_NOT_STARTED_YET, $step = PARTICIPANT_WAITING_ENROLLMENT, $id = 0)
   {
-      // We by and large ignore isActive... It's a remnant of the Symfony UserInterface
-      $this->isActive = true;
-      $this->currentPart = PARTICIPANT_NOT_STARTED_YET; // Make this part 1 if you want automatic enrollment
-      $this->currentStep = PARTICIPANT_MUST_CONSENT;
-      //TODO
+    $this->isActive = $active;
+    $this->currentPart = $part;
+    $this->currentStep = $step;
+    $this->username = $username;
+    $this->email = $email;
+    $this->password = $password;
+    $this->id = $id;
   }
   
   //TODO to customise / internationalise error messages, you need to look at implementing
   // http://api.symfony.com/2.6/Symfony/Component/Security/Http/Authentication/AuthenticationFailureHandlerInterface.html
   
+  
+  //FIXME find out why these methods are never used anywhere.
   public function isAccountNonExpired()
   {
     return $this->currentPart != PARTICIPANT_DONE || $this->currentStep != PARTICIPANT_FINISHED_PART;
@@ -114,7 +118,7 @@ class Participant implements UserInterface, AdvancedUserInterface, EquatableInte
 
   public function isEnabled()
   {
-    return $this->currentPart != PARTICIPANT_NOT_STARTED_YET;
+    return $this->currentPart != PARTICIPANT_NOT_STARTED_YET && $this->isActive;
   }
 
   /**

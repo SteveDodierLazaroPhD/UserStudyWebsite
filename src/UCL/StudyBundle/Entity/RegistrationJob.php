@@ -13,7 +13,7 @@ use Symfony\Component\Yaml\Dumper;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="study_registrationjob")
+ * @ORM\Table(name="study_participants")
  * @UniqueEntity(
  *     fields={"email"},
  *     message="This email address is already in use."
@@ -35,7 +35,7 @@ class RegistrationJob
 
   /**
    * @Assert\NotBlank(message = "You must provide a nickname.",)
-   * @ORM\Column(name="pseudonym", type="string", length=255, unique=true)
+   * @ORM\Column(name="username", type="string", length=255, unique=true)
    */
   protected $pseudonym;
   /**
@@ -100,7 +100,7 @@ class RegistrationJob
    */
   protected $browser;
   
-  
+  private $clearpw;
   
   /* Methods */
   function __construct ($initial = array())
@@ -116,6 +116,7 @@ class RegistrationJob
     $this->distroOther  = $initial ? (array_key_exists('distro_other', $initial) ? $initial['distro_other'] : '') : '';
     $this->de           = $initial ? (array_key_exists('de', $initial) ? $initial['de'] : '') : '';
     $this->browser      = $initial ? (array_key_exists('browser', $initial) ? $initial['browser'] : '') : '';
+    $this->clearpw      = null;
   }
 
   public function getPseudonym()
@@ -220,24 +221,6 @@ class RegistrationJob
 
 
   /* Constraint validation */
-  //FIXME validate whether ORM Unique constraints are properly propagated.
-  //      If so, don't implement the two methods below.
-  /**
-   * @Assert\True(message = "The nickname '{{ value }}' is already taken.")
-   */
-  public function isPseudonymUnique()
-  {
-    return true; //TODO
-  }
-
-  /**
-   * @Assert\True(message = "The email '{{ value }}' is already registered.")
-   */
-  public function isEmailUnique()
-  {
-    return true; //TODO
-  }
-
   /**
    * @Assert\True(
    *     message = "Sorry. Your Desktop Environment is currently unsupported.",
@@ -307,7 +290,8 @@ class RegistrationJob
         'distro' => $this->distro,
         'distroOther' => $this->distroOther,
         'de' => $this->de,
-        'browser' => $this->browser
+        'browser' => $this->browser,
+        'password' => $this->clearpw
     );
 
     try {
@@ -328,5 +312,15 @@ class RegistrationJob
   public function getId()
   {
     return $this->id;
+  }
+
+  public function setPasswordFromClearText($password)
+  {
+    $this->clearpw = $password;
+  }
+
+  public function getPasswordFromClearText()
+  {
+    return $this->clearpw;
   }
 }

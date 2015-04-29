@@ -14,6 +14,7 @@ use UCL\StudyBundle\Controller\UCLStudyController as UCLStudyController;
 use UCL\StudyBundle\Form\Type\RegistrationType;
 use UCL\StudyBundle\Entity\RegistrationJob;
 use UCL\StudyBundle\Entity\ContactJob;
+use UCL\StudyBundle\Entity\Participant;
 
 class DefaultController extends UCLStudyController
 {
@@ -75,15 +76,14 @@ class DefaultController extends UCLStudyController
         
           try {
             $store = $this->get('screening_store');
+            $password = base64_encode (openssl_random_pseudo_bytes (6));
+            $task->setPasswordFromClearText($password);
             $yaml = $task->makeScreeningYaml();
             if (!$yaml)
               $request->getSession()->getFlashBag()->add('error', 'Could not process your registration, because of an unknown error when saving the form you filled. This is a bug, please inform the researchers.');
             else
             {
               $filename = $store->makeFile($yaml, "yaml", $task->getEmail());
-              $em = $this->getDoctrine()->getManager();
-              $em->persist($task);
-              $em->flush();
               
               $mailer = $this->get('mailer');
               $message = $mailer->createMessage()
@@ -98,6 +98,9 @@ class DefaultController extends UCLStudyController
                                         'email'   => $task->getEmail(),
                                         'date'    => date('r'))));
               $mailer->send($message);
+              
+              // If you ever need to email participants their passwords, it happens here.
+              // For now the passwords are in the store for us to hand out, and they are not in use anyway.
               $message = $mailer->createMessage()
                   ->setSubject('['.$this->globals['study_id'].'.study] Thank you for registering!')
                   ->setFrom($this->getEmailAddress())
@@ -110,6 +113,15 @@ class DefaultController extends UCLStudyController
                                         'email'   => $task->getEmail(),
                                         'date'    => date('r'))));
               $mailer->send($message);
+              
+              $participant = new Participant(false, $task->getPseudonym(), $task->getEmail(), null);
+              $encoder = $this->container->get('security.password_encoder');
+              $encodedPw = $encoder->encodePassword($participant, $password);
+              $participant->setPassword($encodedPw);
+
+              $em = $this->getDoctrine()->getManager();
+              $em->persist($participant);
+              $em->flush();
 
               $request->getSession()->getFlashBag()->add('success','Thank you for your interest in this study. A confirmation email was sent to you. I will be in touch with you shortly.');
               return $this->redirect($this->generateUrl('ucl_study_homepage'));
