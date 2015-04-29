@@ -72,34 +72,6 @@ class AppPartController extends UCLStudyController
                              '"Goal": '.$progress->getGoal().', '.'}';
     }
     
-    protected function getUploadJob(Participant $participant, $part, $step)
-    {
-      $prg = $this->getStepProgress($participant, $part, $step);
-    
-      $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:DataUploadJob');
-      $uploadjob = $repository->findOneBy(array("participant" => $participant,
-                                                "part"        => $part,
-                                                "step"        => $step));
-      
-      if (!$uploadjob)
-        $uploadjob = new DataUploadJob($participant, $part, $step, $prg);
-        
-      return $uploadjob;
-    }
-    
-    protected function getStepProgress(Participant $participant, $part, $step, $progress = 0, $goal = 0)
-    {
-      $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:StepProgress');
-      $prg = $repository->findOneBy(array("participant" => $participant,
-                                               "part"        => $part,
-                                               "step"        => $step));
-      
-      if (!$prg)
-        $prg = new StepProgress($participant, $part, $step, $progress, $goal);
-        
-      return $prg;
-    }
-    
     /**
      * @Route("/a/logged_in", name="ucl_study_app_logged_in")
      */
@@ -283,8 +255,8 @@ class AppPartController extends UCLStudyController
     {
       $params = $this->setupParameters($request, true, 'running', $_part);
 
-      $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:DataUploadJob');
-      $uploadjob = $this->getUploadJob($this->getUser(), $_part, 'running');
+      $progressService = $this->get('participant_upload_progress');
+      $uploadjob = $progressService->getUploadJob($this->getUser(), $_part, 'running');
       $uploadingState = $request->getSession()->get('Uploading', 'Init');
       
       /* First, inform the client that we need some job initialisation done */
@@ -319,7 +291,8 @@ class AppPartController extends UCLStudyController
     public function uploadResetAction($_part, Request $request)
     {
       $params = $this->setupParameters($request, true, 'running', $_part);
-      $uploadjob = $this->getUploadJob($this->getUser(), $_part, 'running');
+      $progressService = $this->get('participant_upload_progress');
+      $uploadjob = $progressService->getUploadJob($this->getUser(), $_part, 'running');
       $this->removeObject($uploadjob);
       $request->getSession()->remove('Uploading');
       
@@ -366,24 +339,16 @@ class AppPartController extends UCLStudyController
     public function uploadAction($_part, Request $request)
     {
       $params = $this->setupParameters($request, true, 'running', $_part);
+      $params['page'] = array('title' => 'Upload your Collected Data');
       
       /* Fetch the current upload job, or start a new one */
-      $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:DataUploadJob');
-      $prg = $this->getStepProgress($this->getUser(), $_part, 'running');
-      $uploadjob = $this->getUploadJob($this->getUser(), $_part, 'running');
+      $progressService = $this->get('participant_upload_progress');
+      $prg = $progressService->getStepProgress($this->getUser(), $_part, 'running');
+      $uploadjob = $progressService->getUploadJob($this->getUser(), $_part, 'running');
+      
+      /* Feed all the job data into our view */
+      $progressService->feedCurrentJobIntoParametersCached($params, $prg, $uploadjob);
         
-      /* Setup page parameters for the Twig template */
-      $params['daysCollected'] = $prg->getProgress();
-      $params['daysInCurrentJob'] = $uploadjob->getDayCount();
-      $params['obtainedSize'] = $uploadjob->getObtainedSize();
-      $params['expectedSize'] = $uploadjob->getExpectedSize();
-      $params['resuming'] = $uploadjob->getExpectedSize() > $uploadjob->getObtainedSize() ? true : false;
-      $params['completed'] = !$params['resuming'] && $uploadjob->getObtainedSize() > 0;
-      // We also want to propose erasing when no new data is available, to take local edits into account
-      $params['proposeErasing'] = $params['obtainedSize'] > 0;
-      $params['page'] = array('title' => 'Upload your Collected Data');
-      // Needed for the "refresh day count" button
-
       /* Create and handle the form */
       $form = $this->createForm(new DataUploadType(), $uploadjob);
       $params['form'] = $form->createView();
@@ -463,9 +428,10 @@ class AppPartController extends UCLStudyController
           $progress = $data['ReportProgress']['Progress'];
           $goal = $data['ReportProgress']['Goal'];
 
-          $repository = $this->getDoctrine()->getRepository('UCLStudyBundle:StepProgress');
-          $stepprogress = $this->getStepProgress($this->getUser(), $_part, $step, $progress, $goal);
+          $progressService = $this->get('participant_upload_progress');
+          $stepprogress = $progressService->getStepProgress($this->getUser(), $_part, $step, $progress, $goal);
           $this->persistObject($stepprogress);
+          //TODO estimate if it's a good time to email the researcher and participant
           
           return $this->jResponse('"ReportProgress":"ReadyData", '.$this->getStepProgressJSON($stepprogress));
         }

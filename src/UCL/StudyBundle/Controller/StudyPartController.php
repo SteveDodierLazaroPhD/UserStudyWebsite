@@ -180,7 +180,14 @@ class StudyPartController extends UCLStudyController
       $params = $this->setupParameters($request, true, 'running', $_part);
       $params['page'] = array('title' => 'Check your Current Progress');
       
-      #TODO
+      /* Fetch the current upload job, or start a new one */
+      $progressService = $this->get('participant_upload_progress');
+      $prg = $progressService->getStepProgress($this->getUser(), $_part, 'running');
+      $uploadjob = $progressService->getUploadJob($this->getUser(), $_part, 'running');
+      
+      /* Feed all the job data into our view */
+      $progressService->feedCurrentJobIntoParametersCached($params, $prg, $uploadjob);
+
       return $this->render('UCLStudyBundle:StudyPart:running.html.twig', $params);
     }
 
