@@ -6,27 +6,27 @@
 {% endblock %}
 
 {% block article_body %}
-<h3>1. Add our repository to your software sources</h3>
+<h2>1. Add our repository to your software sources</h2>
 <div class="alert alert-danger"><h4>TODO</h4></div>
 
-<h3>2. Install the UCL Study Manager</h3>
+<hr />
+<h2>2. Install the UCL Study Manager</h2>
 
-    <p>You must install the <code>ucl-study-manager</code> package from your newly added repository. You can do so by clicking the button below or using the Ubuntu App Store.</p>
+    <p>You must <a href="apt://ucl-study-manager" title="Click to install directly">install the <code>ucl-study-manager</code> package</a> from your newly added repository. You can do so by <a href="apt://ucl-study-manager" title="Click to install directly">clicking here</a> or by using the Ubuntu App Store.</p>
     <div class="btn-toolbar">
-      <a class="btn btn-primary" href="apt://ucl-study-manager">Install Study Manager</a>
     </div>
 
     <div class="bs-callout bs-callout-default"><p class="small">The study manager will replace some libraries and applications on your system, including Unity, Nautilus, GTK+ and the GLib. This is normal, as we use modified versions of these libraries and applications to collect data about your multitasking habits. You will be able to return to the original applications the next time they are updated by Ubuntu once the study is over.</p></div>
     
-
-<h3>3. Install the study extension into your browser</h3>
-<h4>Google Chrome</h4>
+<hr />
+<h2>3. Install the study extension into your browser</h2>
+<h3>Google Chrome</h3>
     <ol class="list-group">
     <li class="list-group-item">Open your Chrome Web browser, and visit our <a href="https://chrome.google.com/webstore/detail/ucl-study-zeitgeist-plugi/hhccdfafffjclmgjdokgijhccpcjcehd">Chrome Web Store page</a>.</li>
     <li class="list-group-item">On that page, click on the <button class="btn btn-primary btn-sm disabled text-uppercase" disabled><i class="fa fa-plus"></i> Add to Chrome</button> button.</li>
-    <li class="list-group-item">The extension should now be installed and running. Please <a href="{{ url ('ucl_study_contact') }}">contact us</a> if Chrome displays an error message.</li>
     </ol>
-<h4>Mozilla Firefox</h4>
+    <div class="bs-callout bs-callout-default"><p class="small">The extension should now be installed and running. Please <a href="{{ url ('ucl_study_contact') }}">contact us</a> if Chrome displays an error message.</p></div>
+<h3>Mozilla Firefox</h3>
 <div class="alert alert-danger"><h4>TODO</h4></div>
 
 {% endblock %}
@@ -38,7 +38,7 @@
   <i class="fa fa-certificate fa-stack-2x"></i>
   <i class="fa fa-trophy fa-stack-1x fa-inverse"></i>
 </span>
-Congratulations! You're ready to start the study.</p>
+Congratulations! You can now launch the study software and start collecting data.</p>
 
 {% endblock %}
 
