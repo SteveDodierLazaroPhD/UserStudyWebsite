@@ -1,12 +1,20 @@
-{% set using_form = "form" %}
-{% extends 'UCLStudyBundle::app.html.twig' %}
+{% if space is defined and space == "application_space" %}
+  {# We are displaying from the app, which is able to upload. There will be an upload form #}
+  {% set using_form = "form" %}
+  {% set target = 'app' %}
+{% else %}
+  {% set target = 'base' %}
+{% endif %}
+{% extends 'UCLStudyBundle::'~target~'.html.twig' %}
 
 {% block body %}
+{% block upload_intro %}
     <h3>Reminder</h3>
-    <p>You are about to upload your collected data to UCL for analysis. Please keep in mind that you can amend the collected data using the <span class="fa fa-gear fa-fw"></span>{% if space is defined and space == "application_space" %}<a href="app://ucl-study-journal">UCL Study Journal</a>{% else %}UCL Study Journal{% endif %} prior to uploading{% if resuming %} <span class="warning">(<strong>attention:</strong> you must start a new upload job for your changes to take effect)</span>{% endif %}. You can also write to the researchers if you wish to edit or delete some of your data after uploading it. You can also drop out from the study now, or later, without prejudice to the rewards you have already earned. {#As a reminder, your rights on the collected data are protected by the Data Protection Act 1998.#}</p>
+    <p>You are about to upload your collected data to UCL for analysis. Please keep in mind that you can amend the collected data using the <span class="fa fa-gear fa-fw"></span>{% if target == 'app' %}<a href="app://ucl-study-journal">UCL Study Journal</a>{% else %}UCL Study Journal{% endif %} prior to uploading{% if resuming %} <span class="warning">(<strong>attention:</strong> you must start a new upload job for your changes to take effect)</span>{% endif %}. You can also write to the researchers if you wish to edit or delete some of your data after uploading it. You can also drop out from the study now, or later, without prejudice to the rewards you have already earned. {#As a reminder, your rights on the collected data are protected by the Data Protection Act 1998.#}</p>
     
 {% include ('UCLStudyBundle::dpa.html.twig') %}
-    
+{% endblock %}
+
     {# Progress tracking and billing #}
     {% if site.participant_space['part_' ~ _part]['gains']['running'] is defined and site.participant_space['part_' ~ _part]['gains']['running']['post'] is defined %}
       {% if site.participant_space['part_' ~ _part]['gains']['running']['post']['min_days'] is defined %}
@@ -52,7 +60,10 @@
               <div class="progressbar-marker" style="right: {{ 100 - (minDays * 100 / target) }}%;" title="Min {{ minDays }} Days"></div>
               {% endif %} 
             </div>
-            <a class="btn btn-default" href="{{ path('ucl_study_app_report_progress', {'_part': _part}) }}" title="Refresh day count"><i class="fa fa-refresh"></i> Refresh</a><small><em> (takes a few minutes)</em></small>
+            {% if target == 'app' %}<a class="btn btn-default" href="{{ path('ucl_study_app_report_progress', {'_part': _part}) }}" title="Refresh day count"><i class="fa fa-refresh"></i> Refresh</a><small><em> (takes a few minutes)</em></small>
+            {% else %}
+            <em><small>to update your progress, please use the study application</small></em>
+            {% endif %}
           </div>
       </div>
       
@@ -87,7 +98,7 @@
           <div class="form-row">
             <span{% if (not completed) and notEnoughDays %} class="disabled"{% endif %}>
             <label class="col-sm-3 control-label">{% if completed %}Earned so far{% else %}If you {% if resuming %}finish the current upload job{% else %}upload your data{% endif %}{% endif %}</label><!--
-            --><div class="col-sm-9 form-control-static">£{% if resuming or completed %}{{ min (maxGain, perDay * daysInCurrentJob) }}{% else %}{{ min (maxGain, perDay * daysCollected) }}{% endif %} <div class="progress"><div class="progress-bar progress-bar-default" role="progressbar" aria-valuenow="{{ obtainedSize }}" aria-valuemin="0" aria-valuemax="{{ expectedSize }}" style="width: {% if expectedSize != 0 %}{{ obtainedSize * 100 / expectedSize }}{% else %}0{% endif %}%"><span class="">{{ (obtainedSize / 1000000) | round(0, 'ceil')  }} / {{ (expectedSize / 1000000) | round(0, 'ceil')  }} MB</span></div></div></div>
+            --><div class="col-sm-9 form-control-static">£{% if resuming or completed %}{{ min (maxGain, perDay * daysInCurrentJob) }}{% else %}{{ min (maxGain, perDay * daysCollected) }}{% endif %} {% if target == 'app' %}<div class="progress"><div class="progress-bar progress-bar-default" role="progressbar" aria-valuenow="{{ obtainedSize }}" aria-valuemin="0" aria-valuemax="{{ expectedSize }}" style="width: {% if expectedSize != 0 %}{{ obtainedSize * 100 / expectedSize }}{% else %}0{% endif %}%"><span class="">{{ (obtainedSize / 1000000) | round(0, 'ceil')  }} / {{ (expectedSize / 1000000) | round(0, 'ceil')  }} MB</span></div></div>{% endif %}</div>
             </span>
           </div>
           
@@ -105,6 +116,8 @@
     {% endif %}
     {# Careful, from there on some variables might be undefined! #}
     
+{% block upload_form %}
+  {% if target == 'app' %}
     {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
     <fieldset>
       <div class="form-row">
@@ -142,4 +155,6 @@
     </fieldset>
     {{ form_end(form, {'render_rest': false}) }}
     
+  {% endif %}
+{% endblock %}
 {% endblock %}

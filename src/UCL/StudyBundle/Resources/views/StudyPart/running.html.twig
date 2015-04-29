@@ -1,16 +1,32 @@
-{% set layout = "article" %}
-{% extends 'UCLStudyBundle::base.html.twig' %}
+{% extends 'UCLStudyBundle:App:upload.html.twig' %}
 
-{% block article_details %}
+{% block upload_intro %}
+    <p class="lead">This page shows the information we have on your progress in the study. The data collection software informs us when you collect data, so we can tell you when you are ready to upload</p>
+    
 {% endblock %}
 
-{% block article_body %}
-<p>You have completed {{ user.getCompletedTasks(_part) }} days of data collection out of {{ user.getNeededTasks(_part) }}. When you upload the collected data, you will earn {{ currency }}{{ user.getEarnedPayment(_part) }}.</p>
+{% block upload_form %}
+<hr />
+{% if not completed or proposeErasing %}
+  <div class="bs-callout bs-callout-{% if notEnoughDays %}info">
+    You may start a new upload job by using the study software as soon as you've collected enough data.
+  {% elseif completed %}info">
+    You may start a new upload job by using the study software at any time in order to maximise your gains.
+  {% else %}success">
+    You may now start a new upload job by using the study software.
+  {% endif %}
+  </div>
+{% endif %}
+{% if completed %}
+<hr />
+{% set kudos_message %}Congratulations! You can now <a href="{{ url('ucl_study_part_debriefing') }}" title="Schedule a debriefing meeting with the researchers" class="link">schedule a debriefing</a> with the researchers.{% endset %}
+{% include ('UCLStudyBundle::kudos.html.twig') %}
 
-<p class="bs-callout bs-callout-info small">If you don't upload your collected data, you will still receive {{ currency }}{{ user.getMinPayment(_part) }} as a compensation for your time.</p>
+{% else %}
+<div class="bs-callout bs-callout-danger">
+  You will only be able to schedule a debriefing after you've sent enough data to UCL. If you would like to opt out of the study instead, please contact the researchers.
+</div>
+{% endif %}
 
-{% endblock %}
-
-{% block article_appendix %}
 {% endblock %}
 
