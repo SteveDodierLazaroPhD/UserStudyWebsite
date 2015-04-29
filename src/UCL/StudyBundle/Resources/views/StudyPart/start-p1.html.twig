@@ -32,13 +32,10 @@
 {% endblock %}
 
 {% block article_appendix %}
+{% if user.hasDoneStep(_part, 'install') %}
 <hr />
-<p class="bs-callout bs-callout-success lead">
-<span class="fa-stack fa-lg">
-  <i class="fa fa-certificate fa-stack-2x"></i>
-  <i class="fa fa-trophy fa-stack-1x fa-inverse"></i>
-</span>
-Congratulations! You can now launch the study software and start collecting data.</p>
-
+{% set kudos_message %}Congratulations! You can now launch the study software and start collecting data.{% endset %}
+{% include ('UCLStudyBundle::kudos.html.twig') %}
+{% endif %}
 {% endblock %}
 

@@ -7,7 +7,8 @@
 
 {% block infosheet_actions %}
 {% if step == "AlreadyDone" %}
-  <aside>You have already given your consent. If you would like clarifications on any of the above points, please <a href={{ url('ucl_study_contact') }}">contact us</a>.</aside>
+  {% set kudos_message %}<small>You have already given your consent. If you would like clarifications on any of the above, please <a href={{ url('ucl_study_contact') }}">contact us</a>.</small>{% endset %}
+{% include ('UCLStudyBundle::kudos.html.twig') %}
 {% else %}
   {{ form_start(form) }}
       <fieldset>
