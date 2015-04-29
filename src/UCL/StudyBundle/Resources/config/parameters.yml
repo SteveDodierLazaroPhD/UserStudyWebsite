@@ -93,7 +93,7 @@ parameters:
               href: "ucl_study_part_waiting_enrollment"
               caption: "What Happens Next?"
               tooltip: "You must wait until you are enrolled into the study"
-              visible_steps: [consent]
+              visible_steps: [waiting_enrollment]
         part_1:
           name: "Data Collection"
           title: 'Activity Data Collection'
