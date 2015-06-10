@@ -36,15 +36,23 @@ main {
 #content, .flashbag {
   width: 90% !important;
   max-width: 90% !important;
-  margin: 0 5% !important;
   float: none !important;
   background: #fbfbfb;
+}
+
+#content {
+  margin: 0 5% !important;
+}
+
+.flashbag {
+  margin: 0.5em 5% !important;
 }
 
 @media screen and (max-width: 1000px) {
   #content, .flashbag {
     width: 94% !important;
     max-width: 94% !important;
-    margin: 0 3% !important;
+    margin-left: 3% !important;
+    margin-right: 3% !important;
   }
 }
