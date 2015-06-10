@@ -34,14 +34,17 @@ main {
 }
 
 #content, .flashbag {
-  width: 90%;
-  margin: 0.5em 5%;
+  width: 90% !important;
+  max-width: 90% !important;
+  margin: 0 5% !important;
   float: none !important;
   background: #fbfbfb;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1000px) {
   #content, .flashbag {
-    margin: 0 4%;
+    width: 94% !important;
+    max-width: 94% !important;
+    margin: 0 3% !important;
   }
 }
