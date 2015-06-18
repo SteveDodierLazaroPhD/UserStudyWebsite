@@ -7,7 +7,3 @@ services:
         arguments: ["%ucl_study.site%"]
         arguments: ["%ucl_study.globals%"]
         
-    ucl_study.twig_extension:
-        class: UCL\StudyBundle\Twig\UCLStudyExtension
-        tags:
-            - { name: twig.extension }
