@@ -68,7 +68,7 @@ class Participant implements UserInterface, AdvancedUserInterface, EquatableInte
   /**
    * @ORM\Column(name="is_active", type="boolean")
    */
-  private $isActive;
+  private $active;
 
   /**
    * @ORM\Column(name="current_status", type="string", length=25)
@@ -86,7 +86,7 @@ class Participant implements UserInterface, AdvancedUserInterface, EquatableInte
 
   public function __construct($active = true, $username = null, $email = null, $password = null, $part = PARTICIPANT_NOT_STARTED_YET, $step = PARTICIPANT_WAITING_ENROLLMENT, $id = 0)
   {
-    $this->isActive = $active;
+    $this->active = $active;
     $this->currentPart = $part;
     $this->currentStep = $step;
     $this->username = $username;
@@ -113,7 +113,7 @@ class Participant implements UserInterface, AdvancedUserInterface, EquatableInte
 
   public function isEnabled()
   {
-    return $this->currentPart != PARTICIPANT_NOT_STARTED_YET && $this->isActive;
+    return $this->currentPart != PARTICIPANT_NOT_STARTED_YET && $this->active;
   }
 
   /**
@@ -246,26 +246,26 @@ class Participant implements UserInterface, AdvancedUserInterface, EquatableInte
     }
 
     /**
-     * Set isActive
+     * Set active
      *
-     * @param boolean $isActive
+     * @param boolean $active
      * @return Participant
      */
-    public function setIsActive($isActive)
+    public function setActive($active)
     {
-      $this->isActive = $isActive;
+      $this->active = $active;
 
       return $this;
     }
 
     /**
-     * Get isActive
+     * Get active
      *
      * @return boolean 
      */
-    public function getIsActive()
+    public function getActive()
     {
-      return $this->isActive;
+      return $this->active;
     }
 
     /**
