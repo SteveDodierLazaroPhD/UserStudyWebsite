@@ -5,8 +5,8 @@
 	          {% endif %}
 #}
       	<a href="{{ url('ucl_study_homepage')}}">
-      	<h1>{{ site.title|upper }}</h1><div></div>
-      	<h2>{%if site.subtitle is defined %}{{ site.subtitle|upper }}{% endif %}</h2>
+      	<h1>{{ site.title|upper|trans }}</h1><div></div>
+      	<h2>{%if site.subtitle is defined %}{{ site.subtitle|upper|trans }}{% endif %}</h2>
       	</a>
 		  </header>
 			<div class="clearfix"></div>

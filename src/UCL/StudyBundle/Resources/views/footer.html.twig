@@ -1,12 +1,11 @@
 			<div class="clearfix"></div>
 		  <footer role="contentinfo">
-        <div id="copyright"><span id="footer-title">{{site.title}}</span><span id="copyright-notice"><span property="dc:creator">{{ site.author }}</span> <span class="cnotice">©</span><span property="dc:dateCopyrighted"> {{ "now" | date( 'Y') }}</span></span><p>This study has been approved by the UCL Research Ethics Committee. <span class="nowrap">Project ID Number: {{globals.REC_number}}.</span></p></div>
+        <div id="copyright"><span id="footer-title">{{ site.title|trans }}</span><span id="copyright-notice"><span property="dc:creator">{{ site.author }}</span> <span class="cnotice">©</span><span property="dc:dateCopyrighted"> {{ "now" | date( 'Y') }}</span></span><p>{{ 'This study has been approved by the UCL Research Ethics Committee.' | trans }} <span class="nowrap">{{ 'Project ID Number: %nb%.' |trans({'%nb%' : globals.REC_number}) }}</span></p></div>
         <div id="copyright-secondary">
           <ul>
-            <li><a href="http://mupuf.org" title="Steve's Website">Website by Steve Dodier-Lazaro</a></li>
-            <li><a href="http://symfony.com/" title="Symfony official Website">Powered by Symfony</a></li>
-            <li><a href="http://fortawesome.github.io/Font-Awesome/" title="FontAwesome Website">FontAwesome Icons <span class="cnotice">©</span> Dave Gandy</a></li>
-            <li><a href="{{ site.illustration.url }}" title="Background Photo">Background Photo <span class="cnotice">©</span> {{ site.illustration.author }}</a></li>
+            <li><a href="http://mupuf.org">{{ 'Website by Steve Dodier-Lazaro' | trans }}</a></li>
+            <li><a href="http://symfony.com/">{{ 'Powered by Symfony' | trans }}</a></li>
+            <li><a href="{{ site.illustration.url }}">{{ 'Background Photo' | trans }} <span class="cnotice">©</span> {{ site.illustration.author }}</a></li>
           </ul>
         </div>
       </footer>
