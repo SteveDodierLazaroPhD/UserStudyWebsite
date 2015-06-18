@@ -87,7 +87,7 @@ class AppPartController extends UCLStudyController
      */
     public function installAction($_part, Request $request)
     {
-      $params = $this->setupParameters($request, true, 'install', $_part);
+      /*$params = */$this->setupParameters($request, true, 'install', $_part);
       $this->session->getFlashBag()->add('success', $this->get('translator')->trans('Congratulations! The study application is correctly installed.'));
       $this->takeParticipantToNextStep($_part, 'install');
       return $this->jResponse('"InstallRegistered":"Success"');
@@ -98,7 +98,7 @@ class AppPartController extends UCLStudyController
      */
     public function statusAction(Request $request)
     {
-      $params = $this->setupParameters($request, true);
+      /*$params = */$this->setupParameters($request, true);
       return $this->jResponse('"Status":"Success"');
     }
 
@@ -259,7 +259,7 @@ class AppPartController extends UCLStudyController
      */
     public function uploadingAction($_part, Request $request)
     {
-      $params = $this->setupParameters($request, true, 'running', $_part);
+      /*$params = */$this->setupParameters($request, true, 'running', $_part);
 
       $progressService = $this->get('participant_upload_progress');
       $uploadjob = $progressService->getUploadJob($this->getUser(), $_part, 'running');
@@ -296,7 +296,7 @@ class AppPartController extends UCLStudyController
      */
     public function uploadResetAction($_part, Request $request)
     {
-      $params = $this->setupParameters($request, true, 'running', $_part);
+      /* $params = */$this->setupParameters($request, true, 'running', $_part);
       $progressService = $this->get('participant_upload_progress');
       $uploadjob = $progressService->getUploadJob($this->getUser(), $_part, 'running');
       $this->removeObject($uploadjob);
@@ -312,14 +312,14 @@ class AppPartController extends UCLStudyController
      */
     public function uploadDirectAction($_part, Request $request)
     {
-      $params = $this->setupParameters($request, true, 'running', $_part);
+      /* $params = */$this->setupParameters($request, true, 'running', $_part);
       $handle = $request->getContent(true);
       $type = $request->getContentType();
  
       try
       {
         $store = $this->get('upload_store');
-        list ($filename, $length) = $store->makeFileFromBinary($handle, $request->getContentType(), $this->getUser()->getEmail());
+        list (/* $filename */, $length) = $store->makeFileFromBinary($handle, $request->getContentType(), $this->getUser()->getEmail());
       }
       catch (IOException $e)
       {
@@ -412,7 +412,7 @@ class AppPartController extends UCLStudyController
      */
     public function reportProgressAction($_part, Request $request)
     {
-      $params = $this->setupParameters($request, true, null, $_part);
+      /* $params = */$this->setupParameters($request, true, null, $_part);
       $content = $request->getContent();
       
       if (0 === strpos($request->headers->get('Content-Type'), 'application/json'))

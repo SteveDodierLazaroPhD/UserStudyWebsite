@@ -235,7 +235,7 @@ class StudyPartController extends UCLStudyController
      */
     public function nextUserTaskAction(Request $request)
     {
-      $params = $this->setupParameters($request, true, 'next', null);
+      /* $params = */$this->setupParameters($request, true, 'next', null);
 
       if($this->getUser()->getCurrentPart() == 0)
       {

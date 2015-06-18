@@ -253,7 +253,6 @@ class UCLStudyController extends Controller
   protected function isParticipantDone($_part, $_step)
   {
     $logger     = $this->get('logger');
-    $em         = $this->getDoctrine()->getManager();
     $user       = $this->getUser();
     $translator = $this->get('translator');
     
