@@ -34,7 +34,7 @@
         "bmatzner/fontawesome-bundle": "~4.3",
         "twbs/bootstrap": "~3.3",
         "jquery/jquery":  "1.11.*",
-        "braincrafted/bootstrap-bundle": "dev-master",
+        "braincrafted/bootstrap-bundle": "2.1.*",
         "symfony/yaml": "~2.6"
     },
     "require-dev": {
