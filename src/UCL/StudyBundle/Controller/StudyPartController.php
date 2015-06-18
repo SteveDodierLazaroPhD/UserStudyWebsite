@@ -7,13 +7,9 @@
 namespace UCL\StudyBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Constraints\True;
-
 use UCL\StudyBundle\Controller\UCLStudyController as UCLStudyController;
-use UCL\StudyBundle\Entity\Participant;
 
 class StudyPartController extends UCLStudyController
 {

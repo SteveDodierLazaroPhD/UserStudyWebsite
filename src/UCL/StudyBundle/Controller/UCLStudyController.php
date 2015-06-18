@@ -5,13 +5,7 @@ namespace UCL\StudyBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
-use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-
 use UCL\StudyBundle\Entity\Participant;
 
 class UCLStudyController extends Controller

@@ -7,15 +7,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\IOException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
-
 use UCL\StudyBundle\Controller\UCLStudyController as UCLStudyController;
-
 use UCL\StudyBundle\Form\Type\DataUploadType;
 use UCL\StudyBundle\Entity\DataUploadJob;
-use UCL\StudyBundle\Entity\Participant;
-use UCL\StudyBundle\Entity\StepProgress;
+#use UCL\StudyBundle\Entity\Participant;
+#use UCL\StudyBundle\Entity\StepProgress;
 
 /**
  * WARNING: using this class to upload files over 2GB on a 32-bit server is considered undefined behaviour.

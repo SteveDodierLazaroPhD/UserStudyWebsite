@@ -2,19 +2,10 @@
 
 namespace UCL\StudyBundle\Service;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
-
 use Symfony\Component\DependencyInjection\ContainerAware;
-
-use UCL\StudyBundle\Entity\Participant;
-
 
 class FileStore extends ContainerAware
 {

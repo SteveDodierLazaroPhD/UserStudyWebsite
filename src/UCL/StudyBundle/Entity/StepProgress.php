@@ -1,10 +1,7 @@
 <?php
 namespace UCL\StudyBundle\Entity;
 
-use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity

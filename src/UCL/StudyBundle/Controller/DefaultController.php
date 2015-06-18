@@ -3,13 +3,7 @@
 namespace UCL\StudyBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
-
 use UCL\StudyBundle\Controller\UCLStudyController as UCLStudyController;
 use UCL\StudyBundle\Form\Type\RegistrationType;
 use UCL\StudyBundle\Entity\RegistrationJob;

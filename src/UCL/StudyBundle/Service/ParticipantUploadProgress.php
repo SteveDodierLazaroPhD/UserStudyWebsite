@@ -2,11 +2,7 @@
 
 namespace UCL\StudyBundle\Service;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-
 use Symfony\Component\DependencyInjection\ContainerAware;
-
 use UCL\StudyBundle\Entity\DataUploadJob;
 use UCL\StudyBundle\Entity\Participant;
 use UCL\StudyBundle\Entity\StepProgress;
