@@ -36,7 +36,7 @@ class ParticipantUploadProgress extends ContainerAware
                                               "step"        => $step));
     
     if (!$uploadjob)
-      $uploadjob = new DataUploadJob($participant, $part, $step, $prg);
+      $uploadjob = new DataUploadJob($participant, $part, $step, $prg->getProgress());
 
     return $uploadjob;
   }
