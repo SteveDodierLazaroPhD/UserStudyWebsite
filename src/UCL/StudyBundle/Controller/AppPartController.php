@@ -243,7 +243,7 @@ class AppPartController extends UCLStudyController
         else
           return $this->jResponse('"Uploading":"ReadyData", '.$this->getUploadJobJSON($uploadjob));
       }
-      catch (Exception $e)
+      catch (IOException $e)
       {
         return $this->abortUploadJob($uploadjob,
                                      $translator->trans('Could not open the file to write your data to (%errorMsg%). This is a bug in the server. Aborting the job.', array('%errorMsg%' => $e->getMessage())));
@@ -386,7 +386,7 @@ class AppPartController extends UCLStudyController
           
           return $this->redirect($this->generateUrl('ucl_study_app_uploading', array('uploadjob' => $uploadjob, '_part' => $_part, 'request' => $request)));
         }
-        catch (Exception $e)
+        catch (IOException $e)
         {
           $request->getSession()->getFlashBag()->add('error', $this->get('translator')->trans('The upload was aborted because of an error on the server (%errMsg%)', array('%errMsg%' => $e->getMessage())));
         }
