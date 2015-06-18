@@ -63,7 +63,7 @@ class DataUploadJob
     //TODO
   }
 
-  function reset ($participant, $part, $step, $dayCount)
+  function reset (Participant $participant, $part, $step, $dayCount)
   {
     $this->participant = $participant->getId();
     $this->part = $part;

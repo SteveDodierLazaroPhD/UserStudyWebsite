@@ -47,7 +47,7 @@ class StepProgress
    */
   //protected $counterName;
 
-  function __construct ($participant, $part, $step, $progress = 0, $goal = 0)//, $counterName = "day")
+  function __construct (Participant $participant, $part, $step, $progress = 0, $goal = 0)//, $counterName = "day")
   {
     $this->participant = $participant->getId();
     $this->part = $part;
