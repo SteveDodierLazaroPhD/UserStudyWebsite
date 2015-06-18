@@ -50,7 +50,7 @@ class DefaultController extends UCLStudyController
       $params['page'] = array('title' => $translator->trans('Register for Participant Screening'));
       
       $previous = $request->request->get('registration');
-      $task = new RegistrationJob($previous != null ? $previous : array());
+      $task = new RegistrationJob($previous !== null ? $previous : array());
 
       $prev_email = $previous ? (array_key_exists('email', $previous) ? $previous['email']['first'] : '') : '';
       $prev_browser = $previous ? (array_key_exists('browser', $previous) ? $previous['browser'] : array()) : array();
@@ -290,7 +290,7 @@ class DefaultController extends UCLStudyController
           $err = $iter->current();
           $offender = $err->getCause();
           
-          if($offender != null && DefaultController::startsWith($offender->getPropertyPath(), 'data.'))
+          if($offender !== null && DefaultController::startsWith($offender->getPropertyPath(), 'data.'))
           {
             $has_seen_local_errors = true;
             $params['err_'.substr($offender->getPropertyPath(),5)] = $err->getMessage(); //length of 'data.'

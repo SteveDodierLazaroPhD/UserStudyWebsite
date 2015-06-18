@@ -158,7 +158,7 @@ class UCLStudyController extends Controller
   {
     $translator = $this->get('translator');
     /* Validate user, because. */
-    if ($user == null)
+    if ($user === null)
       throw $this->createAccessDeniedException($translator->trans('Access Denied: you must be logged in to access this part of the website. If you were logged in and do not know why this message is shown, please contact the researchers.'));
     
     /* Verify user is allowed in target part */
@@ -228,17 +228,17 @@ class UCLStudyController extends Controller
     {
       $this->checkLoggedIn($this);
 
-      if ($part != null && $step != null)
+      if ($part !== null && $step !== null)
         $this->checkUserAuthorised($this->getUser(), $step, $part);
     }
 
-    if ($part != null)
+    if ($part !== null)
     {
       $this->checkPartBoundaries($part);
       $params['_part'] = $part;
     }
 
-    if ($step != null)
+    if ($step !== null)
       $params['_step'] = $step;
     
     return $params;

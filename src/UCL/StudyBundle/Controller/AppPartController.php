@@ -114,7 +114,7 @@ class AppPartController extends UCLStudyController
     
     protected function abortUploadJob(DataUploadJob $uploadjob, $_part, $cause=null, $extraData=null)
     {
-      $cause = ($cause==null ? $this->get('translator')->trans('Aborting the job') : $cause);
+      $cause = ($cause===null ? $this->get('translator')->trans('Aborting the job') : $cause);
       $this->removeObject($uploadjob);
       if (empty($extraData))
         return $this->jResponse('"Uploading":"Failure","FailureCause":"'.$cause.'}');
@@ -269,7 +269,7 @@ class AppPartController extends UCLStudyController
       if ($uploadingState == 'Init')
       {
         /* The original state depends on whether we are resuming a job or creating a new one */
-        $resuming = ($uploadjob->getChecksum() != null && $uploadjob->getExpectedSize() != 0);
+        $resuming = ($uploadjob->getChecksum() !== null && $uploadjob->getExpectedSize() != 0);
         if ($resuming)
           return $this->jResponse('"Uploading":"ReadyData", "DataUploadJob":{"Part": '.$uploadjob->getPart().', "Step": "'.$uploadjob->getStep().'", "DayCount": '.$uploadjob->getDayCount().', "ExpectedSize": '.$uploadjob->getExpectedSize().', "ObtainedSize": '.$uploadjob->getObtainedSize().', "Checksum": "'.$uploadjob->getChecksum().'"}');
         else
