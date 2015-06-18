@@ -99,14 +99,14 @@ class FileStore extends ContainerAware
         fwrite($fp, $contents);
         $length += 8192; // grossly overestimate for now
         
-        if ($verifyContents and $length < FileStore::MAX_BUFFER_LENGTH_CONTENT_CHECK)
+        if ($verifyContents && $length < FileStore::MAX_BUFFER_LENGTH_CONTENT_CHECK)
           $buffer .= $contents;
     }
     $length = ftell($fp);
     fclose($handle);
     fclose($fp);
 
-    if ($verifyContents and $length < FileStore::MAX_BUFFER_LENGTH_CONTENT_CHECK)
+    if ($verifyContents && $length < FileStore::MAX_BUFFER_LENGTH_CONTENT_CHECK)
     {
       if ($extension == "json")
       {
