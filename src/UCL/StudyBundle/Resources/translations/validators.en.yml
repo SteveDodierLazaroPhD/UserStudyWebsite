@@ -1,0 +1,68 @@
+contact:
+  pseudonym:
+    not_blank: You must provide a nickname.
+  email:
+    not_blank: You must provide an email address.
+    assert: The email '{{ value }}' is not a valid   
+  message:
+    not_blank: You must write a message.
+    min: Your message is too short. It should be at least {{ limit }} characters.
+    max: Your message is too long. It should be shorter than {{ limit }} characters.
+  spamcheck:
+    not_blank: Sorry, this is necessary to prevent robots from spamming us...
+    incorrect: Sorry, this is not the correct answer.
+
+login:
+  username:
+    not_blank: You must provide a username.
+    invalid: The email '{{ value }}' is not a valid   
+  password:
+    not_blank: You must provide the participant code given to you.
+
+participant:
+  email:
+    already_used: This email address is already in use.
+    not_blank: You must provide an email address.
+    invalid: The email '{{ value }}' is not a valid email address.
+  pseudonym:
+    already_used: This nickname is already in use.
+    not_blank: You must provide a nickname.
+  gender:
+    not_blank: You must specify a gender.
+    invalid: The gender you specified is unknown. Please choose between male, female and other.
+  status:
+    invalid: There is a bug in the application, we cannot currently determine your progress in the study. Please contact us if you see this message.
+  age:
+    not_blank: You must specify your age range.
+    invalid: The age range you specified is unknown.
+  proficiency:
+    not_blank: You must specify your level of proficiency.
+    invalid: The level of proficiency you specified is unknown.
+  occupation:
+    not_blank: You must specify your occupation.
+  distro:
+    not_blank: You must specify your Linux distribution.
+    invalid: You should specify exactly one Linux distribution. If you select ‘Other’, type your distribution in the associated ‘Other’ field.
+  de:
+    not_blank: You must specify your Linux desktop environment.
+    invalid: Sorry. Your Desktop Environment is currently unsupported.
+  browser:
+    not_blank: You must specify your Web browser.
+    invalid: Sorry. Your Web browser is currently unsupported.
+
+form:
+  dataupload:
+    submit:
+      upload: Upload your Data
+      reupload: New Upload (erase previous job)
+  login:
+    name: Email address
+    password: Password
+    remember: Remember me
+    submit: Log in
+  reg:
+    pseudonym: Nickname
+    email:
+      match: The email addresses must match.
+      one: Email address1
+      two: Repeat Email address2

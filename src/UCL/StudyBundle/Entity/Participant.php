@@ -28,7 +28,6 @@ define("PARTICIPANT_READY_BRIEFING",     "briefing");               // Must arra
 define("PARTICIPANT_MUST_START",         "install");                // Must have participant install study software alone
 define("PARTICIPANT_IS_RUNNING",         "running");                // Running the study
 define("PARTICIPANT_PRIMARY_TASK",       "primary_task");           // Performing some primary task
-define("PARTICIPANT_UPLOAD",             "upload");                 // Uploading collected data
 define("PARTICIPANT_READY_DEBRIEFING",   "debriefing");             // Must meet for debriefing
 define("PARTICIPANT_FINISHED_PART",      "done");                   // Must pay participant and switch to next part based on communication with her
 
@@ -39,7 +38,7 @@ define("PARTICIPANT_FINISHED_PART",      "done");                   // Must pay 
  * @ORM\Entity(repositoryClass="UCL\StudyBundle\Entity\ParticipantRepository")
  * @UniqueEntity(
  *     fields={"email"},
- *     message="This email address is already in use."
+ *     message="participant.email.already_used"
  * )
  */
 class Participant implements UserInterface, AdvancedUserInterface, EquatableInterface, \Serializable
@@ -75,7 +74,7 @@ class Participant implements UserInterface, AdvancedUserInterface, EquatableInte
    * @ORM\Column(name="current_status", type="string", length=25)
    * @Assert\Choice(
    *     choices = { "consent", "briefing", "install", "running", "debriefing", "done" },
-   *     message = "There is a bug in the application, we cannot currently determine your progress in the study. Please contact us if you see this message."
+   *     message = "participant.status.invalid"
    * )
    */
   private $currentStep;
@@ -95,10 +94,6 @@ class Participant implements UserInterface, AdvancedUserInterface, EquatableInte
     $this->password = $password;
     $this->id = $id;
   }
-  
-  //TODO to customise / internationalise error messages, you need to look at implementing
-  // http://api.symfony.com/2.6/Symfony/Component/Security/Http/Authentication/AuthenticationFailureHandlerInterface.html
-  
   
   //FIXME find out why these methods are never used anywhere.
   public function isAccountNonExpired()

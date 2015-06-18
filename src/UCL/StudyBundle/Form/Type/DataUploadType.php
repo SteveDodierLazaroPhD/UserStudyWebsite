@@ -22,10 +22,10 @@ class DataUploadType extends AbstractType
       $builder->add('obtainedSize', 'hidden');
 
       $builder->add('dataupload', 'submit', array(
-        'label' => 'Upload your Data',)); // Managed in the Twig file!
+        'label' => 'form.dataupload.submit.upload',)); // Managed in the Twig file!
 
       $builder->add('erasecurrentstartnew', 'submit', array(
-        'label' => 'New Upload (erase previous job)',)); // Managed in the Twig file!
+        'label' => 'form.dataupload.submit.reupload',)); // Managed in the Twig file!
     }
     
     public function getName()

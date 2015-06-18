@@ -7,16 +7,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 class LoginJob
 {
     /**
-     * @Assert\NotBlank(message = "You must provide a username.",)
+     * @Assert\NotBlank(message = "login.username.not_blank",)
      * //@Assert\Email(
-     * //    message = "The email '{{ value }}' is not a valid email.",
+     * //    message = "login.username.invalid",
      * //    checkMX = true
      * )
      */
     protected $username;
 
     /**
-     * @Assert\NotBlank(message = "You must provide the participant code given to you.",)
+     * @Assert\NotBlank(message = "login.password.not_blank",)
      */
     protected $password;
 

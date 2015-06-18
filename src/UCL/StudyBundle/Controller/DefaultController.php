@@ -24,7 +24,8 @@ class DefaultController extends UCLStudyController
     public function indexAction(Request $request)
     {
       $params = $this->setupParameters($request, false);
-      $params['page'] = array('title' => 'Welcome to the '.$params['site']['title'].' website.');
+      $translated = $this->get('translator')->trans('Welcome to the %siteTitle% website.', array('%siteTitle%' => $params['site']['title']));
+      $params['page'] = array('title' => $translated);
       return $this->render('UCLStudyBundle:Default:index.html.twig', $params);
     }
     /**
@@ -34,7 +35,7 @@ class DefaultController extends UCLStudyController
     {
       $request->getSession()->getFlashBag()->add(
           'notice',
-          'You have been logged out. See you soon!'
+          $this->get('translator')->trans('You have been logged out. See you soon!')
       );
       return $this->redirect($this->generateUrl('ucl_study_homepage'));
     }
@@ -44,8 +45,9 @@ class DefaultController extends UCLStudyController
      */
     public function joinScreeningAction(Request $request)
     {
+      $translator = $this->get('translator');
       $params = $this->setupParameters($request, false);
-      $params['page'] = array('title' => 'Register for Participant Screening');
+      $params['page'] = array('title' => $translator->trans('Register for Participant Screening'));
       
       $previous = $request->request->get('registration');
       $task = new RegistrationJob($previous != null ? $previous : array());
@@ -67,7 +69,7 @@ class DefaultController extends UCLStudyController
         {
           $request->getSession()->getFlashBag()->add(
               'notice',
-              'Sorry. The study software does not support your desktop environment and Web browser, and you cannot participate. Thank you for your interest nevertheless.'
+              $translator->trans('Sorry. The study software does not support your desktop environment and Web browser, and you cannot participate. Thank you for your interest nevertheless.')
           );
           return $this->redirect($this->generateUrl('ucl_study_homepage'));
         }
@@ -78,16 +80,20 @@ class DefaultController extends UCLStudyController
             $store = $this->get('screening_store');
             $password = base64_encode (openssl_random_pseudo_bytes (6));
             $task->setPasswordFromClearText($password);
-            $yaml = $task->makeScreeningYaml();
-            if (!$yaml)
-              $request->getSession()->getFlashBag()->add('error', 'Could not process your registration, because of an unknown error when saving the form you filled. This is a bug, please inform the researchers.');
-            else
-            {
+            $filename = null;
+            try {
+              $yaml = $task->makeScreeningYaml();
               $filename = $store->makeFile($yaml, "yaml", $task->getEmail());
-              
+            } catch (Exception $e) {
+              $request->getSession()->getFlashBag()->add('error', $translator->trans('An error occurred while processing your registration: %errMsg%. Please try again later, or contact us if it keeps happening.', array('%errMsg%' => $e->getMessage())));
+            }
+            if ($filename)
+            {
               $mailer = $this->get('mailer');
+              
               $message = $mailer->createMessage()
-                  ->setSubject('['.$this->globals['study_id'].'.study] New Registration from \''.$task->getPseudonym().'\' on ('.date('Y-m-d').')')
+                  ->setSubject($translator->trans('[%id% study] New Registration from %pseudonym on (%date%)',
+                                                  array('%id%' => $this->globals['study_id'], '%pseudonym%' => $task->getPseudonym(), '%date%' => date('Y-m-d'))))
                   ->setFrom($this->getEmailAddress())
                   ->setReplyTo($task->getEmail())
                   ->setTo($this->site['author_email'])
@@ -102,7 +108,7 @@ class DefaultController extends UCLStudyController
               // If you ever need to email participants their passwords, it happens here.
               // For now the passwords are in the store for us to hand out, and they are not in use anyway.
               $message = $mailer->createMessage()
-                  ->setSubject('['.$this->globals['study_id'].'.study] Thank you for registering!')
+                  ->setSubject($translator->trans('[%id% study] Thank you for registering!', array('%id%' => $this->globals['study_id'])))
                   ->setFrom($this->getEmailAddress())
                   ->setReplyTo($this->site['author_email'])
                   ->setTo($task->getEmail())
@@ -123,11 +129,11 @@ class DefaultController extends UCLStudyController
               $em->persist($participant);
               $em->flush();
 
-              $request->getSession()->getFlashBag()->add('success','Thank you for your interest in this study. A confirmation email was sent to you. I will be in touch with you shortly.');
+              $request->getSession()->getFlashBag()->add('success',$translator->trans('Thank you for your interest in this study. A confirmation email was sent to you. We will be in touch with you shortly.'));
               return $this->redirect($this->generateUrl('ucl_study_homepage'));
             }
           } catch (Exception $e) {
-            $request->getSession()->getFlashBag()->add('error', 'The registration process was interrupted by an error on the server ('.$e->getMessage().')');
+            $request->getSession()->getFlashBag()->add('error', $translator->trans('The registration process was interrupted by an error on the server: %errMsg%. Please try again later, or contact us if it keeps happening.', array('%errMsg%', $e->getMessage())));
           }
         }
       }
@@ -152,13 +158,6 @@ class DefaultController extends UCLStudyController
             $params['err_email_different'] = $err->getMessage();
             $params['err_email_first'] = $offender->getInvalidValue()['first'];
             $params['err_email_second'] = $offender->getInvalidValue()['second'];
-            
-            /* FIXME should be propagated in the view by getting the client to do an AJAX call or something...
-            $email_first = $builder->get('email')->get('first');
-            $email_first->setData($offender->getInvalidValue()['first']);
-            $email_second = $builder->get('email')->get('second');
-            $email_second->setData($offender->getInvalidValue()['second']);
-            */
           }
           else
           {
@@ -170,9 +169,9 @@ class DefaultController extends UCLStudyController
         }
         
         if($has_seen_global_errors && $has_seen_local_errors)
-            $request->getSession()->getFlashBag()->add('error', "There are additional errors in the form, please see the messages below.");
+            $request->getSession()->getFlashBag()->add('error', $translator->trans('There are additional errors in the form, please see the messages below.'));
         else if($has_seen_local_errors)
-            $request->getSession()->getFlashBag()->add('error', "There are errors in the form, please see the messages below.");
+            $request->getSession()->getFlashBag()->add('error', $translator->trans('There are errors in the form, please see the messages below.'));
       }
       return $this->render('UCLStudyBundle:Default:join.html.twig', $params);
     }
@@ -192,7 +191,7 @@ class DefaultController extends UCLStudyController
     {
       $params = $this->setupParameters($request, false);
       $params['_part'] = 1;
-      $params['page'] = array('title' => 'Information Sheet for Prospective Participants');
+      $params['page'] = array('title' => $this->get('translator')->trans('Information Sheet for Prospective Participants'));
       return $this->render('UCLStudyBundle:Default:infosheet.html.twig', $params);
     }
 
@@ -201,9 +200,10 @@ class DefaultController extends UCLStudyController
      */
     public function contactAction(Request $request)
     {
+      $translator = $this->get('translator');
       $params = $this->setupParameters($request, false);
       
-      $params['page'] = array('title' => 'Contact the Researchers');
+      $params['page'] = array('title' => $translator->trans('Contact the Researchers'));
 
       $previous = $request->request->get('form');
 
@@ -224,28 +224,32 @@ class DefaultController extends UCLStudyController
       
       $builder->add('pseudonym', 'text', array(
           'required'  => true,
-          'label'     => 'Name',
+          'label'     => $translator->trans('Name'),
       ));
 
       $builder->add('email', 'email', array(
-          'label'     => 'Email address',
+          'label'     => $translator->trans('Email address'),
           'required'  => true,
       ));
       
       $builder->add('message', 'textarea', array(
-          'label' => 'Your message',
+          'label' => $translator->trans('Your message'),
           'required'  => true,
       ));
       
+      $transbag = array();
+      foreach ($this->globals['spam_answer_bag'] as $bagentry)
+        array_push ($transbag, $translator->trans($bagentry));
+
       $builder->add('spamcheck', 'choice', array(
-          'label'     => $this->globals['spam_question'],
-          'choices'   => array_combine($this->globals['spam_answer_bag'], $this->globals['spam_answer_bag']),
+          'label'     => $translator->trans($this->globals['spam_question']),
+          'choices'   => array_combine($this->globals['spam_answer_bag'], $transbag),
           'multiple'  => false,
           'required'  => true,
           'expanded'  => true,
       ));
       
-      $builder->add('write', 'submit', array('label' => 'Send Your Message'));
+      $builder->add('write', 'submit', array('label' => $translator->trans('Send Your Message')));
 
       $form = $builder->getForm();
       $params['form'] = $form->createView();
@@ -256,7 +260,8 @@ class DefaultController extends UCLStudyController
       {
         $mailer = $this->get('mailer');
         $message = $mailer->createMessage()
-            ->setSubject('['.$this->globals['study_id'].'.study] Contact Form message from \''.$task->getPseudonym().'\' on ('.date('Y-m-d').')')
+            ->setSubject($translator->trans('[%id% study] Message from %pseudonym% on (%date%)',
+                                            array('%id%' => $this->globals['study_id'], '%pseudonym%' => $task->getPseudonym(), '%date%' => date('Y-m-d'))))
             ->setFrom($this->getEmailAddress())
             ->setReplyTo($task->getEmail())
             ->setTo($this->site['author_email'])
@@ -271,7 +276,7 @@ class DefaultController extends UCLStudyController
 
         $request->getSession()->getFlashBag()->add(
             'success',
-            'Thank you for your message. I will be in touch with you as soon as I read it.'
+            $translator->trans('Thank you for your message. I will be in touch with you as soon as I read it.')
         );
         return $this->redirect($this->generateUrl('ucl_study_contact'));
       }
@@ -285,7 +290,7 @@ class DefaultController extends UCLStudyController
           $err = $iter->current();
           $offender = $err->getCause();
           
-          if(DefaultController::startsWith($offender->getPropertyPath(), 'data.'))
+          if($offender != null && DefaultController::startsWith($offender->getPropertyPath(), 'data.'))
           {
             $has_seen_local_errors = true;
             $params['err_'.substr($offender->getPropertyPath(),5)] = $err->getMessage(); //length of 'data.'
@@ -300,9 +305,9 @@ class DefaultController extends UCLStudyController
         }
         
         if($has_seen_global_errors && $has_seen_local_errors)
-            $request->getSession()->getFlashBag()->add('error', "There are additional errors in the form, please see the messages below.");
+            $request->getSession()->getFlashBag()->add('error', $translator->trans("There are additional errors in the form, please see the messages below."));
         else if($has_seen_local_errors)
-            $request->getSession()->getFlashBag()->add('error', "There are errors in the form, please see the messages below.");
+            $request->getSession()->getFlashBag()->add('error', $translator->trans("There are errors in the form, please see the messages below."));
       }
       return $this->render('UCLStudyBundle:Default:contact.html.twig', $params);
     }
@@ -313,7 +318,7 @@ class DefaultController extends UCLStudyController
     public function advertAction(Request $request)
     {
       $params = $this->setupParameters($request, false);
-      $params['page'] = array('title' => 'Join a Study about Multitasking on Linux');
+      $params['page'] = array('title' => $this->get('translator')->trans('Join our Study!'));
       
       return $this->render('UCLStudyBundle:Default:advert.html.twig', $params);
     }

@@ -7,30 +7,29 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ContactJob
 {
     /**
-     * @Assert\NotBlank(message = "You must provide a nickname.",)
+     * @Assert\NotBlank(message = "contact.pseudonym.not_blank",)
      */
     protected $pseudonym;
     /**
-     * @Assert\NotBlank(message = "You must provide an email.",)
+     * @Assert\NotBlank(message = "contact.email.not_blank",)
      * @Assert\Email(
-     *     message = "The email '{{ value }}' is not a valid email.",
+     *     message = "contact.email.assert",
      *     checkMX = true
      * )
      */
     protected $email;
     /**
-     * @Assert\NotBlank(message = "You must write a message.",)
+     * @Assert\NotBlank(message = "contact.message.not_blank",)
      * @Assert\Length(
      *      min = 5,
      *      max = 1000,
-     *      minMessage = "Your message must be at least {{ limit }} characters long.",
-     *      maxMessage = "Your message cannot be longer than {{ limit }} characters long."
+     *      minMessage = "contact.message.min",
+     *      maxMessage = "contact.message.max"
      * )
      */
     protected $message;
     /**
-     * @Assert\NotBlank(message = "Sorry, this is necessary to prevent robots from spamming us...",)
-     * )
+     * @Assert\NotBlank(message = "contact.spamcheck.not_empty",)
      */
     protected $spamcheck;
     private static $spam_valid_reply = '';
@@ -48,7 +47,7 @@ class ContactJob
     {
         $metadata->addPropertyConstraint('spamcheck', new Assert\Choice(array(
             'choices' => array(self::$spam_valid_reply,),
-            'message'  => "Sorry, this is not the correct answer.",
+            'message'  => 'contact.spamcheck.incorrect',
         )));
     }
     

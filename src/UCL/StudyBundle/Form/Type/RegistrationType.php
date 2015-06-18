@@ -13,25 +13,25 @@ class RegistrationType extends AbstractType
     {
       $builder->add('pseudonym', 'text', array(
           'required'  => true,
-          'label'     => 'Nickname',
+          'label'     => 'form.reg.pseudonym',
       ));
 
       $builder->add('email', 'repeated', array(
           'type' => 'email',
-          'invalid_message' => 'The email fields must match.',
-          'first_options'   => array('label' => 'Email address'),
-          'second_options'  => array('label' => 'Repeat Email address'),
+          'invalid_message' => 'form.reg.email.match',
+          'first_options'   => array('label' => 'form.reg.email.one'),
+          'second_options'  => array('label' => 'form.reg.email.two'),
           'data'            => $options['email'],
           'required' => true,
       ));
       
       $builder->add('proficiency', 'choice', array(
-          'label'      => 'Linux Proficiency',
+          'label'      => 'form.reg.proficiency.label',
           'choices'   => array(
-              'beginner'   => 'Beginner',
-              'poweruser' => 'Advanced user',
-              'techy'   => 'Advanced user with technical skills<sup>1</sup>',
-              'pro'   => 'IT professional',
+              'beginner'   => 'form.reg.proficiency.beginner',
+              'poweruser' => 'form.reg.proficiency.advanced',
+              'techy'   => 'form.reg.proficiency.tech',
+              'pro'   => 'form.reg.proficiency.pro',
           ),
           'multiple'  => false,
           'required'  => true,
@@ -39,18 +39,18 @@ class RegistrationType extends AbstractType
       ));
       
       $builder->add('occupation', 'text', array(
-          'label' => 'Occupation',
+          'label' => 'form.reg.occupation',
           'required'  => true,
       ));
       
       $builder->add('age', 'choice', array(
           'choices'   => array(
-              'a1824'   => '18 – 24',
-              'a2534' => '25 – 34',
-              'a3544' => '35 – 44',
-              'a4554' => '45 – 54',
-              'a5564' => '55 – 64',
-              'a65p'   => '65+',
+              'a1824'   => 'form.reg.age.1824',
+              'a2534' => 'form.reg.age.2534',
+              'a3544' => 'form.reg.age.3544',
+              'a4554' => 'form.reg.age.4554',
+              'a5564' => 'form.reg.age.5564',
+              'a65p'   => 'form.reg.age.65',
           ),
           'multiple'  => false,
           'required'  => true,
@@ -58,11 +58,11 @@ class RegistrationType extends AbstractType
       ));
       
       $builder->add('distro', 'choice', array(
-          'label' => 'Linux Distribution',
+          'label' => 'form.reg.distro.label',
           'choices'   => array(
               //'debian'   => 'Debian',
-              'ubuntu' => 'Ubuntu',
-              'other'   => 'Other',
+              'ubuntu' => 'form.reg.distro.ubuntu',
+              'other'   => 'form.reg.distro.other',
           ),
           'multiple'  => false,
           'required'  => true,
@@ -73,28 +73,28 @@ class RegistrationType extends AbstractType
       ));
       
       $builder->add('distro_other', 'text', array(
-          'label' => 'If Other, please specify',
+          'label' => 'form.reg.distro.otherlabel',
           'required'  => false,
       ));
       
       $builder->add('de', 'choice', array(
-          'label' => 'Desktop Environment',
+          'label' => 'form.reg.de.label',
           'choices'   => array(
-              //'xfce'   => 'Xfce',
-              'unity' => 'Unity',
-              //'gnome' => 'GNOME',
-              'other'   => 'Other (unsupported)',
+              //'xfce'   => 'form.reg.de.xfce',
+              'unity' => 'form.reg.de.unity',
+              //'gnome' => 'form.reg.de.gnome',
+              'other'   => 'form.reg.de.other',
           ),
           'required'  => true,
           'expanded'  => true,
       ));
       
       $builder->add('browser', 'choice', array(
-          'label' => 'Web Browser',
+          'label' => 'form.reg.browser.label',
           'choices'   => array(
-              //'firefox'   => 'Firefox/Iceweasel',
-              'chrome' => 'Chrome/Chromium',
-              'other'   => 'Other (unsupported)',
+              //'firefox'   => 'form.reg.browser.ff',
+              'chrome' => 'form.reg.browser.chrome',
+              'other'   => 'form.reg.browser.other',
           ),
           'data'      => $options['browser'],
           'multiple'  => true,
@@ -103,12 +103,13 @@ class RegistrationType extends AbstractType
       ));
       
       $builder->add('gender', 'choice', array(
-          'choices'   => array('f' => 'Female', 'm' => 'Male', 'o' => 'Other'),
+          'label'     => 'form.reg.gender.label',
+          'choices'   => array('f' => 'form.reg.gender.female', 'm' => 'form.reg.gender.male', 'o' => 'form.reg.gender.other'),
           'required'  => true,
           'expanded'  => true,
       ));
       
-      $builder->add('register', 'submit', array('label' => 'Join Participant Waiting List'));
+      $builder->add('register', 'submit', array('label' => 'form.reg.submit'));
     }
     
     public function getName()

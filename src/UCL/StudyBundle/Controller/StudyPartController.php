@@ -40,7 +40,9 @@ class StudyPartController extends UCLStudyController
     public function infosheetAction($_part, Request $request)
     {
       $params = $this->setupParameters($request, true, 'information', $_part);
-      $params['page'] = array('title' => 'Information Sheet for Part '.$_part.': '.$this->site['participant_space']['part_'.$_part]['name']);
+      $partName = $this->get('translator')->trans($this->site['participant_space']['part_'.$_part]['name']);
+      $translated = $this->get('translator')->trans('Information Sheet for Part %part%: %partName%', array('%part%' => $_part, '%partName%' => $partName));
+      $params['page'] = array('title' => $translated);
 
       return $this->render('UCLStudyBundle:StudyPart:infosheet-p'.$_part.'.html.twig', $params);
     }
@@ -64,25 +66,28 @@ class StudyPartController extends UCLStudyController
       /* Already consented, just render the page */
       if ($params['step'] == "AlreadyDone")
       {
-        $params['page'] = array('title' => 'Consent Form for Part '.$_part.': '.$this->site['participant_space']['part_'.$_part]['name']);
-        return $this->render('UCLStudyBundle:StudyPart:consent.html.twig', $params);
+        $partName = $this->get('translator')->trans($this->site['participant_space']['part_'.$_part]['name']);
+        $params['page'] = array('title' => $this->get('translator')->trans('Consent Form for Part %part%: %partName%', array('%part%' => $_part, '%partName%' => $partName)));
+        return $this->render('UCLStudyBundle:StudyPart:consent.html.twig', $params);  // no form processing needed, render now
       }
       /* Half-way through, infosheet has been accepted */
       else if ($params['step'] == "Consent")
       {
-        $params['page'] = array('title' => 'Consent Form for Part '.$_part.': '.$this->site['participant_space']['part_'.$_part]['name']);
-        $submitValue = "Give Consent";
+        $partName = $this->get('translator')->trans($this->site['participant_space']['part_'.$_part]['name']);
+        $params['page'] = array('title' => $this->get('translator')->trans('Consent Form for Part %part%: %partName%', array('%part%' => $_part, '%partName%' => $partName)));
+        $submitValue =  $this->get('translator')->trans("Give Consent");
       }
       /* Default position -- show infosheet first */
       else /* if ($params['step'] == "Inform") */
       {
-        $params['page'] = array('title' => 'Information Sheet for Part '.$_part.': '.$this->site['participant_space']['part_'.$_part]['name']);
-        $checkLabel = "I have read the information above and understand what will happen during the study.";
-        $submitValue = "Continue";
+        $partName = $this->get('translator')->trans($this->site['participant_space']['part_'.$_part]['name']);
+        $params['page'] = array('title' => $this->get('translator')->trans('Information Sheet for Part %part%: %partName%', array('%part%' => $_part, '%partName%' => $partName)));
+        $checkLabel = $this->get('translator')->trans("I have read the information above and understand what will happen during the study.");
+        $submitValue = $this->get('translator')->trans("Continue");
       }
 
       if (isset ($checkLabel))
-        $builder->add('check', 'checkbox', array('label' => $checkLabel, 'constraints' => new True(array('message' => 'You need to confirm you have read and understood this information sheet.', 'groups' => 'consent'))));
+        $builder->add('check', 'checkbox', array('label' => $checkLabel, 'constraints' => new True(array('message' => $this->get('translator')->trans('You need to confirm you have read and understood this information sheet.'), 'groups' => 'consent'))));
       $builder->add('button', 'submit', array('label' => $submitValue));
 
       $form = $builder->getForm();
@@ -96,7 +101,7 @@ class StudyPartController extends UCLStudyController
         {
           $this->session->getFlashBag()->add(
               'success',
-              'Thank you. You are now enrolled in the study!'
+              $this->get('translator')->trans('Thank you. You are now enrolled in the study!')
           );
           $this->session->remove('ucl_study_part_consent_step');
           $this->takeParticipantToNextStep($_part, 'consent');
@@ -165,7 +170,7 @@ class StudyPartController extends UCLStudyController
     public function installAction($_part, Request $request)
     {
       $params = $this->setupParameters($request, true, 'install', $_part);
-      $params['page'] = array('title' => 'Software Installation Instructions');
+      $params['page'] = array('title' => $this->get('translator')->trans('Software Installation Instructions'));
 
       return $this->render('UCLStudyBundle:StudyPart:start-p'.$_part.'.html.twig', $params);
     }
@@ -178,7 +183,7 @@ class StudyPartController extends UCLStudyController
     public function runningAction($_part, Request $request)
     {
       $params = $this->setupParameters($request, true, 'running', $_part);
-      $params['page'] = array('title' => 'Check your Current Progress');
+      $params['page'] = array('title' => $this->get('translator')->trans('Check your Current Progress'));
       
       /* Fetch the current upload job, or start a new one */
       $progressService = $this->get('participant_upload_progress');
@@ -199,7 +204,7 @@ class StudyPartController extends UCLStudyController
     public function manualAction($_part, Request $request)
     {
       $params = $this->setupParameters($request, true, 'manual', $_part);
-      $params['page'] = array('title' => 'Software Manuals');
+      $params['page'] = array('title' => $this->get('translator')->trans('Software Manuals'));
       
       #TODO
       return $this->render('UCLStudyBundle:StudyPart:manual.html.twig', $params);
@@ -212,7 +217,7 @@ class StudyPartController extends UCLStudyController
     {
       $params = $this->setupParameters($request, true, 'waiting_enrollment', null);
       $params['_part'] = 0; /* manually injecting this, since we told setupParameters this was not a 'normal' part page and it didn't */
-      $params['page'] = array('title' => 'You Are Not Enrolled Yet');
+      $params['page'] = array('title' => $this->get('translator')->trans('You Are Not Enrolled Yet'));
       
       /* Verify not showing waiting_enrollment to an enrolled user */
       if($this->getUser()->getCurrentPart() == 0)
@@ -221,7 +226,7 @@ class StudyPartController extends UCLStudyController
       }
       else
       {
-        throw $this->createAccessDeniedException('Access Denied: you are already enrolled in the study.');
+        throw $this->createAccessDeniedException($this->get('translator')->trans('Access Denied: you are already enrolled in the study.'));
       }
     }
 

@@ -1,0 +1,60 @@
+"Contact the Researchers": Contact the Researchers
+"PARTICIPANT WEBSITE": PARTICIPANT WEBSITE
+
+form:
+  dataupload:
+    submit:
+      upload: Upload your Data
+      reupload: New Upload (erase previous job)
+  login:
+    name: Email address
+    password: Password
+    remember: Remember me
+    submit: Log in
+  reg:
+    pseudonym: Nickname
+    email:
+      match: The email addresses must match.
+      one: Email address
+      two: Repeat Email address
+    proficiency:
+      label: Linux Proficiency
+      beginner: Beginner
+      advanced: Advanced user
+      tech: Advanced user with technical skills<sup>1</sup>
+      pro: IT professional
+    occupation: Occupation
+    age:
+      1824: 18 – 24
+      2534: 25 – 34
+      3544: 35 – 44
+      4554: 45 – 54
+      5564: 55 – 64
+      65: 65+
+    distro:
+      label: Linux Distribution
+      ubuntu: Ubuntu
+      other: Other
+      otherlabel: If Other, please specify
+    de:
+      label: Desktop Environment
+      unity: Unity 7
+      gnome: GNOME 3
+      xfce: Xfce
+      other: Other (unsupported)
+    browser:
+      label: Web Browser
+      chrome: Chrome/Chromium
+      ff: Firefox/Iceweasel
+      other: Other (unsupported)
+    gender:
+      label: Gender
+      female: Female
+      male: Male
+      other: Other
+    submit: Join Participant Waiting List
+
+
+nav:
+  information:
+    tooltip: Refresh your memory about the 

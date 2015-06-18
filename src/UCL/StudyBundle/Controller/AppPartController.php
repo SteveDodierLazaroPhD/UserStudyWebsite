@@ -88,7 +88,7 @@ class AppPartController extends UCLStudyController
     public function installAction($_part, Request $request)
     {
       $params = $this->setupParameters($request, true, 'install', $_part);
-      $this->session->getFlashBag()->add('success', 'Congratulations! The study application is correctly installed.');
+      $this->session->getFlashBag()->add('success', $this->get('translator')->trans('Congratulations! The study application is correctly installed.'));
       $this->takeParticipantToNextStep($_part, 'install');
       return $this->jResponse('"InstallRegistered":"Success"');
     }
@@ -108,12 +108,13 @@ class AppPartController extends UCLStudyController
     public function showStatusAction(Request $request)
     {
       $params = $this->setupParameters($request, true);
-      $params['page'] = array('title' => 'Your Current Progress');
+      $params['page'] = array('title' => $this->get('translator')->trans('Your Current Progress'));
       return $this->render('UCLStudyBundle:App:status.html.twig', $params);
     }
     
-    protected function abortUploadJob(DataUploadJob $uploadjob, $_part, $cause='Aborting the job', $extraData=null)
+    protected function abortUploadJob(DataUploadJob $uploadjob, $_part, $cause=null, $extraData=null)
     {
+      $cause = ($cause==null ? $this->get('translator')->trans('Aborting the job') : $cause);
       $this->removeObject($uploadjob);
       if (empty($extraData))
         return $this->jResponse('"Uploading":"Failure","FailureCause":"'.$cause.'}');
@@ -158,6 +159,7 @@ class AppPartController extends UCLStudyController
     
     protected function parseUploadingUploading(DataUploadJob $uploadjob, $_part, Request $request)
     {
+      $translator = $this->get('translator');
       try
       {
         $filename = $uploadjob->getFilename();
@@ -214,7 +216,9 @@ class AppPartController extends UCLStudyController
           if ($recovered)
             return $this->jResponse('"Uploading":"ReadyData", '.$diagnostic.', '.$this->getUploadJobJSON($uploadjob));
           else
-            return $this->abortUploadJob($uploadjob, "An error occurred while writing the uploaded data, and the error could not be recovered. Aborting the job.", $diagnostic);
+            return $this->abortUploadJob($uploadjob, 
+                                         $translator->trans('An error occurred while writing the uploaded data, and the error could not be recovered. Aborting the job.'),
+                                         $diagnostic);
         }
 
         $uploadjob->setObtainedSize($uploadjob->getObtainedSize() + $length);
@@ -233,17 +237,19 @@ class AppPartController extends UCLStudyController
             return $this->jResponse('"Uploading":"Done", '.$this->getUploadJobJSON($uploadjob));
           }
           else
-            return $this->abortUploadJob($uploadjob, 'Final checksum failed on data upload job. This usually happens if the client mismatched some of the parts it sent. Aborting the job."');
+            return $this->abortUploadJob($uploadjob,
+                                         $translator->trans('Final checksum failed on data upload job. This usually happens if the client mismatched some of the parts it sent. Aborting the job.'));
         }
         else
           return $this->jResponse('"Uploading":"ReadyData", '.$this->getUploadJobJSON($uploadjob));
       }
       catch (Exception $e)
       {
-        return $this->abortUploadJob($uploadjob, 'Could not open the file to write your data to ('.$e->getMessage().'). This is a bug in the server. Aborting the job."');
+        return $this->abortUploadJob($uploadjob,
+                                     $translator->trans('Could not open the file to write your data to (%errorMsg%). This is a bug in the server. Aborting the job.', array('%errorMsg%' => $e->getMessage())));
       }
 
-      return $this->jResponse('"Uploading":"Failure", "FailureCause":"Could not determine what to do with the received packet. This is a bug in the server."');
+      return $this->jResponse('"Uploading":"Failure", "FailureCause":"'.$translator->trans('Could not determine what to do with the received packet. This is a bug in the server.').'"');
     }
     
     /**
@@ -280,7 +286,7 @@ class AppPartController extends UCLStudyController
         return $this->parseUploadingUploading($uploadjob, $_part, $request);
       }
       
-      return $this->jResponse('"Uploading":"Failure", "FailureCause":"An unknown error occurred while uploading."');
+      return $this->jResponse('"Uploading":"Failure", "FailureCause":"'.$this->get('translator')->trans('An unknown error occurred while uploading.').'"');
     }
     
     /**
@@ -339,7 +345,7 @@ class AppPartController extends UCLStudyController
     public function uploadAction($_part, Request $request)
     {
       $params = $this->setupParameters($request, true, 'running', $_part);
-      $params['page'] = array('title' => 'Upload your Collected Data');
+      $params['page'] = array('title' => $this->get('translator')->trans('Upload your Collected Data'));
       
       /* Fetch the current upload job, or start a new one */
       $progressService = $this->get('participant_upload_progress');
@@ -382,7 +388,7 @@ class AppPartController extends UCLStudyController
         }
         catch (Exception $e)
         {
-          $request->getSession()->getFlashBag()->add('error', 'The upload was aborted because of an error on the server ('.$e->getMessage().')');
+          $request->getSession()->getFlashBag()->add('error', $this->get('translator')->trans('The upload was aborted because of an error on the server (%errMsg%)', array('%errMsg%' => $e->getMessage())));
         }
       }
       else

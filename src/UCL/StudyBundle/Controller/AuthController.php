@@ -31,10 +31,12 @@ class AuthController extends UCLStudyController
      */
     public function loginAction(Request $request,
                                 $twig  = 'UCLStudyBundle:Auth:login.html.twig', 
-                                $title = 'Log In to the Participant Website')
+                                $title = null)
     {
       $session = $request->getSession();
       $params = $this->setupParameters($request, false);
+      if (!$title)
+        $title = $this->get('translator')->trans('Log In to the Participant Website');
       $params['page'] = array('title' => $title);
       
       $authenticationUtils = $this->get('security.authentication_utils');

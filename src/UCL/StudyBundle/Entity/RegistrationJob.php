@@ -16,11 +16,11 @@ use Symfony\Component\Yaml\Dumper;
  * @ORM\Table(name="study_participants")
  * @UniqueEntity(
  *     fields={"email"},
- *     message="This email address is already in use."
+ *     message="participant.email.already_used"
  * )
  * @UniqueEntity(
  *     fields={"pseudonym"},
- *     message="This nickname is already in use."
+ *     message="participant.pseudonym.already_used"
  * )
  */
 class RegistrationJob
@@ -34,15 +34,15 @@ class RegistrationJob
   protected $id;
 
   /**
-   * @Assert\NotBlank(message = "You must provide a nickname.",)
+   * @Assert\NotBlank(message = "participant.pseudonym.not_blank",)
    * @ORM\Column(name="username", type="string", length=255, unique=true)
    */
   protected $pseudonym;
   /**
-   * @Assert\NotBlank(message = "You must provide an email.",)
+   * @Assert\NotBlank(message = "participant.email.not_blank",)
    * @ORM\Column(name="email", type="string", length=255, unique=true)
    * @Assert\Email(
-   *     message = "The email '{{ value }}' is not a valid email.",
+   *     message = "participant.email.invalid",
    *     checkMX = true
    * )
    */
@@ -51,51 +51,51 @@ class RegistrationJob
 
   /* PII fields (not readable after locked) */
   /**
-   * @Assert\NotBlank(message = "You must specify your gender.",)
+   * @Assert\NotBlank(message = "participant.gender.not_blank",)
    * @Assert\Choice(
    *     choices = { "m", "f", "o" },
-   *     message = "The gender you specified is unknown."
+   *     message = "participant.gender.invalid"
    * )
    */
   protected $gender;
   /**
-   * @Assert\NotBlank(message = "You must specify your age range.",)
+   * @Assert\NotBlank(message = "participant.age.not_blank",)
    * @Assert\Choice(
    *     choices = { "a1824", "a2534", "a3544", "a4554", "a5564", "a65p" },
-   *     message = "The age range you specified is unknown."
+   *     message = "participant.age.invalid"
    * )
    */
   protected $age;
   /**
-   * @Assert\NotBlank(message = "You must specify your age range.",)
+   * @Assert\NotBlank(message = "participant.proficiency.not_blank",)
    * @Assert\Choice(
    *     choices = { "beginner", "poweruser", "techy", "pro" },
-   *     message = "The level of proficiency you specified is unknown."
+   *     message = "participant.proficiency.invalid"
    * )
    */
   protected $proficiency;
   /**
    * @Assert\NotBlank(
-   *     message = "You must specify your occupation."
+   *     message = "participant.occupation.not_blank"
    * )
    */
   protected $occupation;
   /**
    * @Assert\NotBlank(
-   *     message = "You must specify your Linux distribution."
+   *     message = "participant.distro.not_blank"
    * )
    */
   protected $distro;
   protected $distroOther;
   /**
    * @Assert\NotBlank(
-   *     message = "You must specify your Linux desktop environment."
+   *     message = "participant.de.not_blank"
    * )
    */
   protected $de;
   /**
    * @Assert\NotBlank(
-   *     message = "You must specify your Web browser."
+   *     message = "participant.browser.not_blank"
    * )
    */
   protected $browser;
@@ -223,7 +223,7 @@ class RegistrationJob
   /* Constraint validation */
   /**
    * @Assert\True(
-   *     message = "Sorry. Your Desktop Environment is currently unsupported.",
+   *     message = "participant.de.invalid",
    *     groups={"envsupport"}
    * )
    */
@@ -234,7 +234,7 @@ class RegistrationJob
 
   /**
    * @Assert\True(
-   *     message = "Sorry. Your Web browser is currently unsupported.",
+   *     message = "participant.browser.invalid",
    *     groups={"envsupport"}
    * )
    */
@@ -247,7 +247,7 @@ class RegistrationJob
   }
 
   /**
-   * @Assert\True(message = "You should specify exactly one Linux distribution. If you select ‘Other’, type your distribution in the associated ‘Other’ field.")
+   * @Assert\True(message = "participant.distro.invalid")
    */
   public function isDistroValid()
   {
@@ -276,6 +276,7 @@ class RegistrationJob
    * Creates a YAML representation of this object.
    *
    * @return string The YAML representation.
+   * @throws Exception
    */
   function makeScreeningYaml()
   {
@@ -294,14 +295,9 @@ class RegistrationJob
         'password' => $this->clearpw
     );
 
-    try {
-      $dumper = new Dumper();
-      return $dumper->dump($array, 1);
-    } catch (Exception $e) {
-      if ($request) 
-         $request->getSession()->getFlashBag()->add('error', 'An error occurred while processing your registration: '.$e->getMessage().'. Please try again later, or contact us if it keeps happening.');
-      return null;
-    }
+    // Can throw exceptions!
+    $dumper = new Dumper();
+    return $dumper->dump($array, 1);
   }
 
   /**

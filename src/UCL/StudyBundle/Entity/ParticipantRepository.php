@@ -24,11 +24,9 @@ class ParticipantRepository extends EntityRepository implements UserProviderInte
             // if there is no record matching the criteria.
             $user = $q->getSingleResult();
         } catch (NoResultException $e) {
-            $message = sprintf(
-                'Unable to find an active participant UCLStudyBundle:Participant object identified by "%s".',
-                $username
-            );
-            throw new UsernameNotFoundException($message, 0, $e);
+            //$message = sprintf('Could not find a participant identified by "%s".', $username);
+            // FIXME there's no way on earth this actually translates...
+            throw new UsernameNotFoundException('Could not find a participant identified by {{ value }}', 0, $e);
         }
 
         return $user;
@@ -38,11 +36,9 @@ class ParticipantRepository extends EntityRepository implements UserProviderInte
     {
         $class = get_class($user);
         if (!$this->supportsClass($class)) {
-            throw new UnsupportedUserException(
-                sprintf(
-                    'Instances of "%s" are not supported.',
-                    $class
-                )
+            // FIXME there's no way on earth this actually translates...
+            throw new UnsupportedUserException('Instances of {{ class }} are not supported.'
+                //sprintf('Instances of "%s" are not supported.', $class)
             );
         }
 
