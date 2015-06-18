@@ -10,8 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
 
 use UCL\StudyBundle\Controller\UCLStudyController as UCLStudyController;
-use UCL\StudyBundle\Form\Type\LoginType;
-use UCL\StudyBundle\Entity\LoginJob;
 
 class AuthController extends UCLStudyController
 {
@@ -33,7 +31,6 @@ class AuthController extends UCLStudyController
                                 $twig  = 'UCLStudyBundle:Auth:login.html.twig', 
                                 $title = null)
     {
-      $session = $request->getSession();
       $params = $this->setupParameters($request, false);
       if (!$title)
         $title = $this->get('translator')->trans('Log In to the Participant Website');
@@ -50,9 +47,6 @@ class AuthController extends UCLStudyController
         if (is_a ($error, 'Symfony\Component\Security\Core\Exception\UsernameNotFoundException'))
           $params['last_username'] = '';
       }
-
-      $previous = $request->request->get('form');
-      $task = new LoginJob($params['last_username'], $previous ? $previous['remember_me'] : false);
 
       return $this->render($twig, $params);
     }
