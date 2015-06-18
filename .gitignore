@@ -15,3 +15,5 @@ web/js
 web/scripts-generated-form.js
 web/scripts-generated.js
 web/bundles
+.git
+.gitignore
