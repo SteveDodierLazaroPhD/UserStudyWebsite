@@ -126,7 +126,7 @@ class DefaultController extends UCLStudyController
               $request->getSession()->getFlashBag()->add('success',$translator->trans('Thank you for your interest in this study. A confirmation email was sent to you. We will be in touch with you shortly.'));
               return $this->redirect($this->generateUrl('ucl_study_homepage'));
             }
-          } catch (Exception $e) {
+          } catch (IOException $e) {
             $request->getSession()->getFlashBag()->add('error', $translator->trans('The registration process was interrupted by an error on the server: %errMsg%. Please try again later, or contact us if it keeps happening.', array('%errMsg%', $e->getMessage())));
           }
         }
