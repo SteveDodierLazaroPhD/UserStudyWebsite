@@ -1,7 +1,7 @@
 {% extends 'UCLStudyBundle::app.html.twig' %}
 
 {% block body %}
-<p class="lead">Check how far you are into the study.</p>
+<p class="lead">{{ 'Check how far you are into the study.' | trans }}</p>
 
 <div id="status">
 {% for p in 1..globals.part_count %}
@@ -11,7 +11,11 @@
    
   {% if globals.part_count != 1 %}
   {% if done %}<s>{% endif %}
-  <h4 {% if future %}class="disabled"{% elseif current %}id="current-page"{% endif%}>Part {{ p }} – {% if not future %}{{ site.participant_space['part_' ~ p].title }}{% else %}???{% endif %}</h4>
+    {% if future %}
+    <h4 class="disabled">{{ 'Part %id% – ???' | trans({'%id%': p }) }}</h4>
+    {% else %}
+    <h4 {% if current %}id="current-page"{% endif%}>{{ 'Part %id% – %title%' | trans({'%id%': p, '%title%': site.participant_space['part_' ~ p].title }) }}</h4>
+    {% endif %}
   {% if done %}</s>{% endif %}
   {% endif %}
   
@@ -29,7 +33,7 @@
       {% else %}
         {% set stepCaption = site.participant_space['part_' ~ p].navigation[s].caption %}
       {% endif %}
-      --><li class="progtrckr-{% if done %}done disabled{% elseif s in completed_steps %}done{% elseif (s == user.getCurrentStep) and (p == user.getCurrentPart) %}current{% else %}todo{% endif %}">{{ stepCaption }}</li><!--
+      --><li class="progtrckr-{% if done %}done disabled{% elseif s in completed_steps %}done{% elseif (s == user.getCurrentStep) and (p == user.getCurrentPart) %}current{% else %}todo{% endif %}">{{ stepCaption | trans }}</li><!--
     {% endfor %}
     --></ol>
   {% else %}
