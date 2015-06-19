@@ -7,6 +7,8 @@
 {% endif %}
 {% extends 'UCLStudyBundle::'~space_target~'.html.twig' %}
 
+{% set lcur = globals.currency | trans %}
+
 {% block body %}
 {% block upload_intro %}
     <h3>{{ 'Reminder' | trans }}</h3>
@@ -86,13 +88,13 @@
           {# Reward for dropping out, mask if completed #}
           <div class="form-row{% if completed %} disabled{% endif %}">
             <label class="col-sm-3 control-label">{{ 'If you drop out' | trans }}</label><!--
-            --><div class="col-sm-9 form-control-static">{{ '%currency%%val%' | trans({'%currency%': globals.currency, '%val%': preReward}) }}</div>
+            --><div class="col-sm-9 form-control-static">{{ '%currency%val' | trans({'%currency': lcur, '%val': preReward}) }}</div>
           </div>
           {# Fixed reward, for completing or starting a new job #}
           <div class="form-row">
             <span{% if (not completed) and notEnoughDays %} class="disabled"{% endif %}>
             <label class="col-sm-3 control-label">{{ earnedLabel }}</label><!--
-            --><div class="col-sm-9 form-control-static">{{ '%currency%%val%' | trans({'%currency%': globals.currency, '%val%': fixedReward}) }}</div>
+            --><div class="col-sm-9 form-control-static">{{ '%currency%val' | trans({'%currency': lcur, '%val': fixedReward}) }}</div>
             </span>
           </div>
         </div>
@@ -100,18 +102,18 @@
         {% set maxGain = site.participant_space['part_' ~ _part]['gains']['running']['post']['max'] %}
         {% set perDay = site.participant_space['part_' ~ _part]['gains']['running']['post']['per_day'] %}
         {% set earnedCount = (resuming or completed) ?  min (maxGain, perDay * daysInCurrentJob) : min (maxGain, perDay * daysCollected) %}
-        <p>{{ 'You will earn %currency%%perDay% per day of uploaded data, up to %currency%%maxGain%. Your reward so far:' | trans({'%currency%': globals.currency, '%perDay%': perDay, '%maxGain%': maxGain}) }}
+        <p>{{ 'You will earn %currency%perDay per day of uploaded data, up to %currency%maxGain. Your reward so far:' | trans({'%currency': lcur, '%perDay': perDay, '%maxGain': maxGain}) }}
         <div class="form-group">
           {# Reward for dropping out, mask if completed #}
           <div class="form-row{% if completed %} disabled{% endif %}">
           <label class="col-sm-3 control-label">{{ 'If you drop out' | trans }}</label><!--
-          --><div class="col-sm-9 form-control-static">{{ '%currency%%val%' | trans({'%currency%': globals.currency, '%val%': preReward}) }}</div>
+          --><div class="col-sm-9 form-control-static">{{ '%currency%val' | trans({'%currency': lcur, '%val': preReward}) }}</div>
           </div>
           
           <div class="form-row">
             <span{% if (not completed) and notEnoughDays %} class="disabled"{% endif %}>
             <label class="col-sm-3 control-label">{{ earnedLabel }}</label><!--
-            --><div class="col-sm-9 form-control-static">{{ '%currency%%val%' | trans({'%currency%': globals.currency, '%val%': earnedCount}) }} {% if space_target == 'app' %}<div class="progress"><div class="progress-bar progress-bar-default" role="progressbar" aria-valuenow="{{ obtainedSize }}" aria-valuemin="0" aria-valuemax="{{ expectedSize }}" style="width: {% if expectedSize != 0 %}{{ obtainedSize * 100 / expectedSize }}{% else %}0{% endif %}%"><span class="">{{ (obtainedSize / 1000000) | round(0, 'ceil')  }} / {{ (expectedSize / 1000000) | round(0, 'ceil')  }} MB</span></div></div>{% endif %}</div>
+            --><div class="col-sm-9 form-control-static">{{ '%currency%val' | trans({'%currency': lcur, '%val': earnedCount}) }} {% if space_target == 'app' %}<div class="progress"><div class="progress-bar progress-bar-default" role="progressbar" aria-valuenow="{{ obtainedSize }}" aria-valuemin="0" aria-valuemax="{{ expectedSize }}" style="width: {% if expectedSize != 0 %}{{ obtainedSize * 100 / expectedSize }}{% else %}0{% endif %}%"><span class="">{{ (obtainedSize / 1000000) | round(0, 'ceil')  }} / {{ (expectedSize / 1000000) | round(0, 'ceil')  }} MB</span></div></div>{% endif %}</div>
             </span>
           </div>
           
@@ -120,7 +122,7 @@
           <div class="form-row">
             <span{% if daysCollected < minDays %} class="disabled"{% endif %}>
             <label class="col-sm-3 control-label">{{ 'If you start a new upload' | trans }}</label><!--
-            --><div class="col-sm-9 form-control-static">{{ '%currency%%val%' | trans({'%currency%': globals.currency, '%val%': newCount}) }}</div>
+            --><div class="col-sm-9 form-control-static">{{ '%currency%val' | trans({'%currency': lcur, '%val': newCount}) }}</div>
             </span>
           </div>
           {% endif %}
