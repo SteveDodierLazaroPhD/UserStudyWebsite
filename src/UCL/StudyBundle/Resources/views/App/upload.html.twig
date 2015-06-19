@@ -9,9 +9,11 @@
 
 {% block body %}
 {% block upload_intro %}
-    <h3>Reminder</h3>
-    <p>You are about to upload your collected data to UCL for analysis. Please keep in mind that you can amend the collected data using the <span class="fa fa-gear fa-fw"></span>{% if space_target == 'app' %}<a href="app://ucl-study-journal">UCL Study Journal</a>{% else %}UCL Study Journal{% endif %} prior to uploading{% if resuming %} <span class="warning">(<strong>attention:</strong> you must start a new upload job for your changes to take effect)</span>{% endif %}. You can also write to the researchers if you wish to edit or delete some of your data after uploading it. You can also drop out from the study now, or later, without prejudice to the rewards you have already earned. {#As a reminder, your rights on the collected data are protected by the Data Protection Act 1998.#}</p>
-    
+    <h3>{{ 'Reminder' | trans }}</h3>
+    {% set resumingWarning = resuming?' <span class="warning">(<strong>attention:</strong> you must start a new upload job for your changes to take effect)</span>':'' %}
+    {% set studyJournal = space_target=='app'?'<span class="fa fa-gear fa-fw"></span><a href="app://ucl-study-journal">UCL Study Journal</a>':'UCL Study Journal' %}
+    <p>{% trans %}You are about to upload your collected data to UCL for analysis. Please keep in mind that you can amend the collected data using the %studyJournal% prior to uploading%resumingWarning%. You can also write to the researchers if you wish to edit or delete some of your data after uploading it. You can also drop out from the study now, or later, without prejudice to the rewards you have already earned.{% endtrans %}</p>    
+
 {% include ('UCLStudyBundle::dpa.html.twig') %}
 {% endblock %}
 
@@ -41,72 +43,84 @@
       {% endif %}
       
       {% set notEnoughDays = (resuming and daysInCurrentJob < minDays) or (not resuming and daysCollected < minDays) %}
+      {% set daysStillNeeded = minDays - daysCollected %}
 
       <hr />
-      <h3>Progress & Reward</h3>
+      <h3>{{ 'Progress & Reward' | trans }}</h3>
       <div class="form-horizontal">
-      <p>You have collected {{ daysCollected }} days of data so far. {% if minDays > daysCollected %}You must collect at least {{ minDays - daysCollected }} more days before you can upload your data and claim a reward{% else %}You can upload your data now{% if maxDays is defined and maxDays > daysCollected %}, or you can wait until you reach {{ maxDays }} days of participation{% endif %}{% endif %}.</p>
+      {% set nextAvailableActions = (minDays > daysCollected)?'You must collect at least %daysStillNeeded% more days before you can upload your data and claim a reward.':'' %}
+      <p>{% trans %}You have collected %daysCollected% days of data so far.{% endtrans%}{% if minDays > daysCollected %} {% trans %}You must collect at least %daysStillNeeded% more days before you can upload your data and claim a reward.{% endtrans %}{% else %}{% if maxDays is defined and maxDays > daysCollected %}{% trans %}You can upload your data now, or you can wait until you reach %maxDays% days of participation.{% endtrans %}{% else %}{% trans %}You can upload your data now.{% endtrans %}{% endif %}{% endif %}</p>
       
       <div class="form-row">
-        <label class="col-sm-3 control-label">Your progress</label><!--
+        <label class="col-sm-3 control-label">{{ 'Your progress' | trans }}</label><!--
         --><div class="col-sm-9 form-control-static">
             <div class="progressbar-wrapper">
               <div class="progress">
                 <div class="progress-bar progress-bar-{% if daysCollected >= minDays %}success{% else %}warning{% endif %}" role="progressbar" aria-valuenow="{{ daysCollected }}" aria-valuemin="0" aria-valuemax="{{ target }}" style="width: {% if target != 0 %}{{ daysCollected * 100 / target }}{% else %}100{% endif %}%">
-                  <span class="">{{ daysCollected }} days</span>
+                  <span class="">{{ '%daysCollected% days' | trans({'%daysCollected%': daysCollected}) }}</span>
                 </div>
               </div>
               {% if target != 0 and daysCollected < minDays %}
               <div class="progressbar-marker" style="right: {{ 100 - (minDays * 100 / target) }}%;" title="Min {{ minDays }} Days"></div>
               {% endif %} 
             </div>
-            {% if space_target == 'app' %}<a class="btn btn-default" href="{{ path('ucl_study_app_report_progress', {'_part': _part}) }}" title="Refresh day count"><i class="fa fa-refresh"></i> Refresh</a><small><em> (takes a few minutes)</em></small>
+            {% if space_target == 'app' %}<a class="btn btn-default" href="{{ path('ucl_study_app_report_progress', {'_part': _part}) }}" title="{{ 'Refresh day count' | trans }}"><i class="fa fa-refresh"></i> {{ 'Refresh' | trans }}</a><small><em> {{ '(takes a few minutes)' | trans }}</em></small>
             {% else %}
-            <em><small>to update your progress, please use the study application</small></em>
+            <em><small>{{ 'to update your progress, please use the study application' | trans }}</small></em>
             {% endif %}
           </div>
       </div>
       
+      {% if completed %}
+        {% set earnedLabel = 'Earned so far' |trans %}
+      {% elseif resuming %}
+        {% set earnedLabel = 'If you finish the current upload job' |trans %}
+      {% else %}
+        {% set earnedLabel = 'If you upload your data' |trans %}
+      {% endif %}
+      
       {% if rewardType == 'fixed' %}
         {% set fixedReward = site.participant_space['part_' ~ _part]['gains']['running']['post']['fixed'] %}
-        <p>You will earn a fixed reward for completing the task assigned to you:</p>
+        <p>{{ 'You will earn a fixed reward for completing the task assigned to you:' | trans }}</p>
         <div class="form-group">
           {# Reward for dropping out, mask if completed #}
           <div class="form-row{% if completed %} disabled{% endif %}">
-            <label class="col-sm-3 control-label">If you drop out</label><!--
-            --><div class="col-sm-9 form-control-static">£{{ preReward }}</div>
+            <label class="col-sm-3 control-label">{{ 'If you drop out' | trans }}</label><!--
+            --><div class="col-sm-9 form-control-static">{{ '%currency%%val%' | trans({'%currency%': globals.currency, '%val%': preReward}) }}</div>
           </div>
           {# Fixed reward, for completing or starting a new job #}
           <div class="form-row">
             <span{% if (not completed) and notEnoughDays %} class="disabled"{% endif %}>
-            <label class="col-sm-3 control-label">{% if completed %}Earned so far{% else %}If you {% if resuming %}finish the current upload job{% else %}upload your data{% endif %}{% endif %}</label><!--
-            --><div class="col-sm-9 form-control-static">£{{ fixedReward }}</div>
+            <label class="col-sm-3 control-label">{{ earnedLabel }}</label><!--
+            --><div class="col-sm-9 form-control-static">{{ '%currency%%val%' | trans({'%currency%': globals.currency, '%val%': fixedReward}) }}</div>
             </span>
           </div>
         </div>
       {% elseif rewardType == 'per_day' %}
         {% set maxGain = site.participant_space['part_' ~ _part]['gains']['running']['post']['max'] %}
         {% set perDay = site.participant_space['part_' ~ _part]['gains']['running']['post']['per_day'] %}
-        <p>You will earn £{{ perDay }} per day of uploaded data, up to £{{ maxGain }}. Your reward so far:
+        {% set earnedCount = (resuming or completed) ?  min (maxGain, perDay * daysInCurrentJob) : min (maxGain, perDay * daysCollected) %}
+        <p>{{ 'You will earn %currency%%perDay% per day of uploaded data, up to %currency%%maxGain%. Your reward so far:' | trans({'%currency%': globals.currency, '%perDay%': perDay, '%maxGain%': maxGain}) }}
         <div class="form-group">
           {# Reward for dropping out, mask if completed #}
           <div class="form-row{% if completed %} disabled{% endif %}">
-          <label class="col-sm-3 control-label">If you drop out</label><!--
-          --><div class="col-sm-9 form-control-static">£{{ preReward }}</div>
+          <label class="col-sm-3 control-label">{{ 'If you drop out' | trans }}</label><!--
+          --><div class="col-sm-9 form-control-static">{{ '%currency%%val%' | trans({'%currency%': globals.currency, '%val%': preReward}) }}</div>
           </div>
           
           <div class="form-row">
             <span{% if (not completed) and notEnoughDays %} class="disabled"{% endif %}>
-            <label class="col-sm-3 control-label">{% if completed %}Earned so far{% else %}If you {% if resuming %}finish the current upload job{% else %}upload your data{% endif %}{% endif %}</label><!--
-            --><div class="col-sm-9 form-control-static">£{% if resuming or completed %}{{ min (maxGain, perDay * daysInCurrentJob) }}{% else %}{{ min (maxGain, perDay * daysCollected) }}{% endif %} {% if space_target == 'app' %}<div class="progress"><div class="progress-bar progress-bar-default" role="progressbar" aria-valuenow="{{ obtainedSize }}" aria-valuemin="0" aria-valuemax="{{ expectedSize }}" style="width: {% if expectedSize != 0 %}{{ obtainedSize * 100 / expectedSize }}{% else %}0{% endif %}%"><span class="">{{ (obtainedSize / 1000000) | round(0, 'ceil')  }} / {{ (expectedSize / 1000000) | round(0, 'ceil')  }} MB</span></div></div>{% endif %}</div>
+            <label class="col-sm-3 control-label">{{ earnedLabel }}</label><!--
+            --><div class="col-sm-9 form-control-static">{{ '%currency%%val%' | trans({'%currency%': globals.currency, '%val%': earnedCount}) }} {% if space_target == 'app' %}<div class="progress"><div class="progress-bar progress-bar-default" role="progressbar" aria-valuenow="{{ obtainedSize }}" aria-valuemin="0" aria-valuemax="{{ expectedSize }}" style="width: {% if expectedSize != 0 %}{{ obtainedSize * 100 / expectedSize }}{% else %}0{% endif %}%"><span class="">{{ (obtainedSize / 1000000) | round(0, 'ceil')  }} / {{ (expectedSize / 1000000) | round(0, 'ceil')  }} MB</span></div></div>{% endif %}</div>
             </span>
           </div>
           
           {% if proposeErasing %}
+          {% set newCount = min (maxGain, perDay * daysCollected) %}
           <div class="form-row">
             <span{% if daysCollected < minDays %} class="disabled"{% endif %}>
-            <label class="col-sm-3 control-label">If you start a new upload</label><!--
-            --><div class="col-sm-9 form-control-static">£{{ min (maxGain, perDay * daysCollected) }}</div>
+            <label class="col-sm-3 control-label">{{ 'If you start a new upload' | trans }}</label><!--
+            --><div class="col-sm-9 form-control-static">{{ '%currency%%val%' | trans({'%currency%': globals.currency, '%val%': newCount}) }}</div>
             </span>
           </div>
           {% endif %}
@@ -123,14 +137,15 @@
       <div class="form-row">
         <div class="col-sm-3"></div>
         {# Job already finished #}
+        {% set extraMsgInParentheses = proposeErasing? ' (%count% days)' | trans({'%count%': daysInCurrentJob}) : '' %}
         {% if completed %}
-        <div class="col-sm-6 cursor-disabled"><button type="submit" id="dataupload_dataupload" name="dataupload[dataupload]" class="btn btn-block disabled">{% if proposeErasing %}(already completed uploading {{ daysInCurrentJob }} days){% else %}(upload already complete){% endif %}</button></div>
+        <div class="col-sm-6 cursor-disabled"><button type="submit" id="dataupload_dataupload" name="dataupload[dataupload]" class="btn btn-block disabled">{% if proposeErasing %}{{ '(already completed an upload with %count% days)' | trans({'%count%':daysInCurrentJob}) }}{% else %}{{ '(upload already complete)' | trans }}{% endif %}</button></div>
         {# Not enough days collected #}
     		{% elseif minDays is defined and notEnoughDays %}
-        <div class="col-sm-6 cursor-disabled"><button type="submit" id="dataupload_dataupload" name="dataupload[dataupload]" class="btn btn-block disabled">{% if resuming %}Resume Upload{% if proposeErasing %} ({{ daysInCurrentJob }} days){% endif %}{% else %}Upload{% endif %} (not enough data yet)</button></div>
+        <div class="col-sm-6 cursor-disabled"><button type="submit" id="dataupload_dataupload" name="dataupload[dataupload]" class="btn btn-block disabled">{% if resuming %}{{ 'Resume Upload (no longer enough data)%extraMsgInParentheses%' | trans({'%extraMsgInParentheses%':extraMsgInParentheses}) }}{% else %}{{ 'Upload (not enough data yet)' | trans }}{% endif %}</button></div>
         {# Good to start a new upload job, or resume the current one #}
     		{% else %}
-        <div class="col-sm-6"><button type="submit" id="dataupload_dataupload" name="dataupload[dataupload]" class="btn btn-block btn-primary">{% if resuming %}Resume Upload{% if proposeErasing %} ({{ daysInCurrentJob }} days){% endif %}{% else %}Upload your Data{% endif %}</button></div>
+        <div class="col-sm-6"><button type="submit" id="dataupload_dataupload" name="dataupload[dataupload]" class="btn btn-block btn-primary">{% if resuming %}{{ 'Resume Upload%extraMsgInParentheses%' | trans({'%extraMsgInParentheses%':extraMsgInParentheses}) }}{% else %}{{ 'Upload your Data' | trans }}{% endif %}</button></div>
     		{% endif %}
       </div>
       {% if proposeErasing %}
@@ -138,9 +153,9 @@
         <div class="col-sm-3"></div>
         {# Not enough days collected #}
         {% if minDays is defined and daysCollected < minDays %}
-        <div class="col-sm-6 cursor-disabled"><button type="submit" id="dataupload_erasecurrentstartnew" name="dataupload[erasecurrentstartnew]" class="btn btn-block disabled">New Upload Job ({{ daysCollected }} days, erases previous job)</button></div>
+        <div class="col-sm-6 cursor-disabled"><button type="submit" id="dataupload_erasecurrentstartnew" name="dataupload[erasecurrentstartnew]" class="btn btn-block disabled">{{ 'New Upload Job (%count% days, erases previous job)' | trans({'%count%': daysCollected}) }}</button></div>
     		{% else %}
-        <div class="col-sm-6"><button type="submit" id="dataupload_erasecurrentstartnew" name="dataupload[erasecurrentstartnew]" class="btn btn-block btn-default">New Upload Job ({{ daysCollected }} days, erases previous job)</button></div>
+        <div class="col-sm-6"><button type="submit" id="dataupload_erasecurrentstartnew" name="dataupload[erasecurrentstartnew]" class="btn btn-block btn-default">{{ 'New Upload Job ({{ daysCollected }} days, erases previous job)' | trans({'%count%': daysCollected}) }}</button></div>
     		{% endif %}
       </div>
       {% endif %}
