@@ -50,19 +50,3 @@ participant:
     not_blank: You must specify your Web browser.
     invalid: Sorry. Your Web browser is currently unsupported.
 
-form:
-  dataupload:
-    submit:
-      upload: Upload your Data
-      reupload: New Upload (erase previous job)
-  login:
-    name: Email address
-    password: Password
-    remember: Remember me
-    submit: Log in
-  reg:
-    pseudonym: Nickname
-    email:
-      match: The email addresses must match.
-      one: Email address1
-      two: Repeat Email address2

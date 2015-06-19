@@ -7,22 +7,22 @@
 {% extends base %}
 
 {% block article_details %}
-    <p class="bs-callout-compact bs-callout-success">This study has been approved by the UCL Research Ethics Committee. <span class="nowrap">Project ID Number: {{globals.REC_number}}.</span> </p>
+    <p class="bs-callout-compact bs-callout-success">{{ 'This study has been approved by the UCL Research Ethics Committee.' | trans }} <span class="nowrap">{{ 'Project ID Number: %nb%.' | trans({'%nb%':globals.REC_number}) }}</span></p>
     <div class="form-horizontal">
     <div class="row">
-      <label class="col-sm-2 control-label">Title of Project</label><!--
-      --><div class="col-sm-10 form-control-static">{{ site.title }} – {{ site.participant_space['part_' ~ _part].title }}</div>
+      <label class="col-sm-2 control-label">{{ 'Title of Project' | trans }}</label><!--
+      --><div class="col-sm-10 form-control-static">{{ site.title | trans }} – {{ site.participant_space['part_' ~ _part].title | trans }}</div>
     </div>
     <div class="row">
-      <label class="col-sm-2 control-label">Main Researcher</label><!--
+      <label class="col-sm-2 control-label">{{ 'Main Researcher' | trans }}</label><!--
       --><div class="col-sm-10 form-control-static">{{ site.author }}</div>
     </div>
     <div class="row">
-      <label class="col-sm-2 control-label">Research Institution</label><!--
-      --><div class="col-sm-10 form-control-static">University College London Department of Computer Science</div>
+      <label class="col-sm-2 control-label">{{ 'Research Institution' | trans }}</label><!--
+      --><div class="col-sm-10 form-control-static">{{ 'University College London Department of Computer Science' | trans }}</div>
     </div>
     <div class="row">
-      <label class="col-sm-2 control-label">Office Address</label><!--
+      <label class="col-sm-2 control-label">{{ 'Office Address' | trans }}</label><!--
       --><div class="col-sm-10 form-control-static">
           {% if site.author_office is defined %}{{ site.author_office }}<br />{% endif %}
           {% if site.author_address_1 is defined %}{{ site.author_address_1 }}<br />{% endif %}
@@ -45,7 +45,7 @@ Content goes here.
 {% endblock %}
 </div>
 {% block infosheet_actions %}
-  <a href="{% if space is defined and space == 'application_space' %}{{ url('ucl_study_app_contact') }}{% else %}{{ url('ucl_study_contact') }}{% endif %}" title="Contact the researchers behind this project" class="btn btn-lg btn-default">Contact the Researchers</a>
+  <a href="{% if space is defined and space == 'application_space' %}{{ url('ucl_study_app_contact') }}{% else %}{{ url('ucl_study_contact') }}{% endif %}" title="{{ 'Contact the researchers behind this project' | trans }}" class="btn btn-lg btn-default">{{ 'Contact the Researchers' | trans }}</a>
 {% endblock %}
 {% endblock %}
 

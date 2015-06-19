@@ -4,6 +4,7 @@ parameters:
     ucl_study.maxgain: '£100'
     ucl_study.screening_max_wait: '3 weeks'
     ucl_study.part_count: 2
+    ucl_study.currency: £
     
     # Globals and Site must be imported inside the controller
     # Global variables for the study

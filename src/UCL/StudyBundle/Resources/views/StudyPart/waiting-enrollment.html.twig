@@ -2,10 +2,11 @@
 
 {% block body %}
 
-    <p class="lead">This study contains a manual screening phase...</p>
-    <p>This means that not all registered participants will be selected. We perform screening in order to ensure that our participants are representative of the population we want to study. For instance, we can target people within a specific age range, profession, gender or degree of IT expertise.</p>
+    <p class="lead">{{ 'This study contains a manual screening phase...' | trans }}</p>
+    <p>{{ 'This means that not all registered participants will be selected. We perform screening in order to ensure that our participants are representative of the population we want to study. For instance, we can target people within a specific age range, profession, gender or degree of IT expertise.' | trans }}</p>
     
-    <p>It can take up to {{ globals.screening_max_wait }} for us to review participants for the '{{ site.title }}' study. We apologise for the inconvenience. If you decided you no longer want to participate, you can let us know by <a href="{{ url('ucl_study_contact') }}" title="Contact us">writing to us</a> (remember to cite the email address you used to register).</p>
+    {% set transTitle = site.title | trans %}
+    <p>{{ 'It can take up to %waitTime% for us to review participants for the \'%siteTitle%\' study. We apologise for the inconvenience. If you decided you no longer want to participate, you can let us know by <a href="%contactPage%" title="Contact us">writing to us</a> (remember to cite the email address you used to register).' | trans({'%waitTime%': globals.screening_max_wait, '%siteTitle%': transTitle, '%contactPage%': url('ucl_study_contact')}) }}</p>
     
 {% include ('UCLStudyBundle::dpa.html.twig') %}
     

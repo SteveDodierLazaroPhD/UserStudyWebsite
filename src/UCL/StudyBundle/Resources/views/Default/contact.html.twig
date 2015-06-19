@@ -8,10 +8,10 @@
 
 {% block body %}
 {% if not (space is defined and space == 'application_space') %}
-    <p class="lead">If you have a question about the study, don't hesitate!</p>
-    <p>You can also use this form for press enquiries, for technical support about the website, and data protection queries for current participants. If you write about your participant data, please provide your Participant ID to help me find you.</p>
+    <p class="lead">{{ 'If you have a question about the study, don\'t hesitate!' | trans }}</p>
+    <p>{{ 'You can also use this form for press enquiries, technical support about the website, and data protection queries for current participants. If you write about your participant data, please reuse the same email address as when you registered.' | trans }}</p>
     <hr />
-    <h3>Contact Form</h3>
+    <h3>{{ 'Contact Form' | trans }}</h3>
 {% endif %}
     {#<form name="form" method="post" action="" onsubmit="return validation();">#}
     {{ form_start(form) }}
@@ -55,22 +55,22 @@
     {{ form_end(form) }}
 		
     <hr />
-    <h3>Office Contact Details</h3>
+    <h3>{{ 'Office Contact Details' | trans }}</h3>
     
     <div class="form-horizontal">
     <div class="form-group">
-      <label class="col-sm-2 control-label">Name&nbsp;&nbsp;<span class="fa fa-user fa-fw"></span></label><!--
+      <label class="col-sm-2 control-label">{{ 'Name' | trans }}&nbsp;&nbsp;<span class="fa fa-user fa-fw"></span></label><!--
       --><div class="col-sm-10 form-control-static">{{ site.author }}</div>
     </div>
     {% if site.author_phone is defined %}
     <div class="form-group">
-      <label class="col-sm-2 control-label">Phone&nbsp;&nbsp;<span class="fa fa-phone fa-fw"></span></label><!--
+      <label class="col-sm-2 control-label">{{ 'Phone' | trans }}&nbsp;&nbsp;<span class="fa fa-phone fa-fw"></span></label><!--
       --><div class="col-sm-10 form-control-static">{{ site.author_phone }}</div>
     </div>
     {% endif %}
   
     <div class="form-group">
-      <label class="col-sm-2 control-label">Address&nbsp;&nbsp;<span class="fa fa-university fa-fw"></span></label><!--
+      <label class="col-sm-2 control-label">{{ 'Address' | trans }}&nbsp;&nbsp;<span class="fa fa-university fa-fw"></span></label><!--
       --><div class="col-sm-10 form-control-static">
           {% if site.author_office is defined %}{{ site.author_office }}<br />{% endif %}
           {% if site.author_address_1 is defined %}{{ site.author_address_1 }}<br />{% endif %}
@@ -81,11 +81,11 @@
     </div>
     
     <hr />
-    <h4>Looking for the UCL Research Ethics Committee?</h4>
+    <h4>{{ 'Looking for the UCL Research Ethics Committee?' | trans }}</h4>
     <div class="form-horizontal">
     <div class="form-group">
       <label class="col-sm-2 control-label"></label><!--
-      --><div class="col-sm-10 form-control-static"><a href="http://ethics.grad.ucl.ac.uk/contact.php" title="UCL REC Website" class="btn btn-default">Visit the UCL REC Website</a></div>
+      --><div class="col-sm-10 form-control-static"><a href="http://ethics.grad.ucl.ac.uk/contact.php" title="UCL REC Website" class="btn btn-default">{{ 'Visit the UCL REC Website' | trans }}</a></div>
     </div>
     </div>
 

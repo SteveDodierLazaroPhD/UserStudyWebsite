@@ -1,7 +1,7 @@
 {% extends 'UCLStudyBundle:App:upload.html.twig' %}
 
 {% block upload_intro %}
-    <p class="lead">This page shows the information we have on your progress in the study. The data collection software informs us when you collect data, so we can tell you when you are ready to upload</p>
+    <p class="lead">{{ 'This page shows the information we have on your progress in the study. The data collection software informs us when you collect data, so we can tell you when you are ready to upload.' | trans }}</p>
     
 {% endblock %}
 
@@ -9,22 +9,22 @@
 <hr />
 {% if not completed or proposeErasing %}
   <div class="bs-callout bs-callout-{% if notEnoughDays %}info">
-    You may start a new upload job by using the study software as soon as you've collected enough data.
+    {{ 'You may start a new upload job by using the study software as soon as you\'ve collected enough data.' | trans }}
   {% elseif completed %}info">
-    You may start a new upload job by using the study software at any time in order to maximise your gains.
+    {{ 'You may start a new upload job by using the study software at any time in order to maximise your gains.' | trans }}
   {% else %}success">
-    You may now start a new upload job by using the study software.
+    {{ 'You may now start a new upload job by using the study software.' | trans }}
   {% endif %}
   </div>
 {% endif %}
 {% if completed %}
 <hr />
-{% set kudos_message %}Congratulations! You can now <a href="{{ url('ucl_study_part_debriefing') }}" title="Schedule a debriefing meeting with the researchers" class="link">schedule a debriefing</a> with the researchers.{% endset %}
+{% set kudos_message %}{{ 'Congratulations! You can now <a href="%debriefing%" title="Schedule a debriefing meeting with the researchers" class="link">schedule a debriefing</a> with the researchers.' | trans({'%debriefing%': url('ucl_study_part_debriefing')}) | raw }}{% endset %}
 {% include ('UCLStudyBundle::kudos.html.twig') %}
 
 {% else %}
 <div class="bs-callout bs-callout-danger">
-  You will only be able to schedule a debriefing after you've sent enough data to UCL. If you would like to opt out of the study instead, please contact the researchers.
+  {{ 'You will only be able to schedule a debriefing after you\'ve sent enough data to UCL. If you would like to opt out of the study instead, please contact the researchers.' | trans }}
 </div>
 {% endif %}
 

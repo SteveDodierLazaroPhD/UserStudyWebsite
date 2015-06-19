@@ -2,12 +2,12 @@
 {% extends 'UCLStudyBundle:StudyPart:infosheet-p1.html.twig' %}
 
 {% block article_details %}
-  <p class="lead">This document presents the research protocol for the first part of the study. This is the information sheet we use to verify that participants understand what will happen and agree to proceed.</p>
+  <p class="lead">{{ 'This document presents the research protocol for the first part of the study. This is the information sheet we use to verify that participants understand what will happen and agree to proceed.' | trans }}</p>
 {{ parent() }}
 {% endblock %}
 
 {% block infosheet_actions %}
-  <a href="{{ url('ucl_study_contact') }}" title="Contact the researchers behind this project" class="btn btn-lg btn-default">Contact Me</a>
-  <a href="{{ url('ucl_study_join_screening') }}" title="Register to join the pre-screening participant pool" class="btn btn-lg btn-primary">Join the Study</a>
+  <a href="{{ url('ucl_study_contact') }}" title="{{ 'Contact the researchers behind this project' | trans }}" class="btn btn-lg btn-default">{{ 'Contact Us' | trans }}</a>
+  <a href="{{ url('ucl_study_join_screening') }}" title="{{ 'Register to join the pre-screening participant pool' | trans }}" class="btn btn-lg btn-primary">{{ 'Join the Study' | trans }}</a>
 {% endblock %}
 

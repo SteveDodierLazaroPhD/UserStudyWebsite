@@ -3,10 +3,10 @@
 {% extends 'UCLStudyBundle::base.html.twig' %}
 
 {% block body %}
-    <p class="lead">I will need a bit of information about you, to help me ensure participants from multiple backgrounds, genders and levels of proficiency are represented in the study.</p>
+    <p class="lead">{{ 'We will need a bit of information about you, to help us ensure participants from multiple backgrounds, genders and levels of proficiency are represented in the study.' | trans }}</p>
     <div class="form-row clearfix">
-      <div class="col-sm-6"><p class="bs-callout bs-callout-success"><strong>If you are selected</strong>, you will receive an email with a complete breakdown of what will happen. You can then decide if you still want to join.</p></div>
-      <div class="col-sm-6"><p class="bs-callout bs-callout-danger"><strong>If you are not selected</strong>, I will let you know within 3 weeks and your details will be permanently deleted.</p></div>
+      <div class="col-sm-6"><p class="bs-callout bs-callout-success">{{ '<strong>If you are selected</strong>, you will receive an email with a complete breakdown of what will happen. You can then decide if you still want to join.' | trans | raw }}</p></div>
+      <div class="col-sm-6"><p class="bs-callout bs-callout-danger">{{ '<strong>If you are not selected</strong>, We will let you know within 3 weeks and your details will be permanently deleted.</p>' | trans | raw }}</div>
     </div>
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
   <div class="form-row">
@@ -15,7 +15,7 @@
       {% else %}
         {{ form_row(form.pseudonym) }}
       {% endif %}
-    <aside>It doesn't have to be your real name. I will use this name to refer to you.</aside>
+    <aside>{{ 'It doesn\'t have to be your real name, but we will need your real name later on to issue payments.' | trans }}</aside>
   </div>
   {% if err_email is defined %}
     <div class="has-error">{{ form_row(form.email) }}<aside class="alert alert-warning">{{ err_email }}</aside></div>
@@ -47,7 +47,7 @@
     {% else %}
       {{ form_row(form.proficiency) }}
     {% endif %}
-    <aside>¹ Technical skills include setting up a firewall, configuring a personal website, writing your own software or scripts, compiling a kernel yourself.</aside>
+    <aside>{{ '<sub>1</sub> Technical skills include setting up a firewall, configuring a personal website, writing your own software or scripts, compiling a kernel yourself.' | trans | raw }}</aside>
   </div>
   
   <hr />  

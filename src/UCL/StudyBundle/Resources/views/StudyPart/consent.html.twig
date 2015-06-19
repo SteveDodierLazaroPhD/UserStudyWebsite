@@ -7,7 +7,8 @@
 
 {% block infosheet_actions %}
 {% if step == "AlreadyDone" %}
-  {% set kudos_message %}<small>You have already given your consent. If you would like clarifications on any of the above, please <a href={{ url('ucl_study_contact') }}">contact us</a>.</small>{% endset %}
+  {% set contactPage = url('ucl_study_contact') %}
+  {% set kudos_message %}<small>{% trans %}You have already given your consent. If you would like clarifications on any of the above, please <a href="%contactPage%">contact us</a>. {% endtrans %}</small>{% endset %}
 {% include ('UCLStudyBundle::kudos.html.twig') %}
 {% else %}
   {{ form_start(form) }}
@@ -23,7 +24,7 @@
       {% endif %}
 
       <div class="form-row">
-      <a href="{{ url('ucl_study_contact') }}" title="Contact the researchers behind this project" class="btn btn-lg btn-default">Contact the Researchers</a> {{ form_widget(form.button, {'attr': {'class': 'btn-lg'}})}}
+      <a href="{{ url('ucl_study_contact') }}" title="{{ 'Contact the researchers behind this project' | trans }}" class="btn btn-lg btn-default">{{ 'Contact the Researchers' | trans }}</a> {{ form_widget(form.button, {'attr': {'class': 'btn-lg'}})}}
       </div>
       </fieldset>
   {{ form_end(form) }}

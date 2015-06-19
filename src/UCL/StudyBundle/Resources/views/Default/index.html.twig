@@ -2,24 +2,24 @@
 
 {% block body %}
 {# TODO if the app's configuration does not include join_screening or join_automatic, then recruitment is closed and this page should be adapted #}
-  <p class="lead">We are recruiting participants, who can earn up to {{ globals.maxgain }} by letting us collect data on their computers.</p>
+  <p class="lead">{{ 'We are recruiting participants, who can earn up to %moneyCount% by letting us collect data on their computers.' | trans({'%moneyCount%': globals.maxgain }) }}</p>
     
   <div class="row">
     <div class="col-md-4 col-lg-3 text-center">
       <div class="bs-callout-card bs-callout-info">
         <a href="{{ url('ucl_study_join') }}" class="unstyled"><i class="fa fa-{{ globals.join_icon }} fa-4x"></i></a>
-        <h4>Join the Study</h4>
-        <p>Earn money by running our data collection software</p>
-        <a href="{{ url('ucl_study_join') }}" class="btn btn-block btn-primary"><strong>Get an invite</strong></a>
+        <h4>{{ 'Join the Study' | trans }}</h4>
+        <p>{{ 'Earn money by running our data collection software' | trans }}</p>
+        <a href="{{ url('ucl_study_join') }}" class="btn btn-block btn-primary"><strong>{{ 'Get an invite' | trans }}</strong></a>
       </div>
     </div>
 
     <div class="col-md-4 col-lg-3 text-center">
       <div class="bs-callout-card">
         <a href="{{ url('ucl_study_advert') }}" class="unstyled"><i class="fa fa-info fa-4x"></i></a>
-        <h4>Find Out More</h4>
-        <p>Learn what you can get out of the study as a participant</p>
-        <a href="{{ url('ucl_study_advert') }}" class="btn btn-block btn-default">Read about the study</a>
+        <h4>{{ 'Find Out More' | trans }}</h4>
+        <p>{{ 'Learn what you can get out of the study as a participant' | trans }}</p>
+        <a href="{{ url('ucl_study_advert') }}" class="btn btn-block btn-default">{{ 'Read about the study' | trans }}</a>
       </div>
     </div>
   
@@ -27,18 +27,18 @@
       <div class="bs-callout-card">
         {#<a href="{{ url('ucl_study_login') }}" class="unstyled"><i class="fa fa-sign-in fa-4x"></i></a>#}
         <a href="{{ url('ucl_study_login') }}" class="unstyled"><i class="fa fa-street-view fa-4x"></i></a>
-        <h4>{# Participant Space #}Participant Login</h4>
-        <p>Already enrolled? Monitor your progress in the study</p>
-        <a href="{{ url('ucl_study_login') }}" class="btn btn-block btn-default">Go to participant space</a>
+        <h4>{# Participant Space #}{{ 'Participant Login' | trans }}</h4>
+        <p>{{ 'Already enrolled? Monitor your progress in the study' | trans }}</p>
+        <a href="{{ url('ucl_study_login') }}" class="btn btn-block btn-default">{{ 'Go to participant space' | trans }}</a>
       </div>
     </div>
     
     <div class="col-md-4 col-lg-3 text-center">
       <div class="bs-callout-card">
         <a href="{{ url('ucl_study_advert') }}" class="unstyled"><i class="fa fa-bullhorn fa-4x"></i></a>
-        <h4>Advertise Us</h4>
-        <p>Use this link to tell your friends about the study</p>
-        <a href="{{ url('ucl_study_advert') }}" class="btn btn-block btn-default">Link to advert</a>
+        <h4>{{ 'Advertise Us' | trans }}</h4>
+        <p>{{ 'Use this link to tell your friends about the study' | trans }}</p>
+        <a href="{{ url('ucl_study_advert') }}" class="btn btn-block btn-default">{{ 'See the advert' | trans }}</a>
       </div>
     </div>
   </div>
