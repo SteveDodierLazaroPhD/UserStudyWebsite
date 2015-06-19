@@ -1,5 +1,102 @@
 "Contact the Researchers": Contact the Researchers
 "PARTICIPANT WEBSITE": PARTICIPANT WEBSITE
+"Check how far you are into the study.": Check how far you are into the study.
+"Part %id% – ???": Part %id% – ???
+"Part %id% – %title%": Part %id% – %title%
+"Progress & Reward": Progress & Reward
+"You have collected %daysCollected% days of data so far.": You have collected %daysCollected% days of data so far.
+"You must collect at least %daysStillNeeded% more days before you can upload your data and claim a reward.": You must collect at least %daysStillNeeded% more days before you can upload your data and claim a reward.
+"You can upload your data now, or you can wait until you reach %maxDays% days of participation.": You can upload your data now, or you can wait until you reach %maxDays% days of participation.
+"You can upload your data now.": You can upload your data now.
+"Your progress": Your progress
+"%daysCollected% days": %daysCollected% days
+"Refresh day count": Refresh day count
+"Refresh": Refresh
+"(takes a few minutes)": (takes a few minutes)
+"to update your progress, please use the study application": to update your progress, please use the study application
+"Earned so far": Earned so far
+"If you finish the current upload job": If you finish the current upload job
+"If you upload your data": If you upload your data
+"You will earn a fixed reward for completing the task assigned to you:": You will earn a fixed reward for completing the task assigned to you:
+"If you drop out": If you drop out
+"%currency%%val%": %currency%%val%
+"You will earn %currency%%perDay% per day of uploaded data, up to %currency%%maxGain%. Your reward so far:": You will earn %currency%%perDay% per day of uploaded data, up to %currency%%maxGain%. Your reward so far:
+"If you start a new upload": If you start a new upload
+"Reminder": Reminder
+"You are about to upload your collected data to UCL for analysis. Please keep in mind that you can amend the collected data using the %studyJournal% prior to uploading%resumingWarning%. You can also write to the researchers if you wish to edit or delete some of your data after uploading it. You can also drop out from the study now, or later, without prejudice to the rewards you have already earned.": You are about to upload your collected data to UCL for analysis. Please keep in mind that you can amend the collected data using the %studyJournal% prior to uploading%resumingWarning%. You can also write to the researchers if you wish to edit or delete some of your data after uploading it. You can also drop out from the study now, or later, without prejudice to the rewards you have already earned.
+"(%count% days)": (%count% days)
+"(already completed an upload with %count% days)": (already completed an upload with %count% days)
+"(upload already complete)": (upload already complete)
+"Resume Upload (no longer enough data)%extraMsgInParentheses%": Resume Upload (no longer enough data)%extraMsgInParentheses%
+"Upload (not enough data yet)": Upload (not enough data yet)
+"Resume Upload%extraMsgInParentheses%": Resume Upload%extraMsgInParentheses%
+"Upload your Data": Upload your Data
+"New Upload Job (%count% days, erases previous job)": New Upload Job (%count% days, erases previous job)
+"New Upload Job ({{ daysCollected }} days, erases previous job)": New Upload Job ({{ daysCollected }} days, erases previous job)
+"This application is for enrolled research participants only. To get an invitation, you should first <a href=\"%url%\">register on our website</a>.": This application is for enrolled research participants only. To get an invitation, you should first <a href=\"%url%\">register on our website</a>.
+"form.login.email": form.login.email
+"form.login.password": form.login.password
+"form.login.remember": form.login.remember
+"form.login.submit": form.login.submit
+"Please log in with the email address you gave the researchers when you were enrolled.": Please log in with the email address you gave the researchers when you were enrolled.
+"If you are not enrolled yet, you must <a href=\"%url%\">register your interest</a> first and wait to be invited.": If you are not enrolled yet, you must <a href=\"%url%\">register your interest</a> first and wait to be invited.
+"If you have a question about the study, don't hesitate!": If you have a question about the study, don't hesitate!
+"You can also use this form for press enquiries, technical support about the website, and data protection queries for current participants. If you write about your participant data, please reuse the same email address as when you registered.": You can also use this form for press enquiries, technical support about the website, and data protection queries for current participants. If you write about your participant data, please reuse the same email address as when you registered.
+"Contact Form": Contact Form
+"Office Contact Details": Office Contact Details
+"Name": Name
+"Phone": Phone
+"Address": Address
+"Looking for the UCL Research Ethics Committee?": Looking for the UCL Research Ethics Committee?
+"Visit the UCL REC Website": Visit the UCL REC Website
+"We are recruiting participants, who can earn up to %moneyCount% by letting us collect data on their computers.": We are recruiting participants, who can earn up to %moneyCount% by letting us collect data on their computers.
+"Join the Study": Join the Study
+"Earn money by running our data collection software": Earn money by running our data collection software
+"Get an invite": Get an invite
+"Find Out More": Find Out More
+"Learn what you can get out of the study as a participant": Learn what you can get out of the study as a participant
+"Read about the study": Read about the study
+"Participant Login": Participant Login
+"Already enrolled? Monitor your progress in the study": Already enrolled? Monitor your progress in the study
+"Go to participant space": Go to participant space
+"Advertise Us": Advertise Us
+"Use this link to tell your friends about the study": Use this link to tell your friends about the study
+"See the advert": See the advert
+"This document presents the research protocol for the first part of the study. This is the information sheet we use to verify that participants understand what will happen and agree to proceed.": This document presents the research protocol for the first part of the study. This is the information sheet we use to verify that participants understand what will happen and agree to proceed.
+"Contact the researchers behind this project": Contact the researchers behind this project
+"Contact Us": Contact Us
+"Register to join the pre-screening participant pool": Register to join the pre-screening participant pool
+"We will need a bit of information about you, to help us ensure participants from multiple backgrounds, genders and levels of proficiency are represented in the study.": We will need a bit of information about you, to help us ensure participants from multiple backgrounds, genders and levels of proficiency are represented in the study.
+"<strong>If you are selected</strong>, you will receive an email with a complete breakdown of what will happen. You can then decide if you still want to join.": <strong>If you are selected</strong>, you will receive an email with a complete breakdown of what will happen. You can then decide if you still want to join.
+"<strong>If you are not selected</strong>, We will let you know within 3 weeks and your details will be permanently deleted.</p>": <strong>If you are not selected</strong>, We will let you know within 3 weeks and your details will be permanently deleted.</p>
+"It doesn't have to be your real name, but we will need your real name later on to issue payments.": It doesn't have to be your real name, but we will need your real name later on to issue payments.
+"<sub>1</sub> Technical skills include setting up a firewall, configuring a personal website, writing your own software or scripts, compiling a kernel yourself.": <sub>1</sub> Technical skills include setting up a firewall, configuring a personal website, writing your own software or scripts, compiling a kernel yourself.
+"UCL COMPUTER SCIENCE STUDY": UCL COMPUTER SCIENCE STUDY
+"You have already given your consent. If you would like clarifications on any of the above, please <a href=\"%contactPage%\">contact us</a>.": You have already given your consent. If you would like clarifications on any of the above, please <a href="%contactPage%">contact us</a>.
+"Contact the Researchers": Contact the Researchers
+"This study has been approved by the UCL Research Ethics Committee.": This study has been approved by the UCL Research Ethics Committee.
+"Project ID Number: %nb%.": Project ID Number: %nb%.
+"Title of Project": Title of Project
+"Main Researcher": Main Researcher
+"Research Institution": Research Institution
+"University College London Department of Computer Science": University College London Department of Computer Science
+"Office Address": Office Address
+"This page shows the information we have on your progress in the study. The data collection software informs us when you collect data, so we can tell you when you are ready to upload.": This page shows the information we have on your progress in the study. The data collection software informs us when you collect data, so we can tell you when you are ready to upload.
+"You may start a new upload job by using the study software as soon as you've collected enough data.": You may start a new upload job by using the study software as soon as you've collected enough data.
+"You may start a new upload job by using the study software at any time in order to maximise your gains.": You may start a new upload job by using the study software at any time in order to maximise your gains.
+"You may now start a new upload job by using the study software.": You may now start a new upload job by using the study software.
+"Congratulations! You can now <a href=\"%debriefing%\" title=\"Schedule a debriefing meeting with the researchers\" class=\"link\">schedule a debriefing</a> with the researchers.": Congratulations! You can now <a href="%debriefing%" title="Schedule a debriefing meeting with the researchers" class="link">schedule a debriefing</a> with the researchers.
+"You will only be able to schedule a debriefing after you've sent enough data to UCL. If you would like to opt out of the study instead, please contact the researchers.": You will only be able to schedule a debriefing after you've sent enough data to UCL. If you would like to opt out of the study instead, please contact the researchers.
+"You have already activated the study application, but you can use the instructions below to reinstall your application if necessary.": You have already activated the study application, but you can use the instructions below to reinstall your application if necessary.
+"You must install the application and log in from within the application to continue with the study. If you cannot progress through this step, or if you have already followed the instructions and the site has not updated, please contact us.": You must install the application and log in from within the application to continue with the study. If you cannot progress through this step, or if you have already followed the instructions and the site has not updated, please contact us.
+"You must install the application to continue with the study. If you cannot progress through this step, or if you have already followed the instructions and the site has not updated, please contact us.": You must install the application to continue with the study. If you cannot progress through this step, or if you have already followed the instructions and the site has not updated, please contact us.
+"This study contains a manual screening phase...": This study contains a manual screening phase...
+"This means that not all registered participants will be selected. We perform screening in order to ensure that our participants are representative of the population we want to study. For instance, we can target people within a specific age range, profession, gender or degree of IT expertise.": This means that not all registered participants will be selected. We perform screening in order to ensure that our participants are representative of the population we want to study. For instance, we can target people within a specific age range, profession, gender or degree of IT expertise.
+"It can take up to %waitTime% for us to review participants for the '%siteTitle%' study. We apologise for the inconvenience. If you decided you no longer want to participate, you can let us know by <a href=\"%contactPage%\" title=\"Contact us\">writing to us</a> (remember to cite the email address you used to register).": It can take up to %waitTime% for us to review participants for the '%siteTitle%' study. We apologise for the inconvenience. If you decided you no longer want to participate, you can let us know by <a href="%contactPage%" title="Contact us">writing to us</a> (remember to cite the email address you used to register).
+"How your data is processed": How your data is processed
+"Website by Steve Dodier-Lazaro": Website by Steve Dodier-Lazaro
+"Powered by Symfony": Powered by Symfony
+"Background Photo ": Background Photo 
 
 form:
   dataupload:
@@ -54,7 +151,6 @@ form:
       other: Other
     submit: Join Participant Waiting List
 
-
-nav:
-  information:
-    tooltip: Refresh your memory about the 
+"Hello, %recipient%.\n\n%name% just sent a message via the website's contact form, at %date%.\nThey asked that you reply at: %email%\n\n-- start message --\n%message%\n-- end message --\nThis is an automated message, please do not reply directly.": "Hello, %recipient%.\n\n%name% just sent a message via the website's contact form, at %date%.\nThey asked that you reply at: %email%\n\n-- start message --\n%message%\n-- end message --\nThis is an automated message, please do not reply directly."
+"Hello, %name%.\n\nThis is to confirm you registered your interest in the '%id%' study, at %date%.\nIf you do not know why you are receiving this email, or if you have changed your mind about participating, please let us know by dropping us an email at %ourEmail%. We'll erase the records related to your email address.\n\n** What happens next? **\n\nIf you are selected for the study, we'll let you know and give you the information you need to login to the website, confirm your consent and get started. In the meantime, you can familiarise yourself with the study design by reading %infoPage%.\n\nIf you are not selected, we will let you know within three weeks from now and permanently erase the data you gave us.\n\nThanks,": "Hello, %name%.\n\nThis is to confirm you registered your interest in the '%id%' study, at %date%.\nIf you do not know why you are receiving this email, or if you have changed your mind about participating, please let us know by dropping us an email at %ourEmail%. We'll erase the records related to your email address.\n\n** What happens next? **\n\nIf you are selected for the study, we'll let you know and give you the information you need to login to the website, confirm your consent and get started. In the meantime, you can familiarise yourself with the study design by reading %infoPage%.\n\nIf you are not selected, we will let you know within three weeks from now and permanently erase the data you gave us.\n\nThanks,"
+"Hello, %recipient%.\n\n%name% just registered for the study, at %date%.\n\nTheir email address is: %email%\n\nRemember, you must reply within %delayXweeks% from %date%.": "Hello, %recipient%.\n\n%name% just registered for the study, at %date%.\n\nTheir email address is: %email%\n\nRemember, you must reply within %delayXweeks% from %date%."

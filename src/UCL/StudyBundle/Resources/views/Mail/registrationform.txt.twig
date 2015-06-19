@@ -3,7 +3,7 @@
 # {{ site.title | trans | upper }}
 =================================================================
 
-{% set delayXweeks = {{ globals.screening_max_wait }} %}{% set recipient= site.author %}{%trans%}Hello, %recipient%.
+{% set delayXweeks = globals.screening_max_wait %}{% set recipient= site.author %}{%trans%}Hello, %recipient%.
 
 %name% just registered for the study, at %date%.
 Their email address is: %email%
