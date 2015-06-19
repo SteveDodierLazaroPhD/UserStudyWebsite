@@ -3,15 +3,15 @@
 {% block body %}
 {# TODO if the app's configuration does not include join_screening or join_automatic, then recruitment is closed and this page should be adapted #}
 
-    <p class="lead">Please log in with the email address you gave the researchers when you were enrolled.</p>
-    <p>If you are not enrolled yet, you must <a href="{{ url('ucl_study_join_screening') }}">register your interest</a> first and wait to be invited.</p>
+    <p class="lead">{{ 'Please log in with the email address you gave the researchers when you were enrolled.' | trans }}</p>
+    <p>{{ 'If you are not enrolled yet, you must <a href="%url%">register your interest</a> first and wait to be invited.' | trans({'%url%': url('ucl_study_join_screening') }) | raw }}</p>
     <hr />
 
     <form name="login" method="post" action="{{ path('ucl_study_login_check') }}" class="form-horizontal" novalidate="novalidate">
     <fieldset>
     <div class="form-row">
         <div class="form-group">
-          <label class="col-sm-2 control-label required" for="_username">Email address</label>
+          <label class="col-sm-2 control-label required" for="_username">{{ 'form.login.email' | trans }}</label>
           <div class="col-sm-10">
             <input type="email" name="_username" id="login_username" required="required" class="form-control" />
           </div>
@@ -19,7 +19,7 @@
     </div>
 
         <div class="form-group hide">
-          <label class="col-sm-2 control-label" for="_password">Participant code (not needed for this study)</label>
+          <label class="col-sm-2 control-label" for="_password">{{ 'form.login.password' | trans }}</label>
           <div class="col-sm-10">
             <input type="password" name="_password" class="form-control" />
           </div>
@@ -29,7 +29,7 @@
           <div class="col-sm-2"></div>
           <div class="col-sm-10">
             <div class="checkbox">
-              <label><input type="checkbox" name="_remember_me" checked="checked" /></input> Remember me</label>
+              <label><input type="checkbox" name="_remember_me" checked="checked" /></input> {{ 'form.login.remember' | trans }}</label>
             </div>
           </div>
         </div>
@@ -37,7 +37,7 @@
         <div class="form-group">
           <div class="col-sm-2"></div>
           <div class="col-sm-2">
-            <button type="submit" name="login" class="btn btn-primary btn-block">Log in</button>
+            <button type="submit" name="login" class="btn btn-primary btn-block">{{ 'form.login.submit' | trans }}</button>
           </div>
         </div>
     </fieldset>
