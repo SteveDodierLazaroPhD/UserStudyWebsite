@@ -1,15 +1,15 @@
 =================================================================
-# UCL COMPUTER SCIENCE STUDY
-# {{ site.title | upper }}
+# {{ 'UCL COMPUTER SCIENCE STUDY' | trans }}
+# {{ site.title | trans | upper }}
 =================================================================
 
-Hello, {{ site.author }}.
+{% set delayXweeks = {{ globals.screening_max_wait }} %}{% set recipient= site.author %}{%trans%}Hello, %recipient%.
 
-{{ name }} just registered for the study, at {{ date }}.
-Their email address is: {{ email }}
+%name% just registered for the study, at %date%.
+Their email address is: %email%
 
-Remember, you must reply within {{ globals.screening_max_wait }} from {{ date }}.
+Remember, you must reply within %delayXweeks% from %date%.{%endtrans%}
 
 =================================================================
-# This is an automated message, please do not reply directly.
+#  {{ 'This is an automated message, please do not reply directly.' | trans }}
 =================================================================

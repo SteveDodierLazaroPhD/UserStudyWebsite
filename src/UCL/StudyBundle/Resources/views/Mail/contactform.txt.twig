@@ -1,17 +1,17 @@
 =================================================================
-# UCL COMPUTER SCIENCE STUDY
-# {{ site.title | upper }}
+# {{ 'UCL COMPUTER SCIENCE STUDY' | trans }}
+# {{ site.title | trans | upper }}
 =================================================================
 
-Hello, {{ site.author }}.
+{% set recipient= site.author %}{%trans%}Hello, %recipient%.
 
-{{ name }} just sent a message via the website's contact form, at {{ date }}.
-They asked that you reply at: {{ email }}
+%name% just sent a message via the website's contact form, at %date%.
+They asked that you reply at: %email%
 
 -- start message --
-{{ message }}
--- end message --
+%message%
+-- end message --{%endtrans%}
 
 =================================================================
-# This is an automated message, please do not reply directly.
+# {{ 'This is an automated message, please do not reply directly.' | trans }}
 =================================================================
