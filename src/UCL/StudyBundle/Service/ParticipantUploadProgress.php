@@ -61,4 +61,4 @@ class ParticipantUploadProgress extends ContainerAware
     return $params;
   }
 }
-?>t
+?>
