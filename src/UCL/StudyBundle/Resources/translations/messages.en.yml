@@ -19,8 +19,8 @@
 "If you upload your data": If you upload your data
 "You will earn a fixed reward for completing the task assigned to you:": You will earn a fixed reward for completing the task assigned to you:
 "If you drop out": If you drop out
-"%currency%%val%": %currency%%val%
-"You will earn %currency%%perDay% per day of uploaded data, up to %currency%%maxGain%. Your reward so far:": You will earn %currency%%perDay% per day of uploaded data, up to %currency%%maxGain%. Your reward so far:
+"%currency%val": %currency%val
+"You will earn %currency%perDay per day of uploaded data, up to %currency%maxGain. Your reward so far:": You will earn %currency%perDay per day of uploaded data, up to %currency%maxGain. Your reward so far:
 "If you start a new upload": If you start a new upload
 "Reminder": Reminder
 "You are about to upload your collected data to UCL for analysis. Please keep in mind that you can amend the collected data using the %studyJournal% prior to uploading%resumingWarning%. You can also write to the researchers if you wish to edit or delete some of your data after uploading it. You can also drop out from the study now, or later, without prejudice to the rewards you have already earned.": You are about to upload your collected data to UCL for analysis. Please keep in mind that you can amend the collected data using the %studyJournal% prior to uploading%resumingWarning%. You can also write to the researchers if you wish to edit or delete some of your data after uploading it. You can also drop out from the study now, or later, without prejudice to the rewards you have already earned.
@@ -96,7 +96,10 @@
 "How your data is processed": How your data is processed
 "Website by Steve Dodier-Lazaro": Website by Steve Dodier-Lazaro
 "Powered by Symfony": Powered by Symfony
-"Background Photo ": Background Photo 
+"Background Photo": Background Photo
+"Email address": Email address
+"Your message": Your message
+"Send Your Message": Send Your Message
 
 form:
   dataupload:
@@ -154,3 +157,5 @@ form:
 "Hello, %recipient%.\n\n%name% just sent a message via the website's contact form, at %date%.\nThey asked that you reply at: %email%\n\n-- start message --\n%message%\n-- end message --\nThis is an automated message, please do not reply directly.": "Hello, %recipient%.\n\n%name% just sent a message via the website's contact form, at %date%.\nThey asked that you reply at: %email%\n\n-- start message --\n%message%\n-- end message --\nThis is an automated message, please do not reply directly."
 "Hello, %name%.\n\nThis is to confirm you registered your interest in the '%id%' study, at %date%.\nIf you do not know why you are receiving this email, or if you have changed your mind about participating, please let us know by dropping us an email at %ourEmail%. We'll erase the records related to your email address.\n\n** What happens next? **\n\nIf you are selected for the study, we'll let you know and give you the information you need to login to the website, confirm your consent and get started. In the meantime, you can familiarise yourself with the study design by reading %infoPage%.\n\nIf you are not selected, we will let you know within three weeks from now and permanently erase the data you gave us.\n\nThanks,": "Hello, %name%.\n\nThis is to confirm you registered your interest in the '%id%' study, at %date%.\nIf you do not know why you are receiving this email, or if you have changed your mind about participating, please let us know by dropping us an email at %ourEmail%. We'll erase the records related to your email address.\n\n** What happens next? **\n\nIf you are selected for the study, we'll let you know and give you the information you need to login to the website, confirm your consent and get started. In the meantime, you can familiarise yourself with the study design by reading %infoPage%.\n\nIf you are not selected, we will let you know within three weeks from now and permanently erase the data you gave us.\n\nThanks,"
 "Hello, %recipient%.\n\n%name% just registered for the study, at %date%.\n\nTheir email address is: %email%\n\nRemember, you must reply within %delayXweeks% from %date%.": "Hello, %recipient%.\n\n%name% just registered for the study, at %date%.\n\nTheir email address is: %email%\n\nRemember, you must reply within %delayXweeks% from %date%."
+
+
