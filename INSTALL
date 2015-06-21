@@ -1,11 +1,22 @@
 Permission setup:
--464/575 for almost everything with apache:webdev owner (allows staff and interns in webdev to code)
+-464/575 for almost everything with apache:somedevgroup owner (allows staff and interns in somedevgroup to code)
 -664/775 for app/cache and app/logs (must be writable by apache)
--300 for app//store (must be writable but not readable -- for study data uploads)
+-370 or 300 for app/store (must be writable but not readable -- for study data uploads)
+
+
 
 Things to do:
+- create the database in the MySQL db (requires connecting to the db as root)
+  CREATE DATABASE `yourprojectname`;
 - create the appropriate user in the MySQL db, with a password of your choice
+  CREATE USER 'yourprojectname'@'localhost' IDENTIFIED BY 'yourGENERATEDandLONGpassword';
+  GRANT ALL PRIVILEGES ON `yourprojectname`.* TO 'yourprojectname'@'localhost' WITH GRANT OPTION;
+- give the password to the authorised users by leaving it in a file in their home
+- generate the DB tables with Doctrine
+  $ php app/console doctrine:schema:update --force
 - create app/config/parameters.yml and add your MySQL user/password information
-- make sure app/store/ is configured as desired
-- [tweak app/config/ further if necessary, normally it is not]
+  $ cp app/config/parameters.yml.dist app/config/parameters.yml
+  $ nano app/configs.parameters.yml
+- make sure app/store/ is configured as desired (at least writable upload/ and screening/ folders)
+- [tweak app/config/ further if necessary, normally you don't need to]
 - go to src/UCL/StudyBundle/Resources/config/ and hack your project into shape!
