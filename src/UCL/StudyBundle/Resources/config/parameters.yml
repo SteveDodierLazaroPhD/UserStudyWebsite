@@ -1,4 +1,4 @@
-# This file is auto-generated during the composer install
+# This file contains all parameters used to describe the study
 parameters:
     # Parameters accessed in Twig templates have a different naming scheme, so we must duplicate them
     ucl_study.maxgain: '£100'
