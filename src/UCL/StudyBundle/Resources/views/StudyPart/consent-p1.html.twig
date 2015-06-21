@@ -4,19 +4,19 @@
 {% endblock %}
 
 {% block article_body %}
-<p>Before you agree to take part, the person organising the research must explain the project to you. If you have any questions arising from the Information Sheet or explanation already given to you, please <a href="{{url('ucl_study_contact')}}">ask the researcher before you to decide whether to join in</a>. You will be able to view and refer to the Information Sheet and Consent Form at any time on this website.</p>
+<p>{{ 'Before you agree to take part, the person organising the research must explain the project to you. If you have any questions arising from the Information Sheet or explanation already given to you, please <a href="%contactUrl%">ask the researcher before you to decide whether to join in</a>. You will be able to view and refer to the Information Sheet and Consent Form at any time on this website.' | trans({'%contactUrl%':url('ucl_study_contact')}) | raw }}</p>
 
-<h3>Participant’s Statement</h3>
-<p>I, {{ user.getUsername }}</p>
+<h3>{{ 'Participant’s Statement' | trans }}</h3>
+<p>{{ 'I, %username%' | trans({'%username%': user.getUsername}) }}</p>
 
 <ul>
-  <li>have read the notes written above and the Information Sheet, and understand what the study involves.</li>
-  <li>understand that if I decide at any time that I no longer wish to take part in this project, I can notify the researchers involved and withdraw immediately.</li>
-  <li>consent to the processing of my personal information for the purposes of this research study.</li>
-  <li>understand that metadata will be collected on my computer and that my participation to the interview will be taped and I consent to use of this material as part of the project.</li>
-  <li>understand that such information will be treated as strictly confidential and handled in accordance with the provisions of the Data Protection Act 1998.</li>
-  <li>understand that I am being paid for my assistance in this research and that some of my personal details will be passed to UCL Finance for administration purposes.</li>
-  <li>agree that the research project named above has been explained to me to my satisfaction and I agree to take part in this study. </li>
+  <li>{{ 'have read the notes written above and the Information Sheet, and understand what the study involves.' | trans }}</li>
+  <li>{{ 'understand that if I decide at any time that I no longer wish to take part in this project, I can notify the researchers involved and withdraw immediately.' | trans }}</li>
+  <li>{{ 'consent to the processing of my personal information for the purposes of this research study.' | trans }}</li>
+  <li>{{ 'understand that metadata will be collected on my computer and that my participation to the interview will be taped and I consent to use of this material as part of the project.' | trans }}</li>
+  <li>{{ 'understand that such information will be treated as strictly confidential and handled in accordance with the provisions of the Data Protection Act 1998.' | trans }}</li>
+  <li>{{ 'understand that I am being paid for my assistance in this research and that some of my personal details will be passed to UCL Finance for administration purposes.' | trans }}</li>
+  <li>{{ 'agree that the research project named above has been explained to me to my satisfaction and I agree to take part in this study.' | trans }}</li>
 </ul>
 {% endblock %}
 

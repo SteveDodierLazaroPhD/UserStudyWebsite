@@ -2,39 +2,49 @@
 
 {% block article_details %}
 {{ parent() }}
-    <p class="lead">You're almost there! You must now install the data collection software. You will find instructions on this page.</span> </p>
+    <p class="lead">{{ 'You\'re almost there! You must now install the data collection software. You will find instructions on this page.' | trans }}</span></p>
 {% endblock %}
 
 {% block article_body %}
-<h2>1. Add our repository to your software sources</h2>
-<div class="alert alert-danger"><h4>TODO</h4></div>
+<h2>{{ '1. Add our repository to your software sources' | trans }}</h2>
+  <div class="bs-callout bs-callout-default"><p class="small">{{ 'You can find instructions with pictures <a href="https://askubuntu.com/a/40351/400786">here.</a>' | trans | raw }}</p></div>
+  <ol class="list-group">
+    <li class="list-group-item">{{ 'Open the <span class="fa fa-gear fa-fw"></span>Ubuntu Software Center.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'In the software center, open the <code>Edit</code> menu and select <code>Software Sources</code>.' | trans | raw}}</li>
+    <li class="list-group-item">{{ 'Enter your password if prompted.' | trans }}</li>
+    <li class="list-group-item">{{ 'Switch to the <code>Other Software</code> tab.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'Click on the <button class="btn disabled" disabled>Add...</button> button, and paste <kbd><strong>ppa:ucl-cs-study-devs/multitasking-study</strong></kbd> into the input box.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'Click on the <button class="btn disabled" disabled><i class="fa fa-plus alert-success"></i> Add Source</button> button.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'Make sure the software center refreshes the list of available software.' | trans }}</li>
+  </ol>
 
 <hr />
-<h2>2. Install the UCL Study Manager</h2>
-
-    <p>You must <a href="apt://ucl-study-manager" title="Click to install directly">install the <code>ucl-study-manager</code> package</a> from your newly added repository. You can do so by <a href="apt://ucl-study-manager" title="Click to install directly">clicking here</a> or by using the Ubuntu App Store.</p>
-    <div class="btn-toolbar">
-    </div>
-
-    <div class="bs-callout bs-callout-default"><p class="small">The study manager will replace some libraries and applications on your system, including Unity, Nautilus, GTK+ and the GLib. This is normal, as we use modified versions of these libraries and applications to collect data about your multitasking habits. You will be able to return to the original applications the next time they are updated by Ubuntu once the study is over.</p></div>
+<h2>{{ '2. Install the UCL Study Manager' | trans }}</h2>
+    <div class="bs-callout bs-callout-default"><p class="small">{{ 'The study manager will replace some libraries and applications on your system, including Unity, Nautilus, GTK+ and the GLib. This is normal, as we use modified versions of these libraries and applications to collect data about your multitasking habits. You will be able to return to the original applications the next time they are updated by Ubuntu once the study is over.' | trans }}</p></div>
+  <ol class="list-group">
+    <li class="list-group-item">{{ 'Open the <span class="fa fa-gear fa-fw"></span>Ubuntu Software Center.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'In the search input box in the top-right corner, type <kbd><strong>ucl-study-manager</strong></kbd>.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'The <span class="fa fa-gear fa-fw"></span>UCL Study Manager should appear in the search results. Click on the <button class="btn disabled">Install</button> button on the right side.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'Open the <span class="fa fa-gear fa-fw"></span>UCL Study Manager and log in to register the application. If you forget this step, your reward might be incorrectly calculated.' | trans | raw }}</li>
+  </ol>
+   {# <p>You must install the <code>ucl-study-manager</code> package from your newly added repository. You can do so by <a href="apt://ucl-study-manager" title="Click to install directly">clicking here</a> or by opening the <span class="fa fa-gear fa-fw"></span>Ubuntu App Store and searching for the UCL Study Manager.</p>#}
     
 <hr />
-<h2>3. Install the study extension into your browser</h2>
-<h3>Google Chrome</h3>
-    <ol class="list-group">
-    <li class="list-group-item">Open your Chrome Web browser, and visit our <a href="https://chrome.google.com/webstore/detail/ucl-study-zeitgeist-plugi/hhccdfafffjclmgjdokgijhccpcjcehd">Chrome Web Store page</a>.</li>
-    <li class="list-group-item">On that page, click on the <button class="btn btn-primary btn-sm disabled text-uppercase" disabled><i class="fa fa-plus"></i> Add to Chrome</button> button.</li>
-    </ol>
-    <div class="bs-callout bs-callout-default"><p class="small">The extension should now be installed and running. Please <a href="{{ url ('ucl_study_contact') }}">contact us</a> if Chrome displays an error message.</p></div>
-<h3>Mozilla Firefox</h3>
-<div class="alert alert-danger"><h4>TODO</h4></div>
+<h2>{{ '3. Install the study extension into your browser' | trans }}</h2>
+<h3>{{ 'Google Chrome' | trans }}</h3>
+  <ol class="list-group">
+    <li class="list-group-item">{{ 'Open your Chrome Web browser, and visit our <a href="https://chrome.google.com/webstore/detail/ucl-study-zeitgeist-plugi/hhccdfafffjclmgjdokgijhccpcjcehd">Chrome Web Store page</a>.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'On that page, click on the <button class="btn btn-primary btn-sm disabled text-uppercase" disabled><i class="fa fa-plus"></i> Add to Chrome</button> button.' | trans | raw }}</li>
+  </ol>
+<h3>{{ 'Mozilla Firefox' | trans }}</h3>
+<div class="alert alert-danger">{{ 'Mozilla Firefox is not available yet. It may become available in the following weeks.' | trans }}</div>
 
 {% endblock %}
 
 {% block article_appendix %}
 {% if user.hasDoneStep(_part, 'install') %}
 <hr />
-{% set kudos_message %}Congratulations! You can now launch the study software and start collecting data.{% endset %}
+{% set kudos_message %}{{ 'Congratulations! You can now launch the study software and start collecting data.' | trans }}{% endset %}
 {% include ('UCLStudyBundle::kudos.html.twig') %}
 {% endif %}
 {% endblock %}
