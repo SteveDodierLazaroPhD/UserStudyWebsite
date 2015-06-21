@@ -12,6 +12,8 @@
   <div class="form-row">
       {% if err_pseudonym is defined %}
         <div class="form-group has-error">{{ form_row(form.pseudonym) }}<aside class="alert alert-warning">{{ err_pseudonym }}</aside></div>
+      {% elseif err_pseudonymValid is defined %}
+        <div class="form-group has-error">{{ form_row(form.pseudonym) }}<aside class="alert alert-warning">{{ err_pseudonymValid }}</aside></div>
       {% else %}
         {{ form_row(form.pseudonym) }}
       {% endif %}
@@ -21,6 +23,8 @@
     <div class="has-error">{{ form_row(form.email) }}<aside class="alert alert-warning">{{ err_email }}</aside></div>
   {% elseif err_email_different is defined %}
     <div class="has-error">{{ form_row(form.email) }}<aside class="alert alert-warning">{{ err_email_different }}</aside></div>
+  {% elseif err_emailValid is defined %}
+    <div class="has-error">{{ form_row(form.email) }}<aside class="alert alert-warning">{{ err_emailValid }}</aside></div>
   {% else %}
   {{ form_row(form.email) }}
   {% endif %}

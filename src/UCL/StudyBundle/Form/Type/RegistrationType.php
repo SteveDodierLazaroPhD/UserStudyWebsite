@@ -67,9 +67,6 @@ class RegistrationType extends AbstractType
           'multiple'  => false,
           'required'  => true,
           'expanded'  => true,
-          'error_mapping' => array(
-            'isDistroValid' => 'choice',
-           ),
       ));
       
       $builder->add('distro_other', 'text', array(
@@ -122,6 +119,11 @@ class RegistrationType extends AbstractType
         $resolver->setDefaults(array(
             'email'           => '',
             'browser'         => array(),
+            'error_mapping' => array(
+              'isDistroValid' => 'distro',
+              'isEmailValid' => 'email',
+              'isPseudonymValid' => 'pseudonym',
+             ),
         ));
     }
 }

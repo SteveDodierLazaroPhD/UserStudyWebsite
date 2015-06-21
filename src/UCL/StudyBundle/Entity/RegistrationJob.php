@@ -2,40 +2,21 @@
 namespace UCL\StudyBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Yaml\Dumper;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="study_participants")
- * @UniqueEntity(
- *     fields={"email"},
- *     message="participant.email.already_used"
- * )
- * @UniqueEntity(
- *     fields={"pseudonym"},
- *     message="participant.pseudonym.already_used"
- * )
  */
-class RegistrationJob
+class RegistrationJob extends EntityRepository
 {
-  /* Public properties (unique db id, nickname and email) */
-  /**
-   * @ORM\Id
-   * @ORM\Column(type="integer", unique=true)
-   * @ORM\GeneratedValue(strategy="AUTO")
-   */
-  protected $id;
-
   /**
    * @Assert\NotBlank(message = "participant.pseudonym.not_blank",)
-   * @ORM\Column(name="username", type="string", length=255, unique=true)
    */
   protected $pseudonym;
   /**
    * @Assert\NotBlank(message = "participant.email.not_blank",)
-   * @ORM\Column(name="email", type="string", length=255, unique=true)
    * @Assert\Email(
    *     message = "participant.email.invalid",
    *     checkMX = true
@@ -98,8 +79,9 @@ class RegistrationJob
   private $clearpw;
   
   /* Methods */
-  function __construct ($initial = array())
+  function __construct (EntityManager $em, $initial = array())
   {
+    parent::__construct($em, new ClassMetadata("UCL\StudyBundle\Entity\Participant"));
     // Note that email (repeated) and browser (choices multiple) are not automatically managed and need manual data instantiation in the controller
     $this->pseudonym    = $initial ? (array_key_exists('pseudonym', $initial) ? $initial['pseudonym'] : '') : '';
     $this->email        = $initial ? (array_key_exists('email', $initial) ? $initial['email'] : '') : '';
@@ -248,8 +230,44 @@ class RegistrationJob
   {
     return ($this->distro != 'other' && $this->distroOther == '') || ($this->distro == 'other' && $this->distroOther != '');
   }
-  
 
+  /**
+   * @Assert\True(message = "participant.email.already_used")
+   */
+  public function isEmailValid()
+  {
+    $q = $this
+          ->createQueryBuilder('u')
+          ->where('u.email = :email')
+          ->setParameter('email', $this->email)
+          ->getQuery();
+    try {
+        $user = $q->getOneOrNullResult();
+    } catch (NoResultException $e) {
+      return true;
+    } finally {
+      return $user === null;
+    }
+  }
+
+  /**
+   * @Assert\True(message = "participant.pseudonym.already_used")
+   */
+  public function isPseudonymValid()
+  {
+    $q = $this
+          ->createQueryBuilder('u')
+          ->where('u.username = :pseudonym')
+          ->setParameter('pseudonym', $this->pseudonym)
+          ->getQuery();
+    try {
+        $user = $q->getOneOrNullResult();
+    } catch (NoResultException $e) {
+      return true;
+    } finally {
+      return $user === null;
+    }
+  }
   
   /**
    * Creates a name for the file containing this object.
@@ -276,7 +294,6 @@ class RegistrationJob
   function makeScreeningYaml()
   {
     $array = array(
-        'id' => $this->id,
         'pseudonym' => $this->pseudonym,
         'email' => $this->email,
         'gender' => $this->gender,
@@ -293,16 +310,6 @@ class RegistrationJob
     // Can throw exceptions!
     $dumper = new Dumper();
     return $dumper->dump($array, 1);
-  }
-
-  /**
-   * Get id
-   *
-   * @return integer 
-   */
-  public function getId()
-  {
-    return $this->id;
   }
 
   public function setPasswordFromClearText($password)

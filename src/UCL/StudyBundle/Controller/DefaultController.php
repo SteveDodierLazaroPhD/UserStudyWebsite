@@ -40,11 +40,12 @@ class DefaultController extends UCLStudyController
     public function joinScreeningAction(Request $request)
     {
       $translator = $this->get('translator');
+      $em = $this->getDoctrine()->getManager();
       $params = $this->setupParameters($request, false);
       $params['page'] = array('title' => $translator->trans('Register for Participant Screening'));
       
       $previous = $request->request->get('registration');
-      $task = new RegistrationJob($previous !== null ? $previous : array());
+      $task = new RegistrationJob($em, $previous !== null ? $previous : array());
 
       $prev_email = $previous ? (array_key_exists('email', $previous) ? $previous['email']['first'] : '') : '';
       $prev_browser = $previous ? (array_key_exists('browser', $previous) ? $previous['browser'] : array()) : array();
@@ -119,7 +120,6 @@ class DefaultController extends UCLStudyController
               $encodedPw = $encoder->encodePassword($participant, $password);
               $participant->setPassword($encodedPw);
 
-              $em = $this->getDoctrine()->getManager();
               $em->persist($participant);
               $em->flush();
 
