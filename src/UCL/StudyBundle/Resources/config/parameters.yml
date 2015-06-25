@@ -13,6 +13,7 @@ parameters:
       REC_number: '6079/001'
       start_date: 2015
       end_date: 2015
+      verify_app_install: true
       part_count: 2
       spam_question: "Anti-spam: Where is UCL located?"
       spam_correct_answer: London

@@ -168,6 +168,9 @@ class StudyPartController extends UCLStudyController
       $params = $this->setupParameters($request, true, 'install', $_part);
       $params['page'] = array('title' => $this->get('translator')->trans('Software Installation Instructions'));
 
+      if ($this->globals['verify_app_install'] !== 'true')
+          $this->takeParticipantToNextStep($_part, 'install');
+
       return $this->render('UCLStudyBundle:StudyPart:start-p'.$_part.'.html.twig', $params);
     }
 
