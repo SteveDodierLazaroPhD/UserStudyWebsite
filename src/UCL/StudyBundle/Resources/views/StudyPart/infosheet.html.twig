@@ -15,7 +15,7 @@
     </div>
     <div class="row">
       <label class="col-sm-2 control-label">{{ 'Main Researcher' | trans }}</label><!--
-      --><div class="col-sm-10 form-control-static">{{ site.author }}</div>
+      --><div class="col-sm-10 form-control-static">{{ site.author | split(',') | first }}</div>
     </div>
     <div class="row">
       <label class="col-sm-2 control-label">{{ 'Research Institution' | trans }}</label><!--
