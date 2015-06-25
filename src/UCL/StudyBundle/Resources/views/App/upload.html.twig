@@ -52,7 +52,7 @@
       <div class="form-horizontal">
       {% set nextAvailableActions = (minDays > daysCollected)?'You must collect at least %daysStillNeeded% more days before you can upload your data and claim a reward.':'' %}
       <p>{% trans %}You have collected %daysCollected% days of data so far.{% endtrans%}{% if minDays > daysCollected %} {% trans %}You must collect at least %daysStillNeeded% more days 
-before you can upload your data and claim a reward.{% endtrans %}{% else %}{% if maxDays is defined and maxDays > daysCollected %}{% trans %}You can upload your data now, or you can wait until you reach %maxDays% days of participation.{% endtrans %} {% else %}{% trans %}You can upload your data now.{% endtrans %}{% endif %}{% endif %}</p>
+before you can upload your data and claim a reward.{% endtrans %}{% else %}{% if maxDays is defined and maxDays > daysCollected %} {% trans %}You can upload your data now, or you can wait until you reach %maxDays% days of participation.{% endtrans %}{% else %} {% trans %}You can upload your data now.{% endtrans %}{% endif %}{% endif %}</p>
       
       <div class="form-row">
         <label class="col-sm-3 control-label">{{ 'Your progress' | trans }}</label><!--
