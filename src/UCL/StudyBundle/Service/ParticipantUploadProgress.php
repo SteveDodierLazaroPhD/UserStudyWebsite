@@ -9,7 +9,7 @@ use UCL\StudyBundle\Entity\StepProgress;
 
 class ParticipantUploadProgress extends ContainerAware
 {
-  public function getStepProgress(Participant $participant, $part, $step, $progress = 0, $goal = 0)
+  public function getStepProgress(Participant $participant, $part, $step, $progress = 0)
   {
     $repository = $this->container->get('doctrine')->getRepository('UCLStudyBundle:StepProgress');
     $prg = $repository->findOneBy(array("participant" => $participant,
@@ -17,7 +17,7 @@ class ParticipantUploadProgress extends ContainerAware
                                               "step"        => $step));
 
     if (!$prg)
-      $prg = new StepProgress($participant, $part, $step, $progress, $goal);
+      $prg = new StepProgress($participant, $part, $step, $progress);
 
     return $prg;
   }

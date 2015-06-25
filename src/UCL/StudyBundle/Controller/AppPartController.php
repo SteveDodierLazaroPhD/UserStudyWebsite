@@ -64,8 +64,7 @@ class AppPartController extends UCLStudyController
     {
       return '"StepProgress":{"Part": '.$progress->getPart().', '.
                              '"Step": "'.$progress->getStep().'", '.
-                             '"Progress": '.$progress->getProgress().', '.
-                             '"Goal": '.$progress->getGoal().', '.'}';
+                             '"Progress": '.$progress->getProgress().'}';
     }
     
     /**
@@ -423,15 +422,11 @@ class AppPartController extends UCLStudyController
           if (!array_key_exists ('Progress', $data['ReportProgress']) || !is_int($data['ReportProgress']['Progress']))
             return $this->jResponse('"ReportProgress":"Failure", "FailureCause":"Missing progress counter."');
             
-          if (!array_key_exists ('Goal', $data['ReportProgress']) || !is_int($data['ReportProgress']['Goal']))
-            return $this->jResponse('"ReportProgress":"Failure", "FailureCause":"Missing goal counter."');
-
           $step = $data['ReportProgress']['Step'];
           $progress = $data['ReportProgress']['Progress'];
-          $goal = $data['ReportProgress']['Goal'];
 
           $progressService = $this->get('participant_upload_progress');
-          $stepprogress = $progressService->getStepProgress($this->getUser(), $_part, $step, $progress, $goal);
+          $stepprogress = $progressService->getStepProgress($this->getUser(), $_part, $step, $progress);
           $this->persistObject($stepprogress);
           //TODO estimate if it's a good time to email the researcher and participant
           

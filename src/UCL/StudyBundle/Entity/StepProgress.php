@@ -34,23 +34,18 @@ class StepProgress
    */
   protected $progress;
 
-  /**
-   * @ORM\Column(type="integer", name="goal", nullable=false, options={"unsigned":true, "default":0, "comment":"Generic counter representing how much the progress counter must be incremented to consider the step complete"})
-   */
-  protected $goal;
 
   /*
    * @ORM\Column(type="string", name="counter_name", nullable=false, options={"comment":"Name of the stuff being counted. You must implement per-locale methods to manipulate this word, as not all languages have a simple singular/plural structure for words"})
    */
   //protected $counterName;
 
-  function __construct (Participant $participant, $part, $step, $progress = 0, $goal = 0)//, $counterName = "day")
+  function __construct (Participant $participant, $part, $step, $progress = 0)//, $counterName = "day")
   {
     $this->participant = $participant->getId();
     $this->part = $part;
     $this->step = $step;
     $this->progress = $progress;
-    $this->goal = $goal;
     //$this->counterName = $counterName;
   }
 
@@ -93,16 +88,6 @@ class StepProgress
   {
       $this->clearPreviousFile();
       $this->progress = $progress;
-  }
-
-  public function getGoal()
-  {
-      return $this->goal;
-  }
-
-  public function setGoal($goal)
-  {
-      $this->goal = $goal;
   }
 
   /*public function getCounterName()
