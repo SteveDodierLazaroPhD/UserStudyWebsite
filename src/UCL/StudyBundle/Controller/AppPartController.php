@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\IOException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use UCL\StudyBundle\Controller\UCLStudyController as UCLStudyController;
-use UCL\StudyBundle\Form\Type\DataUploadType;
+use UCL\StudyBundle\Form\Type\UploadType;
 use UCL\StudyBundle\Entity\UploadJob;
 #use UCL\StudyBundle\Entity\Participant;
 #use UCL\StudyBundle\Entity\StepProgress;
@@ -55,8 +55,8 @@ class AppPartController extends UCLStudyController
       return '"UploadJob":{"Part": '.$job->getPart().', '.
                                 '"Step": "'.$job->getStep().'", '.
                                 '"DayCount": '.$job->getDayCount().', '.
-                                '"ExpectedSize": '.$expectedSize.', '.
-                                '"ObtainedSize": '.$job->getObtainedSize().', '.
+                                '"ExpectedSize": "'.$expectedSize.'", '.
+                                '"ObtainedSize": "'.$job->getObtainedSize().'", '.
                                 '"Checksum": '.$checksum.'}';
     }
     
@@ -266,7 +266,7 @@ class AppPartController extends UCLStudyController
         /* The original state depends on whether we are resuming a job or creating a new one */
         $resuming = ($uploadjob->getChecksum() !== null && $uploadjob->getExpectedSize() != 0);
         if ($resuming)
-          return $this->jResponse('"Uploading":"ReadyData", "UploadJob":{"Part": '.$uploadjob->getPart().', "Step": "'.$uploadjob->getStep().'", "DayCount": '.$uploadjob->getDayCount().', "ExpectedSize": '.$uploadjob->getExpectedSize().', "ObtainedSize": '.$uploadjob->getObtainedSize().', "Checksum": "'.$uploadjob->getChecksum().'"}');
+          return $this->jResponse('"Uploading":"ReadyData", "UploadJob":{"Part": '.$uploadjob->getPart().', "Step": "'.$uploadjob->getStep().'", "DayCount": '.$uploadjob->getDayCount().', "ExpectedSize": "'.$uploadjob->getExpectedSize().'", "ObtainedSize": "'.$uploadjob->getObtainedSize().'", "Checksum": "'.$uploadjob->getChecksum().'"}');
         else
           return $this->parseUploadingInit($uploadjob, $_part, $request);
       }
@@ -351,7 +351,7 @@ class AppPartController extends UCLStudyController
       $progressService->feedCurrentJobIntoParametersCached($params, $prg, $uploadjob);
         
       /* Create and handle the form */
-      $form = $this->createForm(new DataUploadType(), $uploadjob);
+      $form = $this->createForm(new UploadType(), $uploadjob);
       $params['form'] = $form->createView();
       $form->handleRequest($request);
 
