@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="study_datauploadjob")
  * Uploaded files can be up to 2.147GB large on 32 bit servers.
  */
-class DataUploadJob
+class UploadJob
 {
   /**
    * @ORM\Column(type="string", length=255)

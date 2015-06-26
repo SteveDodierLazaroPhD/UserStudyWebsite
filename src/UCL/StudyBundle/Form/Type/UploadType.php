@@ -36,7 +36,7 @@ class DataUploadType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
       $resolver->setDefaults(array(
-        'data_class' => 'UCL\StudyBundle\Entity\DataUploadJob',
+        'data_class' => 'UCL\StudyBundle\Entity\UploadJob',
       ));
     }
 }

@@ -3,7 +3,7 @@
 namespace UCL\StudyBundle\Service;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
-use UCL\StudyBundle\Entity\DataUploadJob;
+use UCL\StudyBundle\Entity\UploadJob;
 use UCL\StudyBundle\Entity\Participant;
 use UCL\StudyBundle\Entity\StepProgress;
 
@@ -24,7 +24,7 @@ class ParticipantUploadProgress extends ContainerAware
 
   public function getUploadJob(Participant $participant, $part, $step)
   {
-    $repository = $this->container->get('doctrine')->getRepository('UCLStudyBundle:DataUploadJob');
+    $repository = $this->container->get('doctrine')->getRepository('UCLStudyBundle:UploadJob');
     $prg = $this->getStepProgress($participant, $part, $step);
     
     $uploadjob = $repository->findOneBy(array("participant" => $participant,
@@ -32,7 +32,7 @@ class ParticipantUploadProgress extends ContainerAware
                                               "step"        => $step));
     
     if (!$uploadjob)
-      $uploadjob = new DataUploadJob($participant, $part, $step, $prg->getProgress());
+      $uploadjob = new UploadJob($participant, $part, $step, $prg->getProgress());
 
     return $uploadjob;
   }
@@ -45,7 +45,7 @@ class ParticipantUploadProgress extends ContainerAware
       return $this->feedCurrentJobIntoParametersCached($params, $prg, $uploadjob);
   }
 
-  public function feedCurrentJobIntoParametersCached(&$params, StepProgress $prg, DataUploadJob $uploadjob)
+  public function feedCurrentJobIntoParametersCached(&$params, StepProgress $prg, UploadJob $uploadjob)
   {
     /* Setup page parameters for the Twig template */
     $params['daysCollected'] = $prg->getProgress();

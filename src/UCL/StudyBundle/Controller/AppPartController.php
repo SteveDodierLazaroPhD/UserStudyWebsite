@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\Exception\IOException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use UCL\StudyBundle\Controller\UCLStudyController as UCLStudyController;
 use UCL\StudyBundle\Form\Type\DataUploadType;
-use UCL\StudyBundle\Entity\DataUploadJob;
+use UCL\StudyBundle\Entity\UploadJob;
 #use UCL\StudyBundle\Entity\Participant;
 #use UCL\StudyBundle\Entity\StepProgress;
 
@@ -52,7 +52,7 @@ class AppPartController extends UCLStudyController
       $expectedSize = ($job->getExpectedSize() != 0) ? ''.$job->getExpectedSize().'':'null';
       $checksum = ($job->getChecksum()) ? '"'.$job->getChecksum().'"':'null';
       
-      return '"DataUploadJob":{"Part": '.$job->getPart().', '.
+      return '"UploadJob":{"Part": '.$job->getPart().', '.
                                 '"Step": "'.$job->getStep().'", '.
                                 '"DayCount": '.$job->getDayCount().', '.
                                 '"ExpectedSize": '.$expectedSize.', '.
@@ -107,7 +107,7 @@ class AppPartController extends UCLStudyController
       return $this->render('UCLStudyBundle:App:status.html.twig', $params);
     }
     
-    protected function abortUploadJob(DataUploadJob $uploadjob, $_part, $cause=null, $extraData=null)
+    protected function abortUploadJob(UploadJob $uploadjob, $_part, $cause=null, $extraData=null)
     {
       $cause = ($cause===null ? $this->get('translator')->trans('Aborting the job') : $cause);
       $this->removeObject($uploadjob);
@@ -117,27 +117,27 @@ class AppPartController extends UCLStudyController
         return $this->jResponse('"Uploading":"Failure","FailureCause":"'.$cause.','.$extraData.'}');
     }
     
-    protected function parseUploadingInit(DataUploadJob $uploadjob, $_part, Request $request)
+    protected function parseUploadingInit(UploadJob $uploadjob, $_part, Request $request)
     {
       $request->getSession()->set('Uploading', 'JobParameters');
       return $this->jResponse('"Uploading":"ReadyJobParameters", '.$this->getUploadJobJSON($uploadjob));
     }
     
-    protected function parseUploadingJobParameters(DataUploadJob $uploadjob, $_part, Request $request)
+    protected function parseUploadingJobParameters(UploadJob $uploadjob, $_part, Request $request)
     {
       if (0 === strpos($request->headers->get('Content-Type'), 'application/json'))
       {
         $data = json_decode($request->getContent(), true);
 
-        if (is_array($data) && ($data['Uploading'] == 'JobParameters') && array_key_exists ('DataUploadJob', $data))
+        if (is_array($data) && ($data['Uploading'] == 'JobParameters') && array_key_exists ('UploadJob', $data))
         {
-          if (array_key_exists ('ExpectedSize', $data['DataUploadJob']) && is_int($data['DataUploadJob']['ExpectedSize']))
-            $uploadjob->setExpectedSize($data['DataUploadJob']['ExpectedSize']);
+          if (array_key_exists ('ExpectedSize', $data['UploadJob']) && is_int($data['UploadJob']['ExpectedSize']))
+            $uploadjob->setExpectedSize($data['UploadJob']['ExpectedSize']);
           else
             return $this->jResponse('"Uploading":"Failure", "FailureCause":"Missing ExpectedSize in JobParameters."');
             
-          if (array_key_exists ('Checksum', $data['DataUploadJob']) && preg_match('/^[a-f0-9]{32}$/', $data['DataUploadJob']['Checksum']))
-            $uploadjob->setChecksum($data['DataUploadJob']['Checksum']);
+          if (array_key_exists ('Checksum', $data['UploadJob']) && preg_match('/^[a-f0-9]{32}$/', $data['UploadJob']['Checksum']))
+            $uploadjob->setChecksum($data['UploadJob']['Checksum']);
           else
             return $this->jResponse('"Uploading":"Failure", "FailureCause":"Missing or invalid Checksum in JobParameters."');
 
@@ -152,7 +152,7 @@ class AppPartController extends UCLStudyController
         return $this->jResponse('"Uploading":"ReadyForContent"');
     }
     
-    protected function parseUploadingUploading(DataUploadJob $uploadjob, $_part, Request $request)
+    protected function parseUploadingUploading(UploadJob $uploadjob, $_part, Request $request)
     {
       $translator = $this->get('translator');
       try
@@ -206,7 +206,7 @@ class AppPartController extends UCLStudyController
                           '"HashMismatch":'.(($hash != $expectedHash) ? 'true':'false').', '.
                           '"ExpectedSizeOverflow":'.(($uploadjob->getObtainedSize() + $length > $uploadjob->getExpectedSize()) ? 'true':'false').
                         ' }';
-          $logger->error('Error while updating DataUploadJob for participant '.$this->getParticipantJSON().'; job P'.$uploadjob->getPart().' S'.$uploadjob->getStep().' D'.$uploadjob->getDayCount().'; '.$diagnostic);
+          $logger->error('Error while updating UploadJob for participant '.$this->getParticipantJSON().'; job P'.$uploadjob->getPart().' S'.$uploadjob->getStep().' D'.$uploadjob->getDayCount().'; '.$diagnostic);
           
           if ($recovered)
             return $this->jResponse('"Uploading":"ReadyData", '.$diagnostic.', '.$this->getUploadJobJSON($uploadjob));
@@ -266,7 +266,7 @@ class AppPartController extends UCLStudyController
         /* The original state depends on whether we are resuming a job or creating a new one */
         $resuming = ($uploadjob->getChecksum() !== null && $uploadjob->getExpectedSize() != 0);
         if ($resuming)
-          return $this->jResponse('"Uploading":"ReadyData", "DataUploadJob":{"Part": '.$uploadjob->getPart().', "Step": "'.$uploadjob->getStep().'", "DayCount": '.$uploadjob->getDayCount().', "ExpectedSize": '.$uploadjob->getExpectedSize().', "ObtainedSize": '.$uploadjob->getObtainedSize().', "Checksum": "'.$uploadjob->getChecksum().'"}');
+          return $this->jResponse('"Uploading":"ReadyData", "UploadJob":{"Part": '.$uploadjob->getPart().', "Step": "'.$uploadjob->getStep().'", "DayCount": '.$uploadjob->getDayCount().', "ExpectedSize": '.$uploadjob->getExpectedSize().', "ObtainedSize": '.$uploadjob->getObtainedSize().', "Checksum": "'.$uploadjob->getChecksum().'"}');
         else
           return $this->parseUploadingInit($uploadjob, $_part, $request);
       }
