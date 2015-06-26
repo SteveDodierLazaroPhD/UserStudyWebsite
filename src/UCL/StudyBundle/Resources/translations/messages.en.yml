@@ -1,3 +1,6 @@
+"Welcome to the %siteTitle% website.": "Welcome to the %siteTitle% website."
+"Age": Age
+"Log In to the Participant Website": Log In to the Participant Website
 "Contact the Researchers": Contact the Researchers
 "PARTICIPANT WEBSITE": PARTICIPANT WEBSITE
 "Check how far you are into the study.": Check how far you are into the study.
@@ -23,6 +26,14 @@
 "You will earn %currency%perDay per day of uploaded data, up to %currency%maxGain. Your reward so far:": You will earn %currency%perDay per day of uploaded data, up to %currency%maxGain. Your reward so far:
 "If you start a new upload": If you start a new upload
 "Reminder": Reminder
+"I have read the information above and understand what will happen during the study.": I have read the information above and understand what will happen during the study.
+"Continue": Continue
+"Consent Form for Part %part%: %partName%": "Consent Form for Part %part%: %partName%"
+"Information Sheet for Part %part%: %partName%": "Information Sheet for Part %part%: %partName%"
+"Give Consent": Give Consent
+"Thank you. You are now enrolled in the study!": "Thank you. You are now enrolled in the study!"
+"Software Installation Instructions": Software Installation Instructions
+"Check your Current Progress": Check your Current Progress
 "You are about to upload your collected data to UCL for analysis. Please keep in mind that you can amend the collected data using the %studyJournal% prior to uploading%resumingWarning%. You can also write to the researchers if you wish to edit or delete some of your data after uploading it. You can also drop out from the study now, or later, without prejudice to the rewards you have already earned.": You are about to upload your collected data to UCL for analysis. Please keep in mind that you can amend the collected data using the %studyJournal% prior to uploading%resumingWarning%. You can also write to the researchers if you wish to edit or delete some of your data after uploading it. You can also drop out from the study now, or later, without prejudice to the rewards you have already earned.
 "(%count% days)": (%count% days)
 "(already completed an upload with %count% days)": (already completed an upload with %count% days)
