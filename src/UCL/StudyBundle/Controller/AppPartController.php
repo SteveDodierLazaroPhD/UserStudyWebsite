@@ -131,8 +131,8 @@ class AppPartController extends UCLStudyController
 
         if (is_array($data) && ($data['Uploading'] == 'JobParameters') && array_key_exists ('UploadJob', $data))
         {
-          if (array_key_exists ('ExpectedSize', $data['UploadJob']) && is_int($data['UploadJob']['ExpectedSize']))
-            $uploadjob->setExpectedSize($data['UploadJob']['ExpectedSize']);
+          if (array_key_exists ('ExpectedSize', $data['UploadJob']) && $data['UploadJob']['ExpectedSize'])
+            $uploadjob->setExpectedSize(intval($data['UploadJob']['ExpectedSize'], 10));
           else
             return $this->jResponse('"Uploading":"Failure", "FailureCause":"Missing ExpectedSize in JobParameters."');
             
@@ -166,13 +166,13 @@ class AppPartController extends UCLStudyController
 
         $contents = fread($input, 32);
         $expectedHash = (preg_match('/^[a-f0-9]{32}$/', $contents)) ? $contents : '';
-
+        
         $contents = fread($input, 6);
         $separatorOk &= $contents === '------';
         
         $contents = fread($input, 24);
         $expectedLength = (strlen ($contents) == 24) ? intval($contents, 10) : -1;
-
+        
         $contents = fread($input, 6);
         $separatorOk &= $contents === '------';
         
@@ -357,16 +357,17 @@ class AppPartController extends UCLStudyController
 
       if($form->isValid())
       {
+        $store = $this->get('upload_store');
         /* We must scrap the existing upload job object, and use a clean one */
         if ($form->get('erasecurrentstartnew')->isClicked())
         {
           if ($params['completed'])
           {
-            $this->archiveFile($uploadjob->getFilename());
+            $store->archiveFile($uploadjob->getFilename());
           }
           else
           {
-            $this->deleteFile($uploadjob->getFilename());
+            $store->deleteFile($uploadjob->getFilename());
           }
           $uploadjob->reset($this->getUser(), $_part, 'running', $prg->getProgress());
         }
@@ -374,7 +375,6 @@ class AppPartController extends UCLStudyController
         /* Make the new file and set the job's filename */
         try
         {
-          $store = $this->get('upload_store');
           $filename = $store->makeFile(null, "studydata", $this->getUser()->getEmail());
           $uploadjob->setFilename($filename);
           $this->persistObject($uploadjob);
