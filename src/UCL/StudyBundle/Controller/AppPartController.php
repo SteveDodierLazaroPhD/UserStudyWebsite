@@ -264,10 +264,10 @@ class AppPartController extends UCLStudyController
       if ($uploadingState == 'Init')
       {
         /* The original state depends on whether we are resuming a job or creating a new one */
-        $resuming = ($uploadjob->getChecksum() !== null && $uploadjob->getExpectedSize() != 0);
+        /*$resuming = ($uploadjob->getChecksum() !== null && $uploadjob->getExpectedSize() != 0);
         if ($resuming)
           return $this->jResponse('"Uploading":"ReadyData", "UploadJob":{"Part": '.$uploadjob->getPart().', "Step": "'.$uploadjob->getStep().'", "DayCount": '.$uploadjob->getDayCount().', "ExpectedSize": "'.$uploadjob->getExpectedSize().'", "ObtainedSize": "'.$uploadjob->getObtainedSize().'", "Checksum": "'.$uploadjob->getChecksum().'"}');
-        else
+        else*/
           return $this->parseUploadingInit($uploadjob, $_part, $request);
       }
       
