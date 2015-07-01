@@ -111,7 +111,8 @@ class FileStore extends ContainerAware
   function moveFile($currentPath, $newPath)
   {
     $this->fs->rename($currentPath, $newPath);
-    return $filename;
+    //TODO check it worked!
+    return $newPath;
   }
   
   function storeExistingFile($currentPath, $extension, $participantEmail)
@@ -140,7 +141,7 @@ class FileStore extends ContainerAware
       throw new IOException($this->translator->trans('Cannot archive file \'%name%\' as it was not found in the store.', array('%name%', $filename)), 0, null, $filepath);
     }
 
-    $archivepath = makeArchivePath($filename);
+    $archivepath = $this->makeArchivePath($filename);
     return $this->moveFile($filepath, $archivepath);
   }
   
