@@ -3,6 +3,7 @@
 //TODO create a proper error page
 //TODO allow showing the previous parts using the done key -- or show nothing when "done" is not visible
 //TODO readd 1/2 and 2/2 in nav menu links
+//TODO when a study doesn't have multiple parts, don't display the "For part X: Y" titles...
 
 namespace UCL\StudyBundle\Controller;
 

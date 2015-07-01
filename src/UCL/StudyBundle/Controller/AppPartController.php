@@ -448,6 +448,16 @@ class AppPartController extends UCLStudyController
     }
 
     /**
+     * @Route("/a/{_part}/debriefing", name="ucl_study_app_debriefing",
+     *    defaults={"_part" = 1},
+     *    requirements={"_part": "\d+"})
+     */
+    public function debriefingAction($_part, Request $request)
+    {
+      return $this->forward('UCLStudyBundle:Default:contact', array('request' => $request));
+    }
+
+    /**
      * @Route("/a/{_part}/information", name="ucl_study_app_information",
      *    defaults={"_part" = 1},
      *    requirements={"_part": "\d+"})
