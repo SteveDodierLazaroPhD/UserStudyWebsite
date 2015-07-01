@@ -138,7 +138,10 @@ before you can upload your data and claim a reward.{% endtrans %}{% else %}{% if
     {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
     <fieldset>
       <div class="form-row">
+      {% if not proposeErasing %}
         <div class="col-sm-3"></div>
+      {% endif %}
+
         {# Job already finished #}
         {% set extraMsgInParentheses = proposeErasing? ' (%count% days)' | trans({'%count%': daysInCurrentJob}) : '' %}
         {% if completed %}
@@ -150,16 +153,15 @@ before you can upload your data and claim a reward.{% endtrans %}{% else %}{% if
     		{% else %}
         <div class="col-sm-6"><button type="submit" id="dataupload_dataupload" name="dataupload[dataupload]" class="btn btn-block btn-primary">{% if resuming %}{{ 'Resume Upload%extraMsgInParentheses%' | trans({'%extraMsgInParentheses%':extraMsgInParentheses}) }}{% else %}{{ 'Upload your Data' | trans }}{% endif %}</button></div>
     		{% endif %}
-      </div>
+
       {% if proposeErasing %}
-      <div class="form-row">
         <div class="col-sm-3"></div>
         {# Not enough days collected #}
         {% if minDays is defined and daysCollected < minDays %}
         <div class="col-sm-6 cursor-disabled"><button type="submit" id="dataupload_erasecurrentstartnew" name="dataupload[erasecurrentstartnew]" class="btn btn-block disabled">{{ 'New Upload Job (%count% days, erases previous job)' | trans({'%count%': daysCollected}) }}</button></div>
     		{% else %}
-        <div class="col-sm-6"><button type="submit" id="dataupload_erasecurrentstartnew" name="dataupload[erasecurrentstartnew]" class="btn btn-block btn-default">{{ 'New Upload Job ({{ daysCollected }} days, erases previous job)' | trans({'%count%': daysCollected}) }}</button></div>
-    		{% endif %}
+        <div class="col-sm-6"><button type="submit" id="dataupload_erasecurrentstartnew" name="dataupload[erasecurrentstartnew]" class="btn btn-block btn-default">{{ 'New Upload Job (%count% days, erases previous job)' | trans({'%count%': daysCollected}) }}</button></div>
+  		{% endif %}
       </div>
       {% endif %}
   		{{ form_widget(form.participant) }}
