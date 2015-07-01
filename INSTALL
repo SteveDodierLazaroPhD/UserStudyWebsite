@@ -17,6 +17,6 @@ Things to do:
 - create app/config/parameters.yml and add your MySQL user/password information
   $ cp app/config/parameters.yml.dist app/config/parameters.yml
   $ nano app/configs.parameters.yml
-- make sure app/store/ is configured as desired (at least writable upload/ and screening/ folders)
+- make sure app/store/ is configured as desired (at least writable upload/, upload/archive and screening/ folders)
 - [tweak app/config/ further if necessary, normally you don't need to]
 - go to src/UCL/StudyBundle/Resources/config/ and hack your project into shape!
