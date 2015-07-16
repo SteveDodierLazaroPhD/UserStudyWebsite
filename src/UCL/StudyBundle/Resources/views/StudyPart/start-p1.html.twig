@@ -7,7 +7,14 @@
 
 {% block article_body %}
 <h2>{{ '1. Add our repository to your software sources' | trans }}</h2>
+  <h3>{{ 'Fast method, using the terminal' | trans }}</h3>
+    <ol class="list-group">
+    <li class="list-group-item">{{ 'Open a terminal and type the following command as \'root\':' | trans }} <code>add-apt-repository ppa:ucl-cs-study-devs/multitasking-study</pre></code>
+    </ol>
+  
+  <h3>{{ 'Slower method' | trans }}</h3>
   <div class="bs-callout bs-callout-default"><p class="small">{{ 'You can find instructions with pictures <a href="https://askubuntu.com/a/40351/400786">here.</a>' | trans | raw }}</p></div>
+  <div class="bs-callout bs-callout-danger"><p class="small">{{ 'Please be aware that you will need to add the PPA\'s signing key to your list of trusted software providers.' | trans | raw }}</p></div>
   <ol class="list-group">
     <li class="list-group-item">{{ 'Open the <span class="fa fa-gear fa-fw"></span>Ubuntu Software Center.' | trans | raw }}</li>
     <li class="list-group-item">{{ 'In the software center, open the <code>Edit</code> menu and select <code>Software Sources</code>.' | trans | raw}}</li>
@@ -20,7 +27,7 @@
 
 <hr />
 <h2>{{ '2. Install the UCL Study Manager' | trans }}</h2>
-    <div class="bs-callout bs-callout-default"><p class="small">{{ 'The study manager will replace some libraries and applications on your system, including Unity, Nautilus, GTK+ and the GLib. This is normal, as we use modified versions of these libraries and applications to collect data about your multitasking habits. You will be able to return to the original applications the next time they are updated by Ubuntu once the study is over.' | trans }}</p></div>
+    <div class="bs-callout bs-callout-default"><p class="small">{{ 'The study manager will replace some libraries and applications on your system, including Unity, Nautilus, GTK+ and the GLib. This is normal, as we use modified versions of these libraries and applications to collect data. You will be able to return to the original applications the next time they are updated by Ubuntu once the study is over, or by removing our PPA from your list of software sources and reinstalling the applications.' | trans }}</p></div>
   <ol class="list-group">
     <li class="list-group-item">{{ 'Open the <span class="fa fa-gear fa-fw"></span>Ubuntu Software Center.' | trans | raw }}</li>
     <li class="list-group-item">{{ 'In the search input box in the top-right corner, type <kbd><strong>ucl-study-manager</strong></kbd>.' | trans | raw }}</li>
