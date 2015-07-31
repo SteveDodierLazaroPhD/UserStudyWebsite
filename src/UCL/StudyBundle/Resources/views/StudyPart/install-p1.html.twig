@@ -1,4 +1,4 @@
-{% extends 'UCLStudyBundle:StudyPart:start.html.twig' %}
+{% extends 'UCLStudyBundle:StudyPart:install.html.twig' %}
 
 {% block article_details %}
 {{ parent() }}
@@ -9,7 +9,7 @@
 <h2>{{ '1. Add our repository to your software sources' | trans }}</h2>
   <h3>{{ 'Fast method, using the terminal' | trans }}</h3>
     <ol class="list-group">
-    <li class="list-group-item">{{ 'Open a terminal and type the following command as \'root\':' | trans }} <code>add-apt-repository ppa:ucl-cs-study-devs/multitasking-study</pre></code>
+    <li class="list-group-item">{{ 'Open a terminal and type the following command:' | trans }} <code>sudo add-apt-repository ppa:ucl-cs-study-devs/multitasking-study</pre></code>
     </ol>
   
   <h3>{{ 'Slower method' | trans }}</h3>

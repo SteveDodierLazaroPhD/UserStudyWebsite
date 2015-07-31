@@ -172,7 +172,7 @@ class StudyPartController extends UCLStudyController
       if ($this->globals['verify_app_install'] !== 'true')
           $this->takeParticipantToNextStep($_part, 'install');
 
-      return $this->render('UCLStudyBundle:StudyPart:start-p'.$_part.'.html.twig', $params);
+      return $this->render('UCLStudyBundle:StudyPart:install-p'.$_part.'.html.twig', $params);
     }
 
     /**
