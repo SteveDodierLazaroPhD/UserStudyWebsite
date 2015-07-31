@@ -19,7 +19,7 @@
 <li>{{ 'be an independent adult at least 18 years old' | trans }}</li>
 <li>{{ 'Speak English fluently and be a EU resident' | trans }}</li>
 <li>{{ 'actively use the computer used for the study for 3 weeks, at least 5 hours per week (you will be paid for each day when the collection software was active)' | trans }}</li>
-<li>{{ 'use Ubuntu (15.04) as a Linux distribution' | trans }}</li>
+<li>{{ 'use Ubuntu (14.04 or 15.04) as a Linux distribution' | trans }}</li>
 <li>{{ 'use Unity and Google Chrome/Chromium Browser' | trans }}</li>
 </ul>
 
@@ -71,17 +71,17 @@
 
 <h3>{{ 'Opting out' | trans }}</h3>
 {% set contactUrl = (space is defined and space == 'application_space')? url('ucl_study_app_contact') : url('ucl_study_contact') %}
-<p>{{ 'If you don\'t want to proceed to part 2, or if you change your mind and want to quit at any point during part 1, it will not affect how you are treated as a participant and will not affect the promised reward for your participation so far (I will pay you for each day of data that you decide to send me – if you decide to send no data I will pay you a minimum compensation of £5). If you change your mind and would like me to remove some of your collected data, or to withdraw entirely from the study, you can do so at any time by using the <a href="%contactUrl%">contact form</a> or sending me an email at <a href="mailto:%authorEmail%">%authorEmail%</a>. You do not have to provide any justification, although it would be helpful to improve future studies and appreciated.' | trans({'%contactUrl%': contactUrl, '%authorEmail%': site.author_email}) }}</p>
+<p>{{ 'If you don\'t want to proceed to part 2, or if you change your mind and want to quit at any point during part 1, it will not affect how you are treated as a participant and will not affect the promised reward for your participation so far (I will pay you for each day of data that you decide to send me – if you decide to send no data I will pay you a minimum compensation of £5). If you change your mind and would like me to remove some of your collected data, or to withdraw entirely from the study, you can do so at any time by using the <a href="%contactUrl%">contact form</a> or sending me an email at <a href="mailto:%authorEmail%">%authorEmail%</a>. You do not have to provide any justification, although it would be helpful to improve future studies and appreciated.' | trans({'%contactUrl%': contactUrl, '%authorEmail%': site.author_email}) | raw }}</p>
 
 <p class="bs-callout bs-callout-warning">{{ 'Please note that I cannot delete results that were published in academic venues and based on your data, however these results will never contain personally identifiable information.' | trans }}</p>
 
 <h3>{% if infosheet_prospective is defined %}{{ 'Instructions given to participants who proceed' | trans }}{% else %}{{ 'How to proceed' | trans }}{% endif %}</h3>
 <ol>
 <li>{{ 'Install the software on your computer (instructions will be provided)' | trans }}</li>
-<li>{{ 'Log in into the <span class="fa fa-gear fa-fw">%studyManager%' | trans({'%studyManager%': studyManager}) }}</li>
+<li>{{ 'Log in into the <span class="fa fa-gear fa-fw"></span>%studyManager%' | trans({'%studyManager%': studyManager}) | raw }}</li>
 <li>{{ 'Use your computer for the next 3 weeks (you are paid based on how often you use it)' | trans }}</li>
-<li>{{ 'Verify the content of the data to be uploaded, or make changes with the <span class="fa fa-gear fa-fw">%studyJournal%' | trans({'%studyJournal%': studyJournal}) }}</li>
-<li>{{ 'Upload the data using the <span class="fa fa-gear fa-fw">%studyManager%' | trans({'%studyManager%': studyManager}) }}</li>
+<li>{{ 'Verify the content of the data to be uploaded, or make changes with the <span class="fa fa-gear fa-fw"></span>%studyJournal%' | trans({'%studyJournal%': studyJournal}) | raw }}</li>
+<li>{{ 'Upload the data using the <span class="fa fa-gear fa-fw"></span>%studyManager%' | trans({'%studyManager%': studyManager}) | raw}}</li>
 <li>{{ 'Wait for me to contact you to schedule the debriefing interview and arrange your payment, or <a href="%contactUrl%">contact me</a> directly if you prefer' | trans({'%contactUr%': contactUrl}) | raw }}</li>
 <li>{{ 'Come to the scheduled interview, or connect on Skype/GTalk at the agreed time.' | trans }}</li>
 <li>{{ 'Retrieve your payment and inform me if you would like to proceed to the second part of the study.' | trans }}</li>
