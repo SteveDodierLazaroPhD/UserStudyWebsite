@@ -12,11 +12,11 @@ Things to do:
   CREATE USER 'yourprojectname'@'localhost' IDENTIFIED BY 'yourGENERATEDandLONGpassword';
   GRANT ALL PRIVILEGES ON `yourprojectname`.* TO 'yourprojectname'@'localhost' WITH GRANT OPTION;
 - give the password to the authorised users by leaving it in a file in their home
-- generate the DB tables with Doctrine
-  $ php app/console doctrine:schema:update --force
 - create app/config/parameters.yml and add your MySQL user/password information
   $ cp app/config/parameters.yml.dist app/config/parameters.yml
   $ nano app/configs.parameters.yml
-- make sure app/store/ is configured as desired (at least writable upload/, upload/archive and screening/ folders)
+- generate the DB tables with Doctrine
+  $ php app/console doctrine:schema:update --force
+- make sure app/store/ is configured as desired (at least writable upload/ and screening/ folders)
 - [tweak app/config/ further if necessary, normally you don't need to]
 - go to src/UCL/StudyBundle/Resources/config/ and hack your project into shape!
