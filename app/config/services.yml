@@ -24,6 +24,9 @@ services:
     screening_store:
         class:        UCL\StudyBundle\Service\FileStore
         arguments:    ["%file_store.screening%", @translator]
+    payment_store:
+        class:        UCL\StudyBundle\Service\FileStore
+        arguments:    ["%file_store.payment%", @translator]
     translation.loader.po:
         class: Symfony\Component\Translation\Loader\PoFileLoader
         tags:
