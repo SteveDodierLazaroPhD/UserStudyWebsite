@@ -18,3 +18,4 @@ parameters:
     mail_password:        ""
     file_store.screening: "%kernel.root_dir%/store/screening"
     file_store.upload:    "%kernel.root_dir%/store/upload"
+    file_store.payment:   "%kernel.root_dir%/store/payment"
