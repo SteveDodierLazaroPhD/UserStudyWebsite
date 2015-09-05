@@ -6,6 +6,9 @@ Permission setup:
 
 
 Things to do:
+- update your local bundles by using composer:
+  $ php composer.phar self-update
+  $ php composer.phar update
 - create the database in the MySQL db (requires connecting to the db as root)
   CREATE DATABASE `yourprojectname`;
 - create the appropriate user in the MySQL db, with a password of your choice
@@ -17,6 +20,12 @@ Things to do:
   $ nano app/configs.parameters.yml
 - generate the DB tables with Doctrine
   $ php app/console doctrine:schema:update --force
-- make sure app/store/ is configured as desired (at least writable upload/ and screening/ folders)
+- generate the CSS and JS files with Assetic
+  $ php app/console assetic:dump --env=prod --no-debug
+- make sure app/store/ is configured as desired (at least writable upload/, payment/ and screening/ folders):
+  # mkdir app/store/{upload,payment,screening} -p
+  # chmod 370 app/store
+  # chown apache:<somedevgroup> app/store
 - [tweak app/config/ further if necessary, normally you don't need to]
 - go to src/UCL/StudyBundle/Resources/config/ and hack your project into shape!
+- when done hacking, modify web/app_dev.php to remove developer mode
