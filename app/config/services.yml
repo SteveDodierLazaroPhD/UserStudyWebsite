@@ -10,9 +10,6 @@ services:
     email_only_authenticator:
         class:     UCL\StudyBundle\Security\EmailOnlyAuthenticator
         arguments: ["@security.password_encoder"]
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
     participant_upload_progress:
         class:        UCL\StudyBundle\Service\ParticipantUploadProgress
         arguments   : []
@@ -27,6 +24,8 @@ services:
     payment_store:
         class:        UCL\StudyBundle\Service\FileStore
         arguments:    ["%file_store.payment%", @translator]
+
+# TODO: not in use yet, but should be implemented in the future to integrate with Launchpad's Web translation service
     translation.loader.po:
         class: Symfony\Component\Translation\Loader\PoFileLoader
         tags:
