@@ -35,7 +35,8 @@
         "twbs/bootstrap": "~3.3",
         "jquery/jquery":  "1.11.*",
         "braincrafted/bootstrap-bundle": "2.1.*",
-        "symfony/yaml": "~2.7"
+        "symfony/yaml": "~2.7",
+        "commerceguys/addressing": "^0.7.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.5"
