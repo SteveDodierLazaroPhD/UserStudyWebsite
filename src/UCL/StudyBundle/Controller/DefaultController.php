@@ -5,6 +5,7 @@ namespace UCL\StudyBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use UCL\StudyBundle\Controller\UCLStudyController as UCLStudyController;
+use UCL\StudyBundle\Form\Type\ContactType;
 use UCL\StudyBundle\Form\Type\RegistrationType;
 use UCL\StudyBundle\Entity\RegistrationJob;
 use UCL\StudyBundle\Entity\ContactJob;
@@ -207,39 +208,14 @@ class DefaultController extends UCLStudyController
         }
       }
 
-      $task = new ContactJob($this->globals['spam_correct_answer'], $previous);
-      $builder = $this->createFormBuilder($task);
-      
-      $builder->add('pseudonym', 'text', array(
-          'required'  => true,
-          'label'     => $translator->trans('Name'),
-      ));
-
-      $builder->add('email', 'email', array(
-          'label'     => $translator->trans('Email address'),
-          'required'  => true,
-      ));
-      
-      $builder->add('message', 'textarea', array(
-          'label' => $translator->trans('Your message'),
-          'required'  => true,
-      ));
-      
       $transbag = array();
       foreach ($this->globals['spam_answer_bag'] as $bagentry)
         array_push ($transbag, $translator->trans($bagentry));
 
-      $builder->add('spamcheck', 'choice', array(
-          'label'     => $translator->trans($this->globals['spam_question']),
-          'choices'   => array_combine($this->globals['spam_answer_bag'], $transbag),
-          'multiple'  => false,
-          'required'  => true,
-          'expanded'  => true,
-      ));
-      
-      $builder->add('write', 'submit', array('label' => $translator->trans('Send Your Message')));
-
-      $form = $builder->getForm();
+      $task = new ContactJob($this->globals['spam_correct_answer'], $previous);
+      $form = $this->createForm(new ContactType(), $task, array('spam_question' => $this->globals['spam_question'],
+                                                                'spam_answer_bag' => $this->globals['spam_answer_bag'],
+                                                                'spam_translated_answers' => $transbag));
       $params['form'] = $form->createView();
       
       $form->handleRequest($request);
@@ -266,7 +242,7 @@ class DefaultController extends UCLStudyController
             'success',
             $translator->trans('Thank you for your message. I will be in touch with you as soon as I read it.')
         );
-        return $this->redirect($this->generateUrl('ucl_study_contact'));
+        return $this->redirect($this->generateUrl('ucl_study_homepage'));
       }
       else if($form->isSubmitted())
       {

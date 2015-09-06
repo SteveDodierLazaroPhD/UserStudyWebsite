@@ -113,6 +113,11 @@
 "Send Your Message": Send Your Message
 
 form:
+  contact:
+    name: Name
+    email: Email address
+    message: Your message
+    send: Send Your Message
   dataupload:
     submit:
       upload: Upload your Data
