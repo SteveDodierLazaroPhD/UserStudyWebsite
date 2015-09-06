@@ -78,20 +78,24 @@ class UCLStudyController extends Controller
     $em->flush();
   }
 
-  protected function getEnabledStepsForPart($part)
+  protected function getEnabledStepsForPart($part, $space = null)
   {
     $logger = $this->get('logger');
     $translator = $this->get('translator');
-    if (!isset ($this->site[$this->space]))
+    
+    if ($space === null)
+      $space = $this->space;
+
+    if (!isset ($this->site[$space]))
     {
-      $logger->error($translator->trans('This study is misconfigured (missing a \'%sectionname%\' section). Please inform the researchers so they can fix the issue.', array('%sectionname%' => $this->space)));
+      $logger->error($translator->trans('This study is misconfigured (missing a \'%sectionname%\' section). Please inform the researchers so they can fix the issue.', array('%sectionname%' => $space)));
       return null;
     }
-    if (!isset ($this->site[$this->space]['part_'.$part]))
+    if (!isset ($this->site[$space]['part_'.$part]))
     {
       $logger->error($translator->trans('This study is misconfigured (missing part \'%partname%\' for the \'%sectionname%\' section). Please inform the researchers so they can fix the issue.',
                                        array('%partname%' => $part,
-                                             '%sectionname%' => $this->space)));
+                                             '%sectionname%' => $space)));
       return null;
     }
     if (!isset ($this->site['participant_space']['part_'.$part]['enabled_steps']))
@@ -103,39 +107,43 @@ class UCLStudyController extends Controller
     return $this->site['participant_space']['part_'.$part]['enabled_steps'];
   }
 
-  protected function getVisiblePagesForPartAndStep($part, $step)
+  protected function getVisiblePagesForPartAndStep($part, $step, $space = null)
   {
     $logger = $this->get('logger');
     $translator = $this->get('translator');
-    if (!isset ($this->site[$this->space]))
+    
+    if ($space === null)
+      $space = $this->space;
+
+    if (!isset ($this->site[$space]))
     {
-      $logger->error($translator->trans('This study is misconfigured (missing a \'%sectionname%\' section). Please inform the researchers so they can fix the issue.', array('%sectionname%' => $this->space)));
+      $logger->error($translator->trans('This study is misconfigured (missing a \'%sectionname%\' section). Please inform the researchers so they can fix the issue.', array('%sectionname%' => $space)));
       return null;
     }
-    if (!isset ($this->site[$this->space]['part_'.$part]))
+    if (!isset ($this->site[$space]['part_'.$part]))
     {
       $logger->error($translator->trans('This study is misconfigured (missing part \'%partname%\' for the \'%sectionname%\' section). Please inform the researchers so they can fix the issue.',
                                        array('%partname%' => $part,
-                                             '%sectionname%' => $this->space)));
+                                             '%sectionname%' => $space)));
       return null;
     }
-    if (!isset ($this->site[$this->space]['part_'.$part]['navigation']))
+    if (!isset ($this->site[$space]['part_'.$part]['navigation']))
     {
       $logger->error($translator->trans('This study is misconfigured (missing a \'navigation\' section for part \'%partname%\'). Please inform the researchers so they can fix the issue.', array('%partname%' => $part)));
       return null;
     }
-    if (!isset ($this->site[$this->space]['part_'.$part]['navigation'][$step]) || !isset ($this->site[$this->space]['part_'.$part]['navigation'][$step]['visible_steps']))
+    if (!isset ($this->site[$space]['part_'.$part]['navigation'][$step]) || !isset ($this->site[$space]['part_'.$part]['navigation'][$step]['visible_steps']))
     {
-      if (!isset ($this->site[$this->space]['part_'.$part]['default_visible']))
+      if (!isset ($this->site[$space]['part_'.$part]['default_visible']))
       {
         $logger->error($translator->trans('This study is misconfigured (missing a list of visible pages for part \'%partname%\' and step \'%stepname%\'). Please inform the researchers so they can fix the issue.', array('%partname%' => $part, '%stepname%' => $step)));
         return null;
       }
   
-      return $this->site[$this->space]['part_'.$part]['default_visible'];
+      return $this->site[$space]['part_'.$part]['default_visible'];
     }
 
-    return $this->site[$this->space]['part_'.$part]['navigation'][$step]['visible_steps'];
+    return $this->site[$space]['part_'.$part]['navigation'][$step]['visible_steps'];
   }
 
   protected function checkPartBoundaries($part)
