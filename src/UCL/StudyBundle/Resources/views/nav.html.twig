@@ -84,14 +84,16 @@
     <ul>
 
     {% for page_name in always_visible_steps_for_route %}
-    {% set item = site[menu_space][always_visible_menu].navigation[page_name] %}
-    {% set current_item = (_route | split(item.href) | first == '') %}
-      {% if item.href is defined and item.caption is defined  %} {# undefined for when we just want the visible pages for the current route #}
-      <li {% if current_item %} id="current-page"{% endif %}>
-        <{% if current_item %}span{% else %}a href="{% if item.href_params is defined %}{{ url(item.href, item.href_params) }}{% else %}{{ url(item.href) }}{% endif %}"{% endif %}{% if item.tooltip %} title="{{ item.tooltip }}"{% endif %}>{{ item.caption }}</{% if current_item %}span{% else %}a{% endif %}>
-        {#{% if item.tooltip is defined %}<span class="navtooltip">{{ item.tooltip }}</span>{% endif %}#}
-        {% if current_item %}<div class="menu-icon"></div>{% endif %}
-      </li>
+      {% if globals.recruitment_open == true or page_name != 'register' %}
+      {% set item = site[menu_space][always_visible_menu].navigation[page_name] %}
+      {% set current_item = (_route | split(item.href) | first == '') %}
+        {% if item.href is defined and item.caption is defined  %} {# undefined for when we just want the visible pages for the current route #}
+        <li {% if current_item %} id="current-page"{% endif %}>
+          <{% if current_item %}span{% else %}a href="{% if item.href_params is defined %}{{ url(item.href, item.href_params) }}{% else %}{{ url(item.href) }}{% endif %}"{% endif %}{% if item.tooltip %} title="{{ item.tooltip }}"{% endif %}>{{ item.caption }}</{% if current_item %}span{% else %}a{% endif %}>
+          {#{% if item.tooltip is defined %}<span class="navtooltip">{{ item.tooltip }}</span>{% endif %}#}
+          {% if current_item %}<div class="menu-icon"></div>{% endif %}
+        </li>
+        {% endif %}
       {% endif %}
     {% endfor %}
     

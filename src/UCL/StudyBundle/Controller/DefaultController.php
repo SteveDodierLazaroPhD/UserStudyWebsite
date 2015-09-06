@@ -43,6 +43,12 @@ class DefaultController extends UCLStudyController
       $em = $this->getDoctrine()->getManager();
       $params = $this->setupParameters($request, false);
 
+      if ($this->globals['recruitment_open'] != true)
+      {
+        $request->getSession()->getFlashBag()->add('warning', $translator->trans('Sorry, recruitment is currently closed for this study.'));
+        return $this->redirect($this->generateUrl('ucl_study_homepage'));
+      }
+
       if ($this->globals['screen_participants'] == true)
       {
         $params['page'] = array('title' => $translator->trans('Register for Participant Screening'));
