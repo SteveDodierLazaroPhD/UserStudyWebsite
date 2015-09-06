@@ -34,7 +34,7 @@ security:
                 always_use_default_target_path: true
                 default_target_path: ucl_study_app_logged_in
                 csrf_parameter: _csrf_token
-                csrf_provider: form.csrf_provider
+                csrf_provider: security.csrf.token_manager
                 intention:      authenticate
             logout:
                 path:   ucl_study_app_logout
@@ -56,7 +56,7 @@ security:
                 check_path: ucl_study_login_check
                 default_target_path: ucl_study_part_next
                 csrf_parameter: _csrf_token
-                csrf_provider: form.csrf_provider
+                csrf_provider: security.csrf.token_manager
                 intention:      authenticate
             logout:
                 path:   ucl_study_logout
