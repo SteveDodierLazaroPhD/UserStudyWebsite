@@ -19,15 +19,33 @@
       {% endif %}
     <aside>{{ 'It doesn\'t have to be your real name, but we will need your real name later on to issue payments.' | trans }}</aside>
   </div>
-  {% if err_email is defined %}
-    <div class="has-error">{{ form_row(form.email) }}<aside class="alert alert-warning">{{ err_email }}</aside></div>
-  {% elseif err_email_different is defined %}
-    <div class="has-error">{{ form_row(form.email) }}<aside class="alert alert-warning">{{ err_email_different }}</aside></div>
-  {% elseif err_emailValid is defined %}
-    <div class="has-error">{{ form_row(form.email) }}<aside class="alert alert-warning">{{ err_emailValid }}</aside></div>
+  {% if err_email is defined or err_emailValid is defined %}
+    <div class="has-error">{{ form_row(form.email) }}
+    {% if err_email is defined %}
+      <aside class="alert alert-warning">{{ err_email }}</aside>
+    {% endif %}
+    {% if err_emailValid is defined %}
+      <aside class="alert alert-warning">{{ err_emailValid }}</aside>
+    {% endif %}
+    </div>
   {% else %}
   {{ form_row(form.email) }}
   {% endif %}
+
+  {% if err_email2 is defined or err_email2Valid is defined %}
+    <div class="has-error">{{ form_row(form.email2) }}
+    {% if err_email2 is defined %}
+      <aside class="alert alert-warning">{{ err_email2 }}</aside>
+    {% endif %}
+    {% if err_email2Valid is defined %}
+      <aside class="alert alert-warning">{{ err_email2Valid }}</aside>
+    {% endif %}
+    </div>
+  {% else %}
+  {{ form_row(form.email2) }}
+  {% endif %}
+
+
   {% if err_age is defined %}
     <div class="form-group has-error">{{ form_row(form.age, {'attr': {'class': 'btn alert-danger'}}) }}<aside class="alert alert-warning">{{ err_age }}</aside></div>
   {% else %}
@@ -95,18 +113,4 @@
 
     {{ form_row(form.register, {}) }}
 {{ form_end(form) }}
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}
-    {% if err_email_different is defined %}
-    <script>
-      $(document).ready(function(){
-        var $first = document.getElementById("form_email_first");
-        var $second = document.getElementById("form_email_second");
-        $first.value = {{ err_email_first |json_encode|raw }};
-        $second.value = {{ err_email_second |json_encode|raw }};
-      });
-    </script>
-    {% endif %}
 {% endblock %}

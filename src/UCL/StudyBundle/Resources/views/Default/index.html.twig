@@ -1,18 +1,20 @@
 {% extends 'UCLStudyBundle::base.html.twig' %}
 
 {% block body %}
-{# TODO if the app's configuration does not include join_screening or join_automatic, then recruitment is closed and this page should be adapted #}
+{# TODO if the app's configuration does not include register_screening or register_automatic, then recruitment is closed and this page should be adapted #}
   <p class="lead">{{ 'We are recruiting participants, who can earn up to %moneyCount% by letting us collect data on their computers.' | trans({'%moneyCount%': globals.maxgain }) }}</p>
     
   <div class="row">
+{% if globals.recruitment_open %}
     <div class="col-md-4 col-lg-3 text-center">
       <div class="bs-callout-card bs-callout-info">
-        <a href="{{ url('ucl_study_join') }}" class="unstyled"><i class="fa fa-{{ globals.join_icon }} fa-4x"></i></a>
+        <a href="{{ url('ucl_study_register') }}" class="unstyled"><i class="fa fa-{{ globals.register_icon }} fa-4x"></i></a>
         <h4>{{ 'Join the Study' | trans }}</h4>
         <p>{{ 'Earn money by running our data collection software' | trans }}</p>
-        <a href="{{ url('ucl_study_join') }}" class="btn btn-block btn-primary"><strong>{{ 'Get an invite' | trans }}</strong></a>
+        <a href="{{ url('ucl_study_register') }}" class="btn btn-block btn-primary"><strong>{{ 'Get an invite' | trans }}</strong></a>
       </div>
     </div>
+{% endif %}
 
     <div class="col-md-4 col-lg-3 text-center">
       <div class="bs-callout-card">

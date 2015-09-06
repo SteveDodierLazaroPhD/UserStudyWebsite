@@ -28,6 +28,8 @@ I will ask for your age range, gender, Linux proficiency and occupation. This in
 
 <a href="{{ url('ucl_study_infopre') }}" title="{{ 'Learn more about the research protocol' | trans }}" class="btn btn-lg btn-default">{{ 'More Details' | trans }}</a>
 <a href="{{ url('ucl_study_contact') }}" title="{{ 'Contact the researchers behind this project' | trans }}" class="btn btn-lg btn-default">{{ 'Contact Me' | trans }}</a>
-<a href="{{ url('ucl_study_join_screening') }}" title="{{ 'Register to join the pre-screening participant pool' | trans }}" class="btn btn-lg btn-primary">{{ 'Join the Study' | trans }}</a>
+{% if globals.recruitment_open %}
+<a href="{{ url('ucl_study_register') }}" title="{{ 'Register to join the study' | trans }}" class="btn btn-lg btn-primary">{{ 'Join the Study' | trans }}</a>
+{% endif %}
 
 {% endblock %}

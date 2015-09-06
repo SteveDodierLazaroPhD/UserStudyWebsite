@@ -1,9 +1,12 @@
 {% extends 'UCLStudyBundle::app.html.twig' %}
 
 {% block body %}
-{# TODO if the app's configuration does not include join_screening or join_automatic, then recruitment is closed and this page should be adapted #}
 
-    <p>{{ 'This application is for enrolled research participants only. To get an invitation, you should first <a href="%url%">register on our website</a>.' | trans({'%url%': url('ucl_study_join_screening') }) | raw }}</p>
+{% if globals.recruitment_open %}
+    <p>{{ 'This application is for enrolled research participants only. To get an invitation, you should first <a href="%url%">register on our website</a>.' | trans({'%url%': url('ucl_study_register') }) | raw }}</p>
+{% else %}
+    <p>{{ 'This application is for enrolled research participants only. If you have not already created an account, it is too late to enroll into the study.' | trans() }}</p>
+{% endif %}
     <hr />
     
     <form name="login" method="post" action="{{ path('ucl_study_app_login_check') }}" class="form-horizontal">
