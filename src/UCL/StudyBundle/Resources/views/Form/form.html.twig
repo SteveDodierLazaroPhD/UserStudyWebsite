@@ -39,12 +39,7 @@
     No need to render the errors here, as all errors are mapped
     to the first child (see RepeatedTypeValidatorExtension).
     #}
-        <div class="form-row">
-            {{ form_row(form.first) }}
-        </div>
-        <div class="form-row">
-            {{ form_row(form.second) }}
-        </div>
+        {{ form_widget(form) }}
 {%- endblock repeated_row %}
 
 
