@@ -35,100 +35,93 @@ class DefaultController extends UCLStudyController
     }
 
     /**
-     * @Route("/join_screening", name="ucl_study_join_screening")
+     * @Route("/register", name="ucl_study_register")
      */
-    public function joinScreeningAction(Request $request)
+    public function registerAction(Request $request)
     {
       $translator = $this->get('translator');
       $em = $this->getDoctrine()->getManager();
       $params = $this->setupParameters($request, false);
-      $params['page'] = array('title' => $translator->trans('Register for Participant Screening'));
-      
+
+      if ($this->globals['screen_participants'] == true)
+      {
+        $params['page'] = array('title' => $translator->trans('Register for Participant Screening'));
+        $confirmationMsg = 'Thank you for your interest in this study. A confirmation email was sent to you. We will be in touch with you shortly.';
+      }
+      else
+      {
+        $params['page'] = array('title' => $translator->trans('Enroll into the Study'));
+        $confirmationMsg = 'Thank you for enrolling into our study. A confirmation email was sent to you. You can now log in into the participant space.';
+      }
+
       $previous = $request->request->get('registration');
       $task = new RegistrationJob($em, $previous !== null ? $previous : array());
 
-      $prev_email = $previous ? (array_key_exists('email', $previous) ? $previous['email']['first'] : '') : '';
-      $prev_browser = $previous ? (array_key_exists('browser', $previous) ? $previous['browser'] : array()) : array();
-      
-      $form = $this->createForm(new RegistrationType(), $task, array( 'email' => $prev_email, 'browser' => $prev_browser));
+      $form = $this->createForm(new RegistrationType(), $task, array('screening' => $this->globals['screen_participants']));
       $params['form'] = $form->createView();
       
       $form->handleRequest($request);
 
       if($form->isValid())
       {
-        $validator = $this->get('validator');
-        $errors = $validator->validate($task, array('envsupport'), true, true);
-
-        if(count($errors) > 0)
-        {
-          $request->getSession()->getFlashBag()->add(
-              'notice',
-              $translator->trans('Sorry. The study software does not support your desktop environment and Web browser, and you cannot participate. Thank you for your interest nevertheless.')
-          );
-          return $this->redirect($this->generateUrl('ucl_study_homepage'));
-        }
-        else
-        {
-        
+        try {
+          $store = $this->get('screening_store');
+          $password = base64_encode (openssl_random_pseudo_bytes (6));
+          $task->setPasswordFromClearText($password);
+          $filename = null;
           try {
-            $store = $this->get('screening_store');
-            $password = base64_encode (openssl_random_pseudo_bytes (6));
-            $task->setPasswordFromClearText($password);
-            $filename = null;
-            try {
-              $yaml = $task->makeScreeningYaml();
-              $filename = $store->makeFile($yaml, "yaml", $task->getEmail());
-            } catch (Exception $e) {
-              $request->getSession()->getFlashBag()->add('error', $translator->trans('An error occurred while processing your registration: %errMsg%. Please try again later, or contact us if it keeps happening.', array('%errMsg%' => $e->getMessage())));
-            }
-            if ($filename)
-            {
-              $mailer = $this->get('mailer');
-              
-              $message = $mailer->createMessage()
-                  ->setSubject($translator->trans('[%id% study] New Registration from %pseudonym on (%date%)',
-                                                  array('%id%' => $this->globals['study_id'], '%pseudonym%' => $task->getPseudonym(), '%date%' => date('Y-m-d'))))
-                  ->setFrom($this->getEmailAddress())
-                  ->setReplyTo($task->getEmail())
-                  ->setTo($this->site['author_email'])
-                  ->setBody($this->renderView('UCLStudyBundle:Mail:registrationform.txt.twig',
-                                  array('site'    => $this->site,
-                                        'globals' => $this->globals,
-                                        'name'    => $task->getPseudonym(),
-                                        'email'   => $task->getEmail(),
-                                        'date'    => date('r'))));
-              $mailer->send($message);
-              
-              // If you ever need to email participants their passwords, it happens here.
-              // For now the passwords are in the store for us to hand out, and they are not in use anyway.
-              $message = $mailer->createMessage()
-                  ->setSubject($translator->trans('[%id% study] Thank you for registering!', array('%id%' => $this->globals['study_id'])))
-                  ->setFrom($this->getEmailAddress())
-                  ->setReplyTo($this->site['author_email'])
-                  ->setTo($task->getEmail())
-                  ->setBody($this->renderView('UCLStudyBundle:Mail:registrationform-participant.txt.twig',
-                                  array('site'    => $this->site,
-                                        'globals' => $this->globals,
-                                        'name'    => $task->getPseudonym(),
-                                        'email'   => $task->getEmail(),
-                                        'date'    => date('r'))));
-              $mailer->send($message);
-              
-              $participant = new Participant(false, $task->getPseudonym(), $task->getEmail(), null);
-              $encoder = $this->container->get('security.password_encoder');
-              $encodedPw = $encoder->encodePassword($participant, $password);
-              $participant->setPassword($encodedPw);
-
-              $em->persist($participant);
-              $em->flush();
-
-              $request->getSession()->getFlashBag()->add('success',$translator->trans('Thank you for your interest in this study. A confirmation email was sent to you. We will be in touch with you shortly.'));
-              return $this->redirect($this->generateUrl('ucl_study_homepage'));
-            }
-          } catch (IOException $e) {
-            $request->getSession()->getFlashBag()->add('error', $translator->trans('The registration process was interrupted by an error on the server: %errMsg%. Please try again later, or contact us if it keeps happening.', array('%errMsg%', $e->getMessage())));
+            $yaml = $task->makeScreeningYaml();
+            $filename = $store->makeFile($yaml, "yaml", $task->getEmail());
+          } catch (Exception $e) {
+            $request->getSession()->getFlashBag()->add('error', $translator->trans('An error occurred while processing your registration: %errMsg%. Please try again later, or contact us if it keeps happening.', array('%errMsg%' => $e->getMessage())));
           }
+          if ($filename)
+          {
+            $mailer = $this->get('mailer');
+            
+            $message = $mailer->createMessage()
+                ->setSubject($translator->trans('[%id% study] New Registration from %pseudonym% on (%date%)',
+                                                array('%id%' => $this->globals['study_id'], '%pseudonym%' => $task->getPseudonym(), '%date%' => date('Y-m-d'))))
+                ->setFrom($this->getEmailAddress())
+                ->setReplyTo($task->getEmail())
+                ->setTo($this->site['author_email'])
+                ->setBody($this->renderView('UCLStudyBundle:Mail:registrationform.txt.twig',
+                                array('site'    => $this->site,
+                                      'globals' => $this->globals,
+                                      'name'    => $task->getPseudonym(),
+                                      'email'   => $task->getEmail(),
+                                      'date'    => date('r'))));
+            $mailer->send($message);
+            
+            // If you ever need to email participants their passwords, it happens here.
+            // For now the passwords are in the store for us to hand out, and they are not in use anyway.
+            $message = $mailer->createMessage()
+                ->setSubject($translator->trans('[%id% study] Thank you for registering!', array('%id%' => $this->globals['study_id'])))
+                ->setFrom($this->getEmailAddress())
+                ->setReplyTo($this->site['author_email'])
+                ->setTo($task->getEmail())
+                ->setBody($this->renderView('UCLStudyBundle:Mail:registrationform-participant.txt.twig',
+                                array('site'    => $this->site,
+                                      'globals' => $this->globals,
+                                      'name'    => $task->getPseudonym(),
+                                      'email'   => $task->getEmail(),
+                                      'date'    => date('r'))));
+            $mailer->send($message);
+            
+            // FIXME: it might seem strange to not modify the participant based on screening but we're refactoring the screening code next
+            $participant = new Participant(false, $task->getPseudonym(), $task->getEmail(), null, PARTICIPANT_NOT_STARTED_YET, PARTICIPANT_WAITING_ENROLLMENT);
+            $encoder = $this->container->get('security.password_encoder');
+            $encodedPw = $encoder->encodePassword($participant, $password);
+            $participant->setPassword($encodedPw);
+
+            $em->persist($participant);
+            $em->flush();
+
+            $request->getSession()->getFlashBag()->add('success',$translator->trans($confirmationMsg));
+            return $this->redirect($this->generateUrl('ucl_study_homepage'));
+          }
+        } catch (IOException $e) {
+          $request->getSession()->getFlashBag()->add('error', $translator->trans('The registration process was interrupted by an error on the server: %errMsg%. Please try again later, or contact us if it keeps happening.', array('%errMsg%', $e->getMessage())));
         }
       }
       else if($form->isSubmitted())
@@ -146,13 +139,6 @@ class DefaultController extends UCLStudyController
             $has_seen_local_errors = true;
             $params['err_'.substr($offender->getPropertyPath(),5)] = $err->getMessage(); //length of 'data.'
           }
-          else if($offender && $offender->getPropertyPath() == "children[email]")
-          {
-            $has_seen_local_errors = true;
-            $params['err_email_different'] = $err->getMessage();
-            $params['err_email_first'] = $offender->getInvalidValue()['first'];
-            $params['err_email_second'] = $offender->getInvalidValue()['second'];
-          }
           else
           {
             $request->getSession()->getFlashBag()->add('error', $err->getMessage());
@@ -167,7 +153,8 @@ class DefaultController extends UCLStudyController
         else if($has_seen_local_errors)
             $request->getSession()->getFlashBag()->add('error', $translator->trans('There are errors in the form, please see the messages below.'));
       }
-      return $this->render('UCLStudyBundle:Default:join.html.twig', $params);
+      return $this->render('UCLStudyBundle:Default:register.html.twig', $params);
+
     }
     
     /**
@@ -175,7 +162,7 @@ class DefaultController extends UCLStudyController
      */
     public function joinAction(Request $request)
     {
-        return $this->redirect($this->generateUrl('ucl_study_join_screening'));
+        return $this->redirect($this->generateUrl('ucl_study_register'));
     }
 
     /**

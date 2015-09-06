@@ -3,12 +3,22 @@
 # {{ site.title | trans | upper }}
 =================================================================
 
-{% set delayXweeks = globals.screening_max_wait %}{% set recipient= site.author %}{%trans%}Hello, %recipient%.
+{% set delayXweeks = globals.screening_max_wait %}{% set recipient= site.author %}
+{% if globals.screen_participants is defined and globals.screen_participants %}
+{%trans%}Hello, %recipient%.
 
 %name% just registered for the study, at %date%.
 Their email address is: %email%
 
 Remember, you must reply within %delayXweeks% from %date%.{%endtrans%}
+{% else %}
+{%trans%}Hello, %recipient%.
+
+%name% just registered for the study, at %date%.
+Their email address is: %email%
+
+Remember, participants are automatically enrolled and %name% can get started already.{%endtrans%}
+{% endif %}
 
 =================================================================
 #  {{ 'This is an automated message, please do not reply directly.' | trans }}
