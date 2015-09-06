@@ -15,22 +15,6 @@ use Symfony\Component\Validator\Constraints as Assert;
    and password is the participant code we'll give to screened participants (or generate when no screening is performed).
  */
 
-define("PARTICIPANT_NOT_STARTED_YET", 0); // Initial state
-define("PARTICIPANT_DONE", -1);           // Getting the last state number would be difficult because of Symfony's structure, so set this when participant's done
-define("PARTICIPANT_INVALID", -2);        // We can use this as a catch-all state for participants we need to lock out
-
-/* Again, Symfony forces us to be very careful. DO NOT MODIFY these constants without also modifying the validation
-   annotation of the currentStep variable. We would need at some point to build up the annotation in PHP to remove
-   this duplication. Also, you do not need to use all states. Sometimes you have no briefing/install actions, etc. */
-define("PARTICIPANT_WAITING_ENROLLMENT", "waiting_enrollment");     // Waiting for researcher to decide whether to recruit
-define("PARTICIPANT_MUST_CONSENT",       "consent");                // Must collect informed consent for this part to start
-define("PARTICIPANT_READY_BRIEFING",     "briefing");               // Must arrange briefing meeting with participant
-define("PARTICIPANT_MUST_START",         "install");                // Must have participant install study software alone
-define("PARTICIPANT_IS_RUNNING",         "running");                // Running the study
-define("PARTICIPANT_PRIMARY_TASK",       "primary_task");           // Performing some primary task
-define("PARTICIPANT_READY_DEBRIEFING",   "debriefing");             // Must meet for debriefing
-define("PARTICIPANT_FINISHED_PART",      "done");                   // Must pay participant and switch to next part based on communication with her
-
 /**
  * UCL\StudyBundle\Entity\Participant
  *
@@ -84,9 +68,9 @@ class Participant implements UserInterface, AdvancedUserInterface, EquatableInte
    */
   private $currentPart;
 
-  public function __construct($active = true, $username = null, $email = null, $password = null, $part = PARTICIPANT_NOT_STARTED_YET, $step = PARTICIPANT_WAITING_ENROLLMENT, $id = 0)
+  public function __construct($username = null, $email = null, $password = null, $part = 1, $step = "unknown", $id = 0)
   {
-    $this->active = $active;
+    $this->active = true;
     $this->currentPart = $part;
     $this->currentStep = $step;
     $this->username = $username;
@@ -274,7 +258,7 @@ class Participant implements UserInterface, AdvancedUserInterface, EquatableInte
      * @param string $currentStep
      * @return Participant
      */
-    public function setcurrentStep($currentStep)
+    public function setCurrentStep($currentStep)
     {
         $this->currentStep = $currentStep;
 
@@ -286,7 +270,7 @@ class Participant implements UserInterface, AdvancedUserInterface, EquatableInte
      *
      * @return string 
      */
-    public function getcurrentStep()
+    public function getCurrentStep()
     {
       return $this->currentStep;
     }
@@ -298,10 +282,23 @@ class Participant implements UserInterface, AdvancedUserInterface, EquatableInte
      *
      * @return boolean
      */
-    public function hasDoneStep($_part, $step)
+    public function hasDoneStep($_part, $step, $enabledSteps)
     {
       //TODO
-      return true;
+      if ($this->currentPart == $_part)
+      {
+        $queriedKey = array_search($step, $enabledSteps);
+        if ($queriedKey === FALSE)
+          return false;
+
+        $currentKey = array_search($this->currentStep, $enabledSteps);
+        if ($currentKey === FALSE)
+          return false;
+
+        return $currentKey > $queriedKey;
+      }
+      else
+        return $this->currentPart > $_part;
     }
 
     /**

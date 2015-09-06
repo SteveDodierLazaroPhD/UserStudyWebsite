@@ -108,8 +108,9 @@ class DefaultController extends UCLStudyController
                                       'date'    => date('r'))));
             $mailer->send($message);
             
-            // FIXME: it might seem strange to not modify the participant based on screening but we're refactoring the screening code next
-            $participant = new Participant(false, $task->getPseudonym(), $task->getEmail(), null, PARTICIPANT_NOT_STARTED_YET, PARTICIPANT_WAITING_ENROLLMENT);
+            $enabledSteps = $this->getEnabledStepsForPart(1, 'participant_space');
+            \Doctrine\Common\Util\Debug::dump($enabledSteps);
+            $participant = new Participant($task->getPseudonym(), $task->getEmail(), null, 1, $enabledSteps[0]);
             $encoder = $this->container->get('security.password_encoder');
             $encodedPw = $encoder->encodePassword($participant, $password);
             $participant->setPassword($encodedPw);

@@ -14,19 +14,21 @@ parameters:
       start_date: 2015
       end_date: 2015
       verify_app_install: true
+      screen_participants: true
+      recruitment_open: false
       part_count: 2
       spam_question: "Anti-spam: Where is UCL located?"
       spam_correct_answer: London
       spam_answer_bag: [Paris, London, Beijing, Mexico, Seoul]
       maxgain: '%ucl_study.maxgain%'
       currency: '£'
-      join_icon: 'flag-checkered' # can be a currency (btc, eur, gbp, ils, inr, money (generic), rmb, rub, rupee, try, usd, won, yen), or 'heartbeat' or any other FontAwesome icon
+      register_icon: 'flag-checkered' # can be a currency (btc, eur, gbp, ils, inr, money (generic), rmb, rub, rupee, try, usd, won, yen), or 'heartbeat' or any other FontAwesome icon
       screening_max_wait: '3 weeks'
       participant_dpa_disclaimer: 'Any personal information you give to us will be processed in accordance with the UK Data Protection Act 1998. It will be used solely for the purposes of the study, and no information shall be published that can personally identify you. Your data will be stored within UCL at all times and deleted within three years of being collected. You can, at any time during the study, contact us to amend or delete the data we collected on you, or to opt out entirely from the study.'
       prescreening_dpa_disclaimer: 'Any personal information you give to us will be processed in accordance with the UK Data Protection Act 1998. It will be used solely for the purposes of the study, and no information shall be published that can personally identify you. Your data will be stored within UCL at all times and deleted within three years of being collected. If you are not selected for the study, we will delete the information and email address you provided us within %ucl_study.screening_max_wait%.'
     
     
-    
+    ### TODO create a step for payment details collection
     
     # Site-related variables
     ucl_study.site:
@@ -59,13 +61,13 @@ parameters:
           #enabled_steps: []
           # Pages that are not study steps but informational. Are always accessible, but may be hidden from a specific menu (e.g. you might want to display
           # nothing when on the consent form step); There is no access control, hence you don't actually have to define additional_pages.
-          #additional_pages: [join, login, infopre, contact, hello]
+          #additional_pages: [register, login, infopre, contact, hello]
           # Default visible steps for when the visible_steps key has not been defined
-          default_visible: [join, login, infopre, contact]
+          default_visible: [register, login, infopre, contact]
           # The navigation key contains direct menu items pointing to pages. Other things can be contained (such as a part name, or a list of enabled pages for this part)
           navigation:
-            join:
-              href: "ucl_study_join"
+            register:
+              href: "ucl_study_register"
               caption: "Join the Study"
               tooltip: "Earn up %ucl_study.maxgain% by letting us collect data about what you do on your computer!"
             login:
@@ -83,26 +85,13 @@ parameters:
 
       # Participants links
       participant_space:
-        part_0:
-          name: "Enrollment"
-          # The enabled steps in the participant space represent the workflow of the study.
-          # All steps (even the ones managed by the app) must be included here, or the site
-          # will be broken!
-          enabled_steps: [waiting_enrollment]
-          default_visible: [waiting_enrollment]
-          navigation:
-            waiting_enrollment:
-              href: "ucl_study_part_waiting_enrollment"
-              caption: "What Happens Next?"
-              tooltip: "You must wait until you are enrolled into the study"
-              visible_steps: [waiting_enrollment]
         part_1:
           name: "Data Collection"
           title: 'Activity Data Collection'
           # The enabled steps in the participant space represent the workflow of the study.
           # All steps (even the ones managed by the app) must be included here, or the site
           # will be broken!
-          enabled_steps: [consent, install, running, debriefing, done]
+          enabled_steps: [waiting_enrollment, consent, install, running, debriefing, done]
           #additional_pages: [manual, information]
           default_visible: [consent, manual, information]
           # The gains of participants for reaching the step (pre) or completing it (post)
@@ -115,7 +104,7 @@ parameters:
               pre: 5
               post:
                 per_day: 1.5
-                min_days: 14
+                min_days: 1
                 max_days: 20
                 max: 30
                 overrides_pre: true
@@ -126,6 +115,13 @@ parameters:
                 fixed: 20
                 overrides_pre: false
           navigation:
+            waiting_enrollment:
+              href: "ucl_study_part_waiting_enrollment"
+              href_params:
+                _part: 1
+              caption: "What Happens Next?"
+              tooltip: "You must wait until you are enrolled into the study"
+              visible_steps: [waiting_enrollment]
             consent:
               href: "ucl_study_part_consent"
               href_params:
@@ -243,9 +239,6 @@ parameters:
       # next study step from within the application API handlers, it is the
       # participant_space's enabled_steps that are used again to determine progression.
       application_space:
-        part_0:
-          default_visible: []
-          navigation: []
         part_1:
           default_visible: [running,manual,information]
           navigation:

@@ -2,7 +2,7 @@
 {% extends 'UCLStudyBundle::base.html.twig' %}
 
 {% block article_details %}
-{% if user.hasDoneStep(_part, 'install') %}
+{% if user.hasDoneStep(_part, 'install', enabledSteps) %}
 <div class="bs-callout bs-callout-info alert alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;&nbsp;</span></button><i class="fa fa-info-circle fa-lg fa-fw text-info"></i> {{ 'You have already activated the study application, but you can use the instructions below to reinstall your application if necessary.' | trans }}</div>
 {% endif %}
 {% endblock %}

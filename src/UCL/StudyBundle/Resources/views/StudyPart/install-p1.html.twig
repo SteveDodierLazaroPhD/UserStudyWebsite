@@ -54,7 +54,7 @@
 {% endblock %}
 
 {% block article_appendix %}
-{% if user.hasDoneStep(_part, 'install') %}
+{% if user.hasDoneStep(_part, 'install', enabledSteps) %}
 <hr />
 {% set kudos_message %}{{ 'Congratulations! You can now launch the study software and start collecting data.' | trans }}{% endset %}
 {% include ('UCLStudyBundle::kudos.html.twig') %}

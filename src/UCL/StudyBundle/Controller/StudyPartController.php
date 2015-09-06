@@ -168,6 +168,7 @@ class StudyPartController extends UCLStudyController
     {
       $params = $this->setupParameters($request, true, 'install', $_part);
       $params['page'] = array('title' => $this->get('translator')->trans('Software Installation Instructions'));
+      $params['enabledSteps'] = $this->getEnabledStepsForPart($_part);
 
       if ($this->globals['verify_app_install'] !== 'true')
           $this->takeParticipantToNextStep($_part, 'install');
@@ -211,22 +212,23 @@ class StudyPartController extends UCLStudyController
     }
 
     /**
-     * @Route("/p/waiting_enrollment", name="ucl_study_part_waiting_enrollment")
+     * @Route("/p/{_part}/waiting_enrollment", name="ucl_study_part_waiting_enrollment",
+     *    defaults={"_part" = 1},
+     *    requirements={"_part": "\d+"})
      */
-    public function waitingEnrollmentAction(Request $request)
+    public function waitingEnrollmentAction($_part, Request $request)
     {
-      $params = $this->setupParameters($request, true, 'waiting_enrollment', null);
-      $params['_part'] = 0; /* manually injecting this, since we told setupParameters this was not a 'normal' part page and it didn't */
+      $params = $this->setupParameters($request, true, 'waiting_enrollment', $_part);
       $params['page'] = array('title' => $this->get('translator')->trans('You Are Not Enrolled Yet'));
       
-      /* Verify not showing waiting_enrollment to an enrolled user */
-      if($this->getUser()->getCurrentPart() == 0)
+      if ($this->globals['screen_participants'] == true)
       {
         return $this->render('UCLStudyBundle:StudyPart:waiting-enrollment.html.twig', $params);
       }
       else
       {
-        throw $this->createAccessDeniedException($this->get('translator')->trans('Access Denied: you are already enrolled in the study.'));
+        $this->takeParticipantToNextStep($_part, 'waiting_enrollment');
+        return $this->nextUserTaskAction($request);
       }
     }
 
@@ -237,13 +239,6 @@ class StudyPartController extends UCLStudyController
     {
       /* $params = */$this->setupParameters($request, true, 'next', null);
 
-      if($this->getUser()->getCurrentPart() == 0)
-      {
-        return $this->redirect($this->generateUrl('ucl_study_part_waiting_enrollment'));
-      }
-      else
-      {
-        return $this->redirect($this->generateUrl('ucl_study_part_'.$this->getUser()->getCurrentStep(), array('_part' => $this->getUser()->getCurrentPart())));
-      }
+      return $this->redirect($this->generateUrl('ucl_study_part_'.$this->getUser()->getCurrentStep(), array('_part' => $this->getUser()->getCurrentPart())));
     }
 }

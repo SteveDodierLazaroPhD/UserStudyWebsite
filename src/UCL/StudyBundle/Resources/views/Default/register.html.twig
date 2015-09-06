@@ -4,12 +4,14 @@
 
 {% block body %}
     <p class="lead">{{ 'We will need a bit of information about you, to help us ensure participants from multiple backgrounds, genders and levels of proficiency are represented in the study.' | trans }}</p>
+  {% if globals.screen_participants %}
     <div class="form-row clearfix">
       <div class="col-sm-6"><p class="bs-callout bs-callout-success">{{ '<strong>If you are selected</strong>, you will receive an email with a complete breakdown of what will happen. You can then decide if you still want to join.' | trans | raw }}</p></div>
       <div class="col-sm-6"><p class="bs-callout bs-callout-danger">{{ '<strong>If you are not selected</strong>, We will let you know within 3 weeks and your details will be permanently deleted.</p>' | trans | raw }}</div>
     </div>
+  {% endif %}
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-  <div class="form-row">
+  <div class="form-row clearfix">
       {% if err_pseudonym is defined %}
         <div class="form-group has-error">{{ form_row(form.pseudonym) }}<aside class="alert alert-warning">{{ err_pseudonym }}</aside></div>
       {% elseif err_pseudonymValid is defined %}
