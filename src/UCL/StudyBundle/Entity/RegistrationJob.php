@@ -15,6 +15,7 @@ class RegistrationJob extends EntityRepository
    * @Assert\NotBlank(message = "participant.pseudonym.not_blank",)
    */
   protected $pseudonym;
+
   /**
    * @Assert\NotBlank(message = "participant.email.not_blank",)
    * @Assert\Email(
@@ -24,6 +25,14 @@ class RegistrationJob extends EntityRepository
    */
   protected $email;
 
+  /**
+   * @Assert\NotBlank(message = "participant.email.not_blank",)
+   * @Assert\Email(
+   *     message = "participant.email.invalid",
+   *     checkMX = true
+   * )
+   */
+  protected $email2;
 
   /* PII fields (not readable after locked) */
   /**
@@ -85,6 +94,7 @@ class RegistrationJob extends EntityRepository
     // Note that email (repeated) and browser (choices multiple) are not automatically managed and need manual data instantiation in the controller
     $this->pseudonym    = $initial ? (array_key_exists('pseudonym', $initial) ? $initial['pseudonym'] : '') : '';
     $this->email        = $initial ? (array_key_exists('email', $initial) ? $initial['email'] : '') : '';
+    $this->email2       = $initial ? (array_key_exists('email2', $initial) ? $initial['email2'] : '') : '';
     $this->age          = $initial ? (array_key_exists('age', $initial) ? $initial['age'] : '') : '';
     $this->gender       = $initial ? (array_key_exists('gender', $initial) ? $initial['gender'] : '') : '';
     $this->proficiency  = $initial ? (array_key_exists('proficiency', $initial) ? $initial['proficiency'] : '') : '';
@@ -92,7 +102,7 @@ class RegistrationJob extends EntityRepository
     $this->distro       = $initial ? (array_key_exists('distro', $initial) ? $initial['distro'] : '') : '';
     $this->distroOther  = $initial ? (array_key_exists('distro_other', $initial) ? $initial['distro_other'] : '') : '';
     $this->de           = $initial ? (array_key_exists('de', $initial) ? $initial['de'] : '') : '';
-    $this->browser      = $initial ? (array_key_exists('browser', $initial) ? $initial['browser'] : '') : '';
+    $this->browser      = $initial ? (array_key_exists('browser', $initial) ? $initial['browser'] : []) : [];
     $this->clearpw      = null;
   }
 
@@ -114,6 +124,16 @@ class RegistrationJob extends EntityRepository
   public function setEmail($email)
   {
     $this->email = $email;
+  }
+
+  public function getEmail2()
+  {
+    return $this->email2;
+  }
+
+  public function setEmail2($email)
+  {
+    $this->email2 = $email;
   }
 
   public function getGender()
@@ -248,6 +268,14 @@ class RegistrationJob extends EntityRepository
     } finally {
       return $user === null;
     }
+  }
+
+  /**
+   * @Assert\True(message = "participant.email.match")
+   */
+  public function isEmail2Valid()
+  {
+    return $this->email === $this->email2;
   }
 
   /**

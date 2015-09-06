@@ -16,15 +16,33 @@ class RegistrationType extends AbstractType
           'label'     => 'form.reg.pseudonym',
       ));
 
-      $builder->add('email', 'repeated', array(
+/* FIXME It is currently impossible to get a repeated field validated because of a bug in Symfony. If we use the code
+         below and only map the first item, it will map onto the constraint validations of the RegistrationJob, but it
+         will not validate for difference with the second item. If we map the second item, the RegistrationJob will
+         receive an array every time both items are different, which will cause an exception in Doctrine's constraint
+         validation routines. We're better off not using repeated fields at all until they fix those. 
+        $builder->add('email', 'repeated', array(
           'type' => 'email',
           'invalid_message' => 'form.reg.email.match',
-          'first_options'   => array('label' => 'form.reg.email.one'),
-          'second_options'  => array('label' => 'form.reg.email.two'),
+          'first_options'   => array('label'  => 'form.reg.email.one',
+                                     'mapped' => true),
+          'second_options'  => array('label'  => 'form.reg.email.two',
+                                     'mapped' => false),
           'data'            => $options['email'],
-          'required' => true,
+          'required'        => true,
       ));
-      
+*/
+
+        $builder->add('email', 'email', array(
+          'label'  => 'form.reg.email.one',
+          'required'        => true,
+      ));
+
+        $builder->add('email2', 'email', array(
+          'label'  => 'form.reg.email.two',
+          'required'        => true,
+      ));
+
       $builder->add('proficiency', 'choice', array(
           'label'      => 'form.reg.proficiency.label',
           'choices'   => array(
@@ -89,11 +107,11 @@ class RegistrationType extends AbstractType
       $builder->add('browser', 'choice', array(
           'label' => 'form.reg.browser.label',
           'choices'   => array(
-              //'firefox'   => 'form.reg.browser.ff',
+              'firefox'   => 'form.reg.browser.ff',
               'chrome' => 'form.reg.browser.chrome',
               'other'   => 'form.reg.browser.other',
           ),
-          'data'      => $options['browser'],
+          //'data'      => $options['browser'],
           'multiple'  => true,
           'required'  => true,
           'expanded'  => true,
@@ -106,7 +124,12 @@ class RegistrationType extends AbstractType
           'expanded'  => true,
       ));
       
-      $builder->add('register', 'submit', array('label' => 'form.reg.submit'));
+      if ($options['screening'])
+        $submitlabel = 'form.reg.submit_screening';
+      else
+        $submitlabel = 'form.reg.submit_automatic';
+      
+      $builder->add('register', 'submit', array('label' => $submitlabel));
     }
     
     public function getName()
@@ -117,11 +140,13 @@ class RegistrationType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'email'           => '',
+//            'email'           => array('', ''),
             'browser'         => array(),
-            'error_mapping' => array(
+            'screening'       => false,
+            'error_mapping'   => array(
               'isDistroValid' => 'distro',
-              'isEmailValid' => 'email',
+              'isEmailValid'  => 'email',
+              'isEmail2Valid' => 'email2',
               'isPseudonymValid' => 'pseudonym',
              ),
         ));

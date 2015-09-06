@@ -24,6 +24,7 @@ participant:
     already_used: This email address is already in use.
     not_blank: You must provide an email address.
     invalid: The email '{{ value }}' is not a valid email address.
+    match: The email addresses must match.
   pseudonym:
     already_used: This nickname is already in use.
     not_blank: You must provide a nickname.
