@@ -9,12 +9,13 @@
 <h2>{{ '1. Add our repository to your software sources' | trans }}</h2>
   <h3>{{ 'Fast method, using the terminal' | trans }}</h3>
     <ol class="list-group">
-    <li class="list-group-item">{{ 'Open a terminal and type the following command:' | trans }} <code>sudo add-apt-repository ppa:ucl-cs-study-devs/multitasking-study</pre></code>
+    <li class="list-group-item">{{ 'Open a terminal and type the following commands:' | trans }}
+        <pre><span class="fa fa-angle-right fa-fw"></span>sudo add-apt-repository ppa:ucl-cs-study-devs/multitasking-study<br /><span class="fa fa-angle-right fa-fw"></span>sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 23E7A2C9</pre>
     </ol>
   
-  <h3>{{ 'Slower method' | trans }}</h3>
+  <h3>{{ 'Slower method, with the user interface' | trans }}</h3>
   <div class="bs-callout bs-callout-default"><p class="small">{{ 'You can find instructions with pictures <a href="https://askubuntu.com/a/40351/400786">here.</a>' | trans | raw }}</p></div>
-  <div class="bs-callout bs-callout-danger"><p class="small">{{ 'Please be aware that you will need to add the PPA\'s signing key to your list of trusted software providers.' | trans | raw }}</p></div>
+  {# <div class="bs-callout bs-callout-danger"><p class="small">{{ 'Please be aware that you will need to add the PPA\'s signing key to your list of trusted software providers.' | trans | raw }}</p></div> #}
   <ol class="list-group">
     <li class="list-group-item">{{ 'Open the <span class="fa fa-gear fa-fw"></span>Ubuntu Software Center.' | trans | raw }}</li>
     <li class="list-group-item">{{ 'In the software center, open the <code>Edit</code> menu and select <code>Software Sources</code>.' | trans | raw}}</li>
@@ -22,16 +23,20 @@
     <li class="list-group-item">{{ 'Switch to the <code>Other Software</code> tab.' | trans | raw }}</li>
     <li class="list-group-item">{{ 'Click on the <button class="btn disabled" disabled>Add...</button> button, and paste <kbd><strong>ppa:ucl-cs-study-devs/multitasking-study</strong></kbd> into the input box.' | trans | raw }}</li>
     <li class="list-group-item">{{ 'Click on the <button class="btn disabled" disabled><i class="fa fa-plus alert-success"></i> Add Source</button> button.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'Switch to the <code>Authentication</code> tab.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'Visit the <a href="http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0xAE505B7423E7A2C9">Ubuntu keyserver website</a> to retrieve our signing key.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'Save the contents of the Web page from <code>-----BEGIN ...-----</code> to <code>-----END ...-----</code> to a file.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'Click on the <button class="btn disabled" disabled>Import Key File...</button> button, and select the file you just created.' | trans | raw }}</li>
     <li class="list-group-item">{{ 'Make sure the software center refreshes the list of available software.' | trans }}</li>
   </ol>
 
 <hr />
-<h2>{{ '2. Install the UCL Study Manager' | trans }}</h2>
-    <div class="bs-callout bs-callout-default"><p class="small">{{ 'The study manager will replace some libraries and applications on your system, including Unity, Nautilus, GTK+ and the GLib. This is normal, as we use modified versions of these libraries and applications to collect data. You will be able to return to the original applications the next time they are updated by Ubuntu once the study is over, or by removing our PPA from your list of software sources and reinstalling the applications.' | trans }}</p></div>
+<h2>{{ '2. Install the UCL Study Software' | trans }}</h2>
+    <div class="bs-callout bs-callout-default"><p class="small">{{ 'The study software will replace some libraries and applications on your system, including Unity, Nautilus, GTK+ and the GLib. This is normal, as we use modified versions of these libraries and applications to collect data. You will be able to return to the original applications the next time they are updated by Ubuntu once the study is over, or by removing our PPA from your list of software sources and reinstalling the applications.' | trans }}</p></div>
   <ol class="list-group">
     <li class="list-group-item">{{ 'Open the <span class="fa fa-gear fa-fw"></span>Ubuntu Software Center.' | trans | raw }}</li>
-    <li class="list-group-item">{{ 'In the search input box in the top-right corner, type <kbd><strong>ucl-study-manager</strong></kbd>.' | trans | raw }}</li>
-    <li class="list-group-item">{{ 'The <span class="fa fa-gear fa-fw"></span>UCL Study Manager should appear in the search results. Click on the <button class="btn disabled">Install</button> button on the right side.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'In the search input box in the top-right corner, type <kbd><strong>ucl-multitasking-study</strong></kbd>.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'The UCL Multitasking Study package should appear in the search results. Click on the <button class="btn disabled">Install</button> button on the right side.' | trans | raw }}</li>
     <li class="list-group-item">{{ 'Open the <span class="fa fa-gear fa-fw"></span>UCL Study Manager and log in to register the application. If you forget this step, your reward might be incorrectly calculated.' | trans | raw }}</li>
   </ol>
    {# <p>You must install the <code>ucl-study-manager</code> package from your newly added repository. You can do so by <a href="apt://ucl-study-manager" title="Click to install directly">clicking here</a> or by opening the <span class="fa fa-gear fa-fw"></span>Ubuntu App Store and searching for the UCL Study Manager.</p>#}
