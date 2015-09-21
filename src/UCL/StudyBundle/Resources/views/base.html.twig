@@ -7,7 +7,7 @@
 	  <meta name="HandheldFriendly" content="True">
 	  <meta name="MobileOptimized" content="640">
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
-
+	  
 {% block stylesheets %}
     {% stylesheets
         'css/bootstrap.css'
@@ -18,12 +18,7 @@
     {% endstylesheets %}
     <link rel="icon" type="image/x-icon" href="{{ asset('bundles/uclstudy/images/favicon.ico') }}" />
 {% endblock %}
-
   </head>
-
-{% if using_form is defined and using_form == "form" %}
-{% form_theme form _self 'UCLStudyBundle:Form:form.html.twig' %}
-{% endif %}
 
   <body class="load">
 		<div class="photograph-wrapper">
@@ -88,7 +83,6 @@
     </script>
     
     
-    {% if using_form is defined and using_form == "form" %}
     {% javascripts
         'js/jquery.js'
         'js/bootstrap_transition_1.js'
@@ -97,14 +91,6 @@
         'bundles/uclstudy/js/fix-bootstrap-button-input.js' output='scripts-generated-form.js' %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
-    {% else %}
-    {% javascripts
-        'js/jquery.js'
-        'js/bootstrap_transition_1.js'
-        'js/bootstrap_alert_2.js'  output='scripts-generated.js' %}
-    <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    {% endif %}
 {% endblock %}
 
 
