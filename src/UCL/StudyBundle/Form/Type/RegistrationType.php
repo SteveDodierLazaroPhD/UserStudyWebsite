@@ -80,6 +80,8 @@ class RegistrationType extends AbstractType
           'choices'   => array(
               //'debian'   => 'Debian',
               'ubuntu' => 'form.reg.distro.ubuntu',
+              'debian' => 'form.reg.distro.debian',
+              'mint' => 'form.reg.distro.mint',
               'other'   => 'form.reg.distro.other',
           ),
           'multiple'  => false,
@@ -95,7 +97,7 @@ class RegistrationType extends AbstractType
       $builder->add('de', 'choice', array(
           'label' => 'form.reg.de.label',
           'choices'   => array(
-              //'xfce'   => 'form.reg.de.xfce',
+              'xfce'   => 'form.reg.de.xfce',
               'unity' => 'form.reg.de.unity',
               //'gnome' => 'form.reg.de.gnome',
               'other'   => 'form.reg.de.other',
