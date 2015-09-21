@@ -1,6 +1,5 @@
 {% if space is defined and space == "application_space" %}
   {# We are displaying from the app, which is able to upload. There will be an upload form #}
-  {% set using_form = "form" %}
   {% set space_target = 'app' %}
 {% else %}
   {% set space_target = 'base' %}

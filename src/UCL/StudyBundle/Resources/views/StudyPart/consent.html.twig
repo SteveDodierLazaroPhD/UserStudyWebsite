@@ -1,7 +1,4 @@
 {% set infosheet_template %}UCLStudyBundle:StudyPart:{% if step == 'Inform'%}infosheet{% else %}consent{% endif %}-p{{ _part }}.html.twig{% endset %}
-{% if step != "AlreadyDone" %}
-  {% set using_form = "form" %}
-{% endif %}
 {% set layout = "article" %}
 {% extends ''~infosheet_template~'' %}
 
@@ -14,13 +11,7 @@
   {{ form_start(form) }}
       <fieldset>
       {% if step == "Inform" %}
-      <div class="form-row">
-        {% if err_check is defined %}
-          <div class="form-group has-error">{{ form_row(form.check) }}<aside class="alert alert-warning">{{ err_check }}</aside></div>
-        {% else %}
-          {{ form_row(form.check) }}
-        {% endif %}
-      </div>
+        {{ form_row(form.check) }}
       {% endif %}
 
       <div class="form-row">

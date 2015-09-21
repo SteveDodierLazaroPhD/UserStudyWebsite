@@ -1,4 +1,3 @@
-{% set using_form = "form" %}
 {% if space is defined and space == 'application_space' %}
 {% set base = 'UCLStudyBundle::app.html.twig' %}
 {% else %}
@@ -16,40 +15,10 @@
     {#<form name="form" method="post" action="" onsubmit="return validation();">#}
     {{ form_start(form) }}
     <fieldset>
-
-    <div class="form-row">
-      {% if err_pseudonym is defined %}
-        <div class="form-group has-error">{{ form_row(form.pseudonym) }}<aside class="alert alert-warning">{{ err_pseudonym }}</aside></div>
-      {% else %}
-        {{ form_row(form.pseudonym) }}
-      {% endif %}
-    </div>
-    <div class="form-row">
-      {% if err_email is defined %}
-        <div class="form-group has-error">{{ form_row(form.email) }}<aside class="alert alert-warning">{{ err_email }}</aside></div>
-      {% else %}
-        {{ form_row(form.email) }}
-      {% endif %}
-    </div>
-
-    <div class="form-row">
-      {% if err_message is defined %}
-        <div class="form-group has-error">{{ form_row(form.message) }}<aside class="alert alert-warning">{{ err_message }}</aside></div>
-      {% else %}
-        {{ form_row(form.message) }}
-      {% endif %}
-    </div>
-
-    <div class="form-row"{% if space is defined and (space == 'application_space' or space == 'participant_space') %} hidden{% endif %}>
-      {% if err_spamcheck is defined %}
-        <div class="form-group has-error">{{ form_row(form.spamcheck) }}<aside class="alert alert-warning">{{ err_spamcheck }}</aside></div>
-      {% else %}
-        {{ form_row(form.spamcheck) }}
-      {% endif %}
-    </div>
-    {#<div class="actions">
-      <input type="submit" value="Send Your Message" name="submit" id="submitButton" class="btn btn-info pull    -right" title="Click here to submit your message!" />
-    </div>	#}
+      {{ form_row(form.pseudonym) }}
+      {{ form_row(form.email) }}
+      {{ form_row(form.message) }}
+      {{ form_row(form.spamcheck) }}
       {{ form_row(form.write, {}) }}
     </fieldset>
     {{ form_end(form) }}

@@ -1,4 +1,3 @@
-{% set using_form = "form" %}
 {% set prescreening = "True" %}
 {% extends 'UCLStudyBundle::base.html.twig' %}
 
@@ -12,104 +11,30 @@
   {% endif %}
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
   <div class="form-row clearfix">
-      {% if err_pseudonym is defined %}
-        <div class="form-group has-error">{{ form_row(form.pseudonym) }}<aside class="alert alert-warning">{{ err_pseudonym }}</aside></div>
-      {% elseif err_pseudonymValid is defined %}
-        <div class="form-group has-error">{{ form_row(form.pseudonym) }}<aside class="alert alert-warning">{{ err_pseudonymValid }}</aside></div>
-      {% else %}
         {{ form_row(form.pseudonym) }}
-      {% endif %}
     <aside>{{ 'It doesn\'t have to be your real name, but we will need your real name later on to issue payments.' | trans }}</aside>
   </div>
-  {% if err_email is defined or err_emailValid is defined %}
-    <div class="has-error">{{ form_row(form.email) }}
-    {% if err_email is defined %}
-      <aside class="alert alert-warning">{{ err_email }}</aside>
-    {% endif %}
-    {% if err_emailValid is defined %}
-      <aside class="alert alert-warning">{{ err_emailValid }}</aside>
-    {% endif %}
-    </div>
-  {% else %}
+
   {{ form_row(form.email) }}
-  {% endif %}
-
-  {% if err_email2 is defined or err_email2Valid is defined %}
-    <div class="has-error">{{ form_row(form.email2) }}
-    {% if err_email2 is defined %}
-      <aside class="alert alert-warning">{{ err_email2 }}</aside>
-    {% endif %}
-    {% if err_email2Valid is defined %}
-      <aside class="alert alert-warning">{{ err_email2Valid }}</aside>
-    {% endif %}
-    </div>
-  {% else %}
   {{ form_row(form.email2) }}
-  {% endif %}
 
+  {{ form_row(form.age) }}
+  {{ form_row(form.gender) }}
+  {{ form_row(form.occupation) }}
 
-  {% if err_age is defined %}
-    <div class="form-group has-error">{{ form_row(form.age, {'attr': {'class': 'btn alert-danger'}}) }}<aside class="alert alert-warning">{{ err_age }}</aside></div>
-  {% else %}
-    {{ form_row(form.age) }}
-  {% endif %}
-  {% if err_gender is defined %}
-    <div class="form-group has-error">{{ form_row(form.gender, {'attr': {'class': 'btn alert-danger'}}) }}<aside class="alert alert-warning">{{ err_gender }}</aside></div>
-  {% else %}
-    {{ form_row(form.gender) }}
-  {% endif %}
   <div class="form-row">
-      {% if err_occupation is defined %}
-        <div class="form-group has-error">{{ form_row(form.occupation) }}<aside class="alert alert-warning">{{ err_occupation }}</aside></div>
-      {% else %}
-        {{ form_row(form.occupation) }}
-      {% endif %}
-  </div>
-  <div class="form-row">
-    {% if err_proficiency is defined %}
-      <div class="form-group has-error">{{ form_row(form.proficiency, {'attr': {'class': 'btn alert-danger'}}) }}<aside class="alert alert-warning">{{ err_proficiency }}</aside></div>
-    {% else %}
-      {{ form_row(form.proficiency) }}
-    {% endif %}
+    {{ form_row(form.proficiency) }}
     <aside>{{ '<sub>1</sub> Technical skills include setting up a firewall, configuring a personal website, writing your own software or scripts, compiling a kernel yourself.' | trans | raw }}</aside>
   </div>
   
   <hr />  
  {# <p>The following information will be used to ensure your <span class="fa fa-linux"></span> system is compatible with the software used in the study. If you use a derivate of Debian or Ubuntu, please indicate which one.</p> #}
-  
-  <div class="form-row">
-    {% if err_distro is defined or err_distroValid is defined %}
-      <div class="form-group has-error">{{ form_row(form.distro, {'attr': {'class': 'btn alert-danger'}}) }}
-    {% if err_distro is defined %}<aside class="alert alert-warning">{{ err_distro }}</aside>{% endif %}</div>
-    {% else %}
-      {{ form_row(form.distro) }}
-    {% endif %}
-    {% if err_distro_other is defined or err_distroValid is defined %}
-      <div class="form-group has-error small">{{ form_row(form.distro_other) }}
-    {% if err_distro_other is defined %}<aside class="alert alert-warning">{{ err_distro }}</aside>{% endif %}</div>
-    {% else %}
-      <div class=" small">{{ form_row(form.distro_other) }}</div>
-    {% endif %}
-  {% if err_distroValid is defined %}
-    <aside class="alert alert-warning">{{ err_distroValid }}</aside>
-  {% endif %}
-  </div>
+  {{ form_row(form.distro) }}
+  <div class=" small">{{ form_row(form.distro_other) }}</div>
 
-  <div class="form-row">
-    {% if err_de is defined %}
-      <div class="form-group has-error">{{ form_row(form.de, {'attr': {'class': 'btn alert-danger'}}) }}<aside class="alert alert-warning">{{ err_de }}</aside></div>
-    {% else %}
-      {{ form_row(form.de) }}
-    {% endif %}
-  </div>
+  {{ form_row(form.de) }}
+  {{ form_row(form.browser) }}
 
-  <div class="form-row">
-    {% if err_browser is defined %}
-      <div class="form-group has-error">{{ form_row(form.browser, {'attr': {'class': 'btn alert-danger'}}) }}<aside class="alert alert-warning">{{ err_browser }}</aside></div>
-    {% else %}
-      {{ form_row(form.browser) }}
-    {% endif %}
-  </div>
   <hr />  
 {% include ('UCLStudyBundle::dpa.html.twig') %}
 
