@@ -1,4 +1,23 @@
-{% extends 'bootstrap_3_horizontal_layout.html.twig' %}
+{% extends 'bootstrap_3_layout.html.twig' %}
+
+{% block form_errors -%}
+    {% if errors|length > 0 -%}
+    {% if form.parent %}<span class="help-block">{% else %}<aside class="alert alert-danger">{% endif %}
+    <ul class="list-unstyled">
+        {%- for error in errors -%}
+            <li><span class="fa fa-exclamation-triangle "></span> {{ error.message }}</li>
+        {%- endfor -%}
+    </ul>
+    {% if form.parent %}</span>{% else %}</aside>{% endif %}
+    {%- endif %}
+{%- endblock form_errors %}
+
+{% block submit_widget %}
+    {% spaceless %}
+        {% set type = type|default('submit') %}
+        {{ block('button_widget') }}
+    {% endspaceless %}
+{% endblock submit_widget %}
 
 {% block choice_widget_expanded %}
     {% spaceless %}
@@ -41,14 +60,6 @@
     #}
         {{ form_widget(form) }}
 {%- endblock repeated_row %}
-
-
-{% block submit_widget %}
-    {% spaceless %}
-        {% set type = type|default('submit') %}
-        {{ block('button_widget') }}
-    {% endspaceless %}
-{% endblock submit_widget %}
 
 {% block button_widget %}
     {% spaceless %}

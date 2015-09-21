@@ -31,6 +31,8 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form:
+       resources: ['UCLStudyBundle:Form:form.html.twig']
     globals:
         site:
             title: 'UCL CS Study Server'
@@ -54,6 +56,7 @@ braincrafted_bootstrap:
     assets_dir: %kernel.root_dir%/../vendor/twbs/bootstrap
     fonts_dir: %kernel.root_dir%/../web/fonts
     less_filter: less
+    icon_prefix: fa
     fontawesome_dir: %kernel.root_dir%/../vendor/bmatzner/fontawesome-bundle/Bmatzner/FontAwesomeBundle/Resources/public/
     auto_configure:
         assetic: true
