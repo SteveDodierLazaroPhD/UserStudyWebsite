@@ -38,7 +38,7 @@ class ContactType extends AbstractType
     
     public function getName()
     {
-      return 'registration';
+      return 'contact';
     }
 
     public function configureOptions(OptionsResolver $resolver)

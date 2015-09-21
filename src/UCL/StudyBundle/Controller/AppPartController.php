@@ -352,8 +352,8 @@ class AppPartController extends UCLStudyController
         
       /* Create and handle the form */
       $form = $this->createForm(new UploadType(), $uploadjob);
-      $params['form'] = $form->createView();
       $form->handleRequest($request);
+      $params['form'] = $form->createView();
 
       if($form->isValid())
       {
@@ -386,15 +386,9 @@ class AppPartController extends UCLStudyController
           $request->getSession()->getFlashBag()->add('error', $this->get('translator')->trans('The upload was aborted because of an error on the server (%errMsg%)', array('%errMsg%' => $e->getMessage())));
         }
       }
-      else
+      else if($form->isSubmitted())
       {
-        $iter = $form->getErrors(true, true);
-        while($iter->valid())
-        {
-          $err = $iter->current();
-          $request->getSession()->getFlashBag()->add('error', $err->getMessage());
-          $iter->next();      
-        }
+        $request->getSession()->getFlashBag()->add('error', $translator->trans("There are errors in the form, please see the messages below."));
       }
 
       return $this->render('UCLStudyBundle:App:upload.html.twig', $params);

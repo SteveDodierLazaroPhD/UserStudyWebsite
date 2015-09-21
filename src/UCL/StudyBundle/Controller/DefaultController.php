@@ -36,6 +36,14 @@ class DefaultController extends UCLStudyController
     }
 
     /**
+     * @Route("/join_screening", name="ucl_study_join_screening")
+     */
+    public function joinScreeningAction(Request $request)
+    {
+      return $this->redirect($this->generateUrl('ucl_study_register'));
+    }
+
+    /**
      * @Route("/register", name="ucl_study_register")
      */
     public function registerAction(Request $request)
@@ -65,9 +73,8 @@ class DefaultController extends UCLStudyController
       $task = new RegistrationJob($em, $previous !== null ? $previous : array());
 
       $form = $this->createForm(new RegistrationType(), $task, array('screening' => $this->globals['screen_participants']));
-      $params['form'] = $form->createView();
-      
       $form->handleRequest($request);
+      $params['form'] = $form->createView();
 
       if($form->isValid())
       {
@@ -116,7 +123,6 @@ class DefaultController extends UCLStudyController
             $mailer->send($message);
             
             $enabledSteps = $this->getEnabledStepsForPart(1, 'participant_space');
-            \Doctrine\Common\Util\Debug::dump($enabledSteps);
             $participant = new Participant($task->getPseudonym(), $task->getEmail(), null, 1, $enabledSteps[0]);
             $encoder = $this->container->get('security.password_encoder');
             $encodedPw = $encoder->encodePassword($participant, $password);
@@ -134,32 +140,7 @@ class DefaultController extends UCLStudyController
       }
       else if($form->isSubmitted())
       {
-        $iter = $form->getErrors(true, true);
-        $has_seen_local_errors = false;
-        $has_seen_global_errors = false;
-        while($iter->valid())
-        {
-          $err = $iter->current();
-          $offender = $err->getCause();
-          
-          if($offender && DefaultController::startsWith($offender->getPropertyPath(), 'data.'))
-          {
-            $has_seen_local_errors = true;
-            $params['err_'.substr($offender->getPropertyPath(),5)] = $err->getMessage(); //length of 'data.'
-          }
-          else
-          {
-            $request->getSession()->getFlashBag()->add('error', $err->getMessage());
-            $has_seen_global_errors = true;
-          }
-          
-          $iter->next();      
-        }
-        
-        if($has_seen_global_errors && $has_seen_local_errors)
-            $request->getSession()->getFlashBag()->add('error', $translator->trans('There are additional errors in the form, please see the messages below.'));
-        else if($has_seen_local_errors)
-            $request->getSession()->getFlashBag()->add('error', $translator->trans('There are errors in the form, please see the messages below.'));
+        $request->getSession()->getFlashBag()->add('error', $translator->trans("There are errors in the form, please see the messages below."));
       }
       return $this->render('UCLStudyBundle:Default:register.html.twig', $params);
 
@@ -194,7 +175,7 @@ class DefaultController extends UCLStudyController
       
       $params['page'] = array('title' => $translator->trans('Contact the Researchers'));
 
-      $previous = $request->request->get('form');
+      $previous = $request->request->get('contact');
 
       if (!$previous)
       {
@@ -216,9 +197,8 @@ class DefaultController extends UCLStudyController
       $form = $this->createForm(new ContactType(), $task, array('spam_question' => $this->globals['spam_question'],
                                                                 'spam_answer_bag' => $this->globals['spam_answer_bag'],
                                                                 'spam_translated_answers' => $transbag));
-      $params['form'] = $form->createView();
-      
       $form->handleRequest($request);
+      $params['form'] = $form->createView();
 
       if($form->isValid())
       {
@@ -246,33 +226,9 @@ class DefaultController extends UCLStudyController
       }
       else if($form->isSubmitted())
       {
-        $iter = $form->getErrors(true, true);
-        $has_seen_local_errors = false;
-        $has_seen_global_errors = false;
-        while($iter->valid())
-        {
-          $err = $iter->current();
-          $offender = $err->getCause();
-          
-          if($offender !== null && DefaultController::startsWith($offender->getPropertyPath(), 'data.'))
-          {
-            $has_seen_local_errors = true;
-            $params['err_'.substr($offender->getPropertyPath(),5)] = $err->getMessage(); //length of 'data.'
-          }
-          else
-          {
-            $request->getSession()->getFlashBag()->add('error', $err->getMessage());
-            $has_seen_global_errors = true;
-          }
-          
-          $iter->next();      
-        }
-        
-        if($has_seen_global_errors && $has_seen_local_errors)
-            $request->getSession()->getFlashBag()->add('error', $translator->trans("There are additional errors in the form, please see the messages below."));
-        else if($has_seen_local_errors)
-            $request->getSession()->getFlashBag()->add('error', $translator->trans("There are errors in the form, please see the messages below."));
+        $request->getSession()->getFlashBag()->add('error', $translator->trans("There are errors in the form, please see the messages below."));
       }
+
       return $this->render('UCLStudyBundle:Default:contact.html.twig', $params);
     }
 
