@@ -620,7 +620,7 @@ ol.progtrckr li {
   line-height: 1em;
   margin: 1em 0 0;
   padding: 1em 0;
-  min-width: 140px;
+  min-width: 120px;
   text-align: center;
 }
 ol.progtrckr[data-progtrckr-steps="2"] li { width: 49.99%; }
