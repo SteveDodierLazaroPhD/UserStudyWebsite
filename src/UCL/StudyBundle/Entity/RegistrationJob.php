@@ -296,23 +296,7 @@ class RegistrationJob extends EntityRepository
       return $user === null;
     }
   }
-  
-  /**
-   * Creates a name for the file containing this object.
-   *
-   * @return string The file name.
-   */
-  public function makeFileName()
-  {
-    $extension = 'yaml';
-    date_default_timezone_set('Europe/London');
-    $time = date('Y-m-d_h:i:s');
-    //$date = new DateTime('now', new DateTimeZone('Europe/London'));
-    //$time = $date->format('Y-m-d h:i:s'); //Y-m-d\TH:i:sP
 
-    return $time.'_'.$this->email.'_'.uniqid('', false).'.'.$extension;
-  }
-  
   /**
    * Creates a YAML representation of this object.
    *
