@@ -103,7 +103,7 @@ class UCLStudyController extends Controller
       $logger->error($translator->trans('This study is misconfigured (missing a list of enabled steps for part \'%partname%\'). Please inform the researchers so they can fix the issue.', array('%partname%' => $part)));
       return null;
     }
-
+    
     return $this->site['participant_space']['part_'.$part]['enabled_steps'];
   }
 
@@ -148,7 +148,7 @@ class UCLStudyController extends Controller
 
   protected function checkPartBoundaries($part)
   {
-    if (($part <= 0 || $part > $this->globals['part_count']))
+    if ((intval($part, 10) <= 0 || intval($part, 10) > intval($this->globals['part_count'], 10)))
     {
       $translated = $this->get('translator')->trans('This study only contains %partCount% parts. Part %part% is not valid for this study.', array('%part%' => $part, '%partCount%' => $this->globals['part_count']));
       throw new HttpException(404, $translated);
@@ -163,7 +163,7 @@ class UCLStudyController extends Controller
       throw $this->createAccessDeniedException($translator->trans('Access Denied: you must be logged in to access this part of the website. If you were logged in and do not know why this message is shown, please contact the researchers.'));
     
     /* Verify user is allowed in target part */
-    if ($user->getCurrentPart() < $part)
+    if ($user->getCurrentPart() < intval($part, 10))
     {
       $translated = $translator->trans('Access Denied: you are not yet enrolled in part %part% of this study.', array('%part%' => $part));
       throw $this->createAccessDeniedException($translated);
@@ -185,7 +185,7 @@ class UCLStudyController extends Controller
       throw new HttpException(404, $translator->trans('This study part does not contain the page you\'re looking for.'));
 
     /* Get list of pages that are visible given user's current step -- if the user is looking back at old parts, use the 'done' step */
-    if ($user->getCurrentPart() == $part)
+    if ($user->getCurrentPart() == intval($part, 10))
       $allowedForStep = $this->getVisiblePagesForPartAndStep($user->getCurrentPart(), $user->getCurrentStep());
     else
       $allowedForStep = $this->getVisiblePagesForPartAndStep($part, 'done');
@@ -264,8 +264,8 @@ class UCLStudyController extends Controller
     }
     
     /* Different parts... */
-    if ($user->getCurrentPart() != $_part)
-      return $user->getCurrentPart() > $_part;
+    if ($user->getCurrentPart() != intval($_part, 10))
+      return $user->getCurrentPart() > intval($_part, 10);
     
     /* Same parts, different steps? */
     $enabledSteps = $this->getEnabledStepsForPart($user->getCurrentPart());
@@ -273,25 +273,23 @@ class UCLStudyController extends Controller
     {
       $logger->critical('isParticipantDone: Failed to retrieve a list of enabled steps for study part '.$user->getCurrentPart().'. This is a bug.');
       $this->session->getFlashBag()->add('warning', $translator->trans('Because of an unexpected problem, we were unable to determine your current progress in the study. Please try again later or contact us.'));
-      return null;
+      return FALSE;
     }
     
-    $keys = array_keys($enabledSteps);
-    
-    $userpos = array_search($user->getCurrentStep(), $keys);
+    $userpos = array_search($user->getCurrentStep(), $enabledSteps);
     if ($userpos === FALSE)
     {
       $logger->critical('isParticipantDone: User step \''.$user->getCurrentStep().'\' was not found in the list of enabled steps for part \''.$user->getCurrentPart().'\'. This is a bug.');
       $this->session->getFlashBag()->add('warning', $translator->trans('Because of an unexpected problem, we were unable to determine your current progress in the study. Please try again later or contact us.'));
-      return null;
+      return FALSE;
     }
   
-    $_steppos = array_search($_step, $keys);
+    $_steppos = array_search($_step, $enabledSteps);
     if ($_steppos === FALSE)
     {
       $logger->critical('isParticipantDone: Queried step \''.$_step.'\' was not found in the list of enabled steps for part \''.$user->getCurrentPart().'\'. This is a bug.');
       $this->session->getFlashBag()->add('warning', $translator->trans('Because of an unexpected problem, we were unable to determine your current progress in the study. Please try again later or contact us.'));
-      return null;
+      return FALSE;
     }
   
     return $userpos > $_steppos;
@@ -309,11 +307,16 @@ class UCLStudyController extends Controller
       return;
     }
 
-    $enabledSteps = $this->getEnabledStepsForPart($currentPart);
+    $enabledSteps = $this->getEnabledStepsForPart(intval($currentPart, 10) + 1);
+    if (!$enabledSteps)
+    {
+      $logger->critical('takeParticipantToNextPart: Failed to retrieve a list of enabled steps for study part '.$currentPart.', whilst updating user \''.$user->getUsername().'\' ('.$user->getEmail().') from part '.$currentPart.'. This is a bug.');
+      $this->session->getFlashBag()->add('warning', $this->get('translator')->trans('Because of an unexpected problem, we were unable to take you to the next part of the study. Please try again later or contact us.'));
+      return;
+    }
     $val = current($enabledSteps);
     reset($enabledSteps);
-
-    if (!$enabledSteps || !$val)
+    if (!$val)
     {
       $logger->critical('takeParticipantToNextPart: Failed to retrieve a list of enabled steps for study part '.$currentPart.', whilst updating user \''.$user->getUsername().'\' ('.$user->getEmail().') from part '.$currentPart.'. This is a bug.');
       $this->session->getFlashBag()->add('warning', $this->get('translator')->trans('Because of an unexpected problem, we were unable to take you to the next part of the study. Please try again later or contact us.'));
@@ -321,7 +324,7 @@ class UCLStudyController extends Controller
     }
 
     $user->setCurrentStep ($val);
-    $user->setCurrentPart($currentPart + 1);
+    $user->setCurrentPart(intval($currentPart, 10) + 1);
     $em->flush();
   }
 
