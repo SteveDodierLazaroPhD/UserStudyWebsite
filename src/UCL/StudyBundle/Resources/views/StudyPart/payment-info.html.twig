@@ -1,0 +1,209 @@
+{% set layout = "article" %}
+{% extends 'UCLStudyBundle::base.html.twig' %}
+
+{% block article_details %}
+{% if user.hasDoneStep(_part, 'payment-info', enabledSteps) %}
+<hr />
+{% set kudos_message %}{{ 'Congratulations! We have your payment details stored in our servers. You can still use this form to update them. For security reasons, your current bank details are not accessible from this website and are not visible on this form.' | trans }}{% endset %}
+{% include ('UCLStudyBundle::kudos.html.twig') %}
+{% endif %}
+{% endblock %}
+
+{% block article_body %}
+{% if user.hasDoneStep(_part, 'payment_info', enabledSteps) %}
+{% set kudos_message %}{{ 'You have already provided your payment details, and they have been transferred to UCL. You can use the form below to submit updated payment details.' | trans }}{% endset %}
+{% include ('UCLStudyBundle::kudos.html.twig') %}
+{% endif %}
+<p>{{ 'In order to pay you, we need to transfer your contact details and bank account information to UCL. UCL will then transfer your reward to your bank account using this information. The data you type is directly transferred into a file store where UCL researchers will perform the necessary paperwork, and is not stored on this website.' | trans }}</p>
+
+  {{ form_start(form) }}
+  {{ form_errors(form) }}
+      <fieldset>
+      <h4>Personal Identity</h4>
+      {{ form_row(form.name) }}
+      <div class="form-row">
+      {{ form_label(form.address) }}
+        <div class="panel">
+          <div class="panel-body">{{ form_widget(form.address) }}</div>
+          {{ form_errors(form.address) }}
+        </div>
+      </div>
+
+      <hr />
+      <h4>Bank Details</h4>
+      {{ form_row(form.bankname) }}
+      <div class="form-row">
+      {{ form_label(form.bankaddress) }}
+        <div class="panel">
+          <div class="panel-body">{{ form_widget(form.bankaddress) }}</div>
+          {{ form_errors(form.bankaddress) }}
+        </div>
+      </div>
+
+      {{ form_row(form.account) }}
+      {{ form_row(form.iban) }}
+      {{ form_row(form.swift) }}
+
+      <hr />
+      {{ form_row(form.send) }}
+      </fieldset>
+  {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+    var indexOf = function(needle) {
+      if(typeof Array.prototype.indexOf === 'function')
+      {
+        indexOf = Array.prototype.indexOf;
+      }
+      else
+      {
+        indexOf = function(needle)
+        {
+          var i = -1, index = -1;
+
+          for(i = 0; i < this.length; i++)
+          {
+            if(this[i] === needle)
+            {
+              index = i;
+              break;
+            }
+          }
+
+          return index;
+        };
+      }
+  };
+
+  function collectData()
+  {
+    var $address = $('#paymentinfo_address_countryCode');
+    var $address_recipient = $('#paymentinfo_address_recipient');
+    var $address_administrativeArea = $('#paymentinfo_address_administrativeArea');
+    var $address_locality = $('#paymentinfo_address_locality');
+    var $address_dependentLocality = $('#paymentinfo_address_dependentLocality');
+    var $address_postalCode = $('#paymentinfo_address_postalCode');
+    var $address_sortingCode = $('#paymentinfo_address_sortingCode');
+    var $address_addressLine1 = $('#paymentinfo_address_addressLine1');
+    var $address_addressLine2 = $('#paymentinfo_address_addressLine2');
+    var $address_organization = $('#paymentinfo_address_organization');
+
+    var $bankaddress = $('#paymentinfo_bankaddress_countryCode');
+    var $bankaddress_recipient = $('#paymentinfo_bankaddress_recipient');
+    var $bankaddress_administrativeArea = $('#paymentinfo_bankaddress_administrativeArea');
+    var $bankaddress_locality = $('#paymentinfo_bankaddress_locality');
+    var $bankaddress_dependentLocality = $('#paymentinfo_bankaddress_dependentLocality');
+    var $bankaddress_postalCode = $('#paymentinfo_bankaddress_postalCode');
+    var $bankaddress_sortingCode = $('#paymentinfo_bankaddress_sortingCode');
+    var $bankaddress_addressLine1 = $('#paymentinfo_bankaddress_addressLine1');
+    var $bankaddress_addressLine2 = $('#paymentinfo_bankaddress_addressLine2');
+    var $bankaddress_organization = $('#paymentinfo_bankaddress_organization');
+
+    var $token = $('#paymentinfo__token');
+
+    var data = {};
+    data[$address.attr('name')] = $address.val();
+    data[$address_recipient.attr('name')] = $address_recipient.val();
+    data[$address_administrativeArea.attr('name')] = $address_administrativeArea.val();
+    data[$address_locality.attr('name')] = $address_locality.val();
+    data[$address_dependentLocality.attr('name')] = $address_dependentLocality.val();
+    data[$address_postalCode.attr('name')] = $address_postalCode.val();
+    data[$address_sortingCode.attr('name')] = $address_sortingCode.val();
+    data[$address_addressLine1.attr('name')] = $address_addressLine1.val();
+    data[$address_addressLine2.attr('name')] = $address_addressLine2.val();
+    data[$address_organization.attr('name')] = $address_organization.val();
+    data[$bankaddress.attr('name')] = $bankaddress.val();
+    data[$bankaddress_recipient.attr('name')] = $bankaddress_recipient.val();
+    data[$bankaddress_administrativeArea.attr('name')] = $bankaddress_administrativeArea.val();
+    data[$bankaddress_locality.attr('name')] = $bankaddress_locality.val();
+    data[$bankaddress_dependentLocality.attr('name')] = $bankaddress_dependentLocality.val();
+    data[$bankaddress_postalCode.attr('name')] = $bankaddress_postalCode.val();
+    data[$bankaddress_sortingCode.attr('name')] = $bankaddress_sortingCode.val();
+    data[$bankaddress_addressLine1.attr('name')] = $bankaddress_addressLine1.val();
+    data[$bankaddress_addressLine2.attr('name')] = $bankaddress_addressLine2.val();
+    data[$bankaddress_organization.attr('name')] = $bankaddress_organization.val();
+    data[$token.attr('name')] = $token.val();
+  
+    return data;
+  }
+  
+  function validateIban()
+  {
+    var $newBankAddress = $('#paymentinfo_bankaddress_countryCode');
+    var country = $newBankAddress.val();
+    var ibanCountries = ['AD','AT','BH','BE','BG','HR','CY','CZ','DK','EE','FO','FI','FR',
+                         'GE','DE','GI','GB','GR','GL','HU','IS','IE','IM','IT','JE','JO',
+                         'LV','LB','LI','LT','LU','MK','MT','MD','MC','ME','NL','NO','PK',
+                         'PS','PL','PT','QA','RO','SM','SA','SK','SI','ES','SE','CH','TN',
+                         'TR','AE'];
+
+    // We're in ab IBAN country, we must require the IBAN field
+    var $iban = $('#paymentinfo_iban');
+    var $label = $("label[for='"+$iban.attr('id')+"']")
+     if ($label.length == 0)
+       $label = $iban.closest('label')
+    if (indexOf.call(ibanCountries, country) != -1)
+    {
+      $iban.prop('required', 'required');
+      $label.addClass('required');
+    }
+    else
+    {
+      $iban.prop('required', false);
+      $label.removeClass('required');
+    }
+  }
+
+  function updateAddressForm()
+  {
+    var $form = $(this).closest('form');
+    var data = collectData();
+
+    $.ajax({
+      url : $form.attr('action'),
+      type: $form.attr('method'),
+      data : data,
+      success: function(html) {
+        $('#paymentinfo_address').replaceWith($(html).find('#paymentinfo_address'));
+        var $newAddress = $('#paymentinfo_address_countryCode');
+        $newAddress.change(updateAddressForm);
+      }
+    });
+  }
+
+  function updateBankAddressForm()
+  {
+    var $form = $(this).closest('form');
+    var data = collectData();
+
+    $.ajax({
+      url : $form.attr('action'),
+      type: $form.attr('method'),
+      data : data,
+      success: function(html) {
+        $('#paymentinfo_bankaddress').replaceWith($(html).find('#paymentinfo_bankaddress'));
+        var $newBankAddress = $('#paymentinfo_bankaddress_countryCode');
+        $newBankAddress.change(updateBankAddressForm);
+        validateIban();
+      }
+    });
+  }
+
+  var $address = $('#paymentinfo_address_countryCode');
+  $address.change(updateAddressForm);
+  var $bankaddress = $('#paymentinfo_bankaddress_countryCode');
+  $bankaddress.change(updateBankAddressForm);
+  validateIban();
+</script>
+{% endblock %}
+
+{% block article_appendix %}
+{% if user.hasDoneStep(_part, 'payment_info', enabledSteps) %}
+<hr />
+{% set kudos_message %}{{ 'You have already provided your payment details, and they have been transferred to UCL.' | trans }}{% endset %}
+{% include ('UCLStudyBundle::kudos.html.twig') %}
+{% endif %}
+{% endblock %}

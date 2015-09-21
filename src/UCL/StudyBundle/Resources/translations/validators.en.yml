@@ -19,6 +19,26 @@ login:
   password:
     not_blank: You must provide the participant code given to you.
 
+payment:
+  name:
+    not_blank: You must provide your full name.
+  address:
+    not_blank: You must provide an address.
+    invalid: The address you provided is not recognised.
+  bankname:
+    not_blank: You must provide the name of your bank.
+  bankaddress:
+    not_blank: You must provide a bank address.
+    invalid: The bank address you provided is not recognised.
+  account:
+    not_blank: You must provide an account number.
+  swift:
+    not_blank: You must provide a SWIFT code.
+    invalid: This is not a valid SWIFT code.
+  iban:
+    mandatory_for_region: International Bank Account Numbers are mandatory for payments to your bank's country.
+    invalid: This is not a valid International Bank Account Number (IBAN).
+
 participant:
   email:
     already_used: This email address is already in use.
@@ -50,4 +70,3 @@ participant:
   browser:
     not_blank: You must specify your Web browser.
     invalid: Sorry. Your Web browser is currently unsupported.
-

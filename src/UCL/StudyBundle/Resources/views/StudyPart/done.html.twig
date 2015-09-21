@@ -1,0 +1,26 @@
+{% extends 'UCLStudyBundle::base.html.twig' %}
+
+
+{% set partsLeft =  _part < globals.part_count %}
+{% set userBeyond = user.getCurrentPart > _part %}
+{% set current_part_menu = 'part_#' | replace('#', _part) %}
+
+{% block body %}
+{% if partsLeft and (not userBeyond) %}
+<p>You have finished this part of the study, you may now move on to the next part if you want to.</p>
+{% if site['participant_space'][current_part_menu].name is defined %}
+<p>The next part of this study is: {{ site['participant_space'][current_part_menu].name }}</po>
+{% endif %}
+  {{ form_start(form) }}
+      <fieldset>
+    {{ form_row(form.button, {'attr': {'class': 'btn-lg'}})}}
+      </fieldset>
+  {{ form_end(form) }}
+{% elseif not partsLeft %}
+  Already completed the study, total kudos
+{% else %}{# userBeyond is true #}
+  Already completed this part, basic kudos
+{% endif %}
+
+{% endblock %}
+

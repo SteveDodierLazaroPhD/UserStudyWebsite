@@ -149,6 +149,8 @@ form:
     distro:
       label: Linux Distribution
       ubuntu: Ubuntu
+      debian: Debian (partial support)
+      mint: Mint (partial support)
       other: Other
       otherlabel: If Other, please specify
     de:
@@ -169,6 +171,15 @@ form:
       other: Other
     submit_screening: Join Participant Waiting List
     submit_automatic: Register
+  payment:
+    fullname: Full Name
+    address: Address
+    bankname: Bank Name
+    bankaddress: Bank Branch Address
+    account: Account Number
+    swift: SWIFT Code
+    iban: IBAN Code
+    send: Send Your Details
 
 "Hello, %recipient%.\n\n%name% just sent a message via the website's contact form, at %date%.\nThey asked that you reply at: %email%\n\n-- start message --\n%message%\n-- end message --\nThis is an automated message, please do not reply directly.": "Hello, %recipient%.\n\n%name% just sent a message via the website's contact form, at %date%.\nThey asked that you reply at: %email%\n\n-- start message --\n%message%\n-- end message --\nThis is an automated message, please do not reply directly."
 "Hello, %name%.\n\nThis is to confirm you registered your interest in the '%id%' study, at %date%.\nIf you do not know why you are receiving this email, or if you have changed your mind about participating, please let us know by dropping us an email at %ourEmail%. We'll erase the records related to your email address.\n\n** What happens next? **\n\nIf you are selected for the study, we'll let you know and give you the information you need to login to the website, confirm your consent and get started. In the meantime, you can familiarise yourself with the study design by reading %infoPage%.\n\nIf you are not selected, we will let you know within three weeks from now and permanently erase the data you gave us.\n\nThanks,": "Hello, %name%.\n\nThis is to confirm you registered your interest in the '%id%' study, at %date%.\nIf you do not know why you are receiving this email, or if you have changed your mind about participating, please let us know by dropping us an email at %ourEmail%. We'll erase the records related to your email address.\n\n** What happens next? **\n\nIf you are selected for the study, we'll let you know and give you the information you need to login to the website, confirm your consent and get started. In the meantime, you can familiarise yourself with the study design by reading %infoPage%.\n\nIf you are not selected, we will let you know within three weeks from now and permanently erase the data you gave us.\n\nThanks,"
