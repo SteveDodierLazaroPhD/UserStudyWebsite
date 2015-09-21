@@ -1,0 +1,15 @@
+{
+	"locale": "und",
+	"format": "%addressLine1\n%addressLine2\n%locality, %administrativeArea, %postalCode",
+	"required_fields": [
+		"addressLine1",
+		"locality"
+	],
+	"uppercase_fields": [
+		"locality"
+	],
+	"administrative_area_type": "department",
+	"locality_type": "city",
+	"postal_code_type": "postal",
+	"postal_code_pattern": "\\d{6}"
+}

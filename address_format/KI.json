@@ -1,0 +1,17 @@
+{
+	"locale": "und",
+	"format": "%addressLine1\n%addressLine2\n%administrativeArea\n%locality",
+	"required_fields": [
+		"addressLine1",
+		"locality"
+	],
+	"uppercase_fields": [
+		"addressLine1",
+		"addressLine2",
+		"locality",
+		"organization",
+		"administrativeArea"
+	],
+	"administrative_area_type": "island",
+	"locality_type": "city"
+}

@@ -9,6 +9,8 @@ Things to do:
 - update your local bundles by using composer:
   $ php composer.phar self-update
   $ php composer.phar update
+- copy address_format into vendor/commerceguys/addressing/resources/ (replace the original one)
+  $ cp address_format vendor/commerceguys/addressing/resources/ -r
 - create the database in the MySQL db (requires connecting to the db as root)
   CREATE DATABASE `yourprojectname`;
 - create the appropriate user in the MySQL db, with a password of your choice
