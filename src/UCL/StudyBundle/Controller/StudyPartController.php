@@ -286,7 +286,7 @@ class StudyPartController extends UCLStudyController
       $params['page'] = array('title' => $this->get('translator')->trans('Software Manuals'));
       
       #TODO
-      return $this->render('UCLStudyBundle:StudyPart:manual.html.twig', $params);
+      return $this->render('UCLStudyBundle:StudyPart:manual-p'.$_part.'.html.twig', $params);
     }
 
     /**
