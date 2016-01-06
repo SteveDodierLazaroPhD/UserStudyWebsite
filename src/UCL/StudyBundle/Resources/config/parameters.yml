@@ -185,7 +185,7 @@ parameters:
         part_2:
           name: "Co-Design"
           title: 'Sandbox Appropriation & Co-Design'
-          enabled_steps: [consent, briefing, install, running, debriefing, done]
+          enabled_steps: [waiting_enrollment, consent, briefing, install, running, debriefing, done]
           #additional_pages: [manual, info]
           default_visible: [consent, install, running, manual, information]
           gains:
@@ -193,8 +193,8 @@ parameters:
               pre: 0
               post: 
                 per_day: 1.5
-                min_days: 14
-                max_days: 30
+                min_days: 28
+                max_days: 35
                 max: 40
                 overrides_pre: true
             debriefing:
@@ -203,6 +203,14 @@ parameters:
                 fixed: 10
                 overrides_pre: false
           navigation:
+            waiting_enrollment:
+              href: "ucl_study_part_waiting_enrollment"
+              href_params:
+                _part: 2
+              progress_caption: "Enrollment"
+              caption: "What Happens Next?"
+              tooltip: "You must wait until you are enrolled into the study"
+              visible_steps: [waiting_enrollment]
             consent:
               href: "ucl_study_part_consent"
               href_params:
@@ -281,6 +289,15 @@ parameters:
       # participant_space's enabled_steps that are used again to determine progression.
       application_space:
         part_1:
+          default_visible: [running,manual,information]
+          navigation:
+            consent:
+              visible_steps: [manual,information]
+            install:
+              visible_steps: [install,manual,information]
+            running:
+              visible_steps: [running,manual,information]
+        part_2:
           default_visible: [running,manual,information]
           navigation:
             consent:
