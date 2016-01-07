@@ -183,9 +183,20 @@ class StudyPartController extends UCLStudyController
     public function debriefingAction($_part, Request $request)
     {
       $params = $this->setupParameters($request, true, 'debriefing', $_part);
-
-      #TODO
+      $params['page'] = array('title' => $this->get('translator')->trans('Schedule Debriefing'));
       return $this->render('UCLStudyBundle:StudyPart:debriefing.html.twig', $params);
+    }
+    
+    /**
+     * @Route("/p/{_part}/weekly/{_week}", name="ucl_study_part_weekly",
+     *    defaults={"_part" = 1, "_week" = 1},
+     *    requirements={"_part": "\d+", "week": "\d+"})
+     */
+    public function weeklyAction($_part, $_week, Request $request)
+    {
+      $params = $this->setupParameters($request, true, 'running', $_part);
+      $params['page'] = array('title' => $this->get('translator')->trans('Weekly Schedule'));
+      return $this->render('UCLStudyBundle:StudyPart:weekly-p'.$_part.'-w'.$_week.'.html.twig', $params);
     }
     
     /**
@@ -252,6 +263,19 @@ class StudyPartController extends UCLStudyController
           $this->takeParticipantToNextStep($_part, 'install');
 
       return $this->render('UCLStudyBundle:StudyPart:install-p'.$_part.'.html.twig', $params);
+    }
+
+    /**
+     * @Route("/p/{_part}/forum", name="ucl_study_part_forum",
+     *    defaults={"_part" = 2},
+     *    requirements={"_part": "\d+"})
+     */
+    public function forumAction($_part, Request $request)
+    {
+      /* Part 2 only! */
+      $params = $this->setupParameters($request, true, 'running', 2);
+      $params['page'] = array('title' => $this->get('translator')->trans('Participant Forum'));
+      return $this->render('UCLStudyBundle:StudyPart:forum.html.twig', $params);
     }
 
     /**
