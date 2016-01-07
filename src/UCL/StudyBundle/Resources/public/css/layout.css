@@ -757,6 +757,11 @@ hr.progtrckr-todo {
   border: 1px solid #eee;
   border-radius: 3px;
 }
+.bs-callout-list-item {
+  border-width: 1px 1px 1px 5px;
+  border-style: solid;
+  -moz-border-left-colors: none;
+}
 
 .bs-callout-card.bs-callout-info {
   border-left-width: 5px;

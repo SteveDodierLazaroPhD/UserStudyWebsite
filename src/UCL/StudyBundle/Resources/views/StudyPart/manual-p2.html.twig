@@ -1,23 +1,36 @@
-{% set layout = "article" %}
-{% extends 'UCLStudyBundle::base.html.twig' %}
-
-{% block article_details %}
-{% endblock %}
+{% extends 'UCLStudyBundle:StudyPart:manual.html.twig' %}
 
 {% block article_body %}
 <h2>Firejail</h2>
 <p class="lead">Linux namespaces sandbox program</p>
 
+<div class="bs-callout bs-callout-compact bs-callout-default">
+  <h4>Table of contents</h4>
+  <ol >
+    <li><a href="#sec-synopsis">Synopsis</a></li>
+    <li><a href="#sec-description">Description</a></li>
+    <li><a href="#sec-usage">Usage</a></li>
+    <li><a href="#sec-protected">Protected Files and Xfce</a></li>
+    <li><a href="#sec-options">Options</a></li>
+    <li><a href="#sec-traffic">Traffic Shaping</a></li>
+    <li><a href="#sec-monitoring">Monitoring</a></li>
+    <li><a href="#sec-profiles">Security Profiles</a></li>
+    <li><a href="#sec-syntax">Profile Syntax</a></li>
+    <li><a href="#sec-shell">Restricted Shell</a></li>
+  </ol>
+</div>
+
+<a name="sec-synopsis"></a>
 <h3>Synopsis</h3>
   <ol class="list-group">
     <li class="list-group-item">Start a sandbox:
-      <pre><span class="fa fa-angle-right fa-fw"></span>firejail [OPTIONS] [program and arguments]</pre>
+      <pre><span class="fa fa-angle-right fa-fw"></span>firejail --helper [OPTIONS] [program and arguments]</pre>
     </li>
     <li class="list-group-item">Adding a program to an existing sandbox:
-      <pre><span class="fa fa-angle-right fa-fw"></span>firejail --join={<name>|<PID>} [OPTIONS] [program and arguments]</pre>
+      <pre><span class="fa fa-angle-right fa-fw"></span>firejail --helper --join={&lt;name&gt;|&lt;PID&gt;} [OPTIONS] [program and arguments]</pre>
     </li>
     <li class="list-group-item">Network traffic shaping for an existing sandbox:
-      <pre><span class="fa fa-angle-right fa-fw"></span>firejail --bandwidth={<name>|<PID>} bandwidth-command</pre>
+      <pre><span class="fa fa-angle-right fa-fw"></span>firejail --bandwidth={&lt;name&gt;|&lt;PID&gt;} bandwidth-command</pre>
     </li>
     <li class="list-group-item">Monitoring:
       <pre><span class="fa fa-angle-right fa-fw"></span>firejail {--list | --netstats | --top | --tree}</pre>
@@ -27,405 +40,288 @@
     </li>
   </ol>
 
-<h3>General Description</h3>
+<a name="sec-description"></a>
+<h3>Description</h3>
 <p>Firejail is a SUID sandbox program that reduces the risk of security breaches by restricting the running environment of untrusted applications (using Linux namespaces, seccomp-bpf and Linux capabilities). It allows a process and all its descendants to have their own private view of the globally shared system resources, such as the network stack, process table, mount table.</p>
 
-<p>Written in C with virtually no dependencies, the software runs on any Linux computer with a 3.x kernel version or newer. It is recommended to use at least Ubuntu Vivid to have access to all the options, though. The version provided in the study allows users to mark specific files as being protected, and this will prevent sandboxed programs from accessing the file. Firejail comes with <TODO>fireexecd</TODO>, a daemon that detects when protected files are being accessed and help users open these files transparently in their corresponding sandbox.</p>
+<p>Written in C with virtually no dependencies, the software runs on any Linux computer with a 3.x kernel version or newer. It is recommended to use at least Ubuntu Vivid to have access to all the options, though. The version provided in the study allows users to mark specific files as being protected, and this will prevent sandboxed programs from accessing the file. Firejail comes with <span class="fa fa-gear fa-fw"></span>fireexecd, a daemon that detects when protected files are being accessed and help users open these files transparently in their corresponding sandbox.</p>
 
 <p>Firejail allows the user to manage application security using security profiles. Each profile defines a set of permissions for a specific application or group of applications. The software includes security profiles for a number of more common Linux programs, such as Mozilla Firefox, Chromium, VLC, Transmission etc. Profiles can be used to prevent an application from seeing part of your documents, from modifying its own configuration, and so on.</p>
 
 
 
+<a name="sec-usage"></a>
 <h3>Usage</h3>
-Without any options, the sandbox isolates the application from others (using a PID namespace) and only allows it to write to the user's home directory, /tmp and /var (using a mount namespace). Applications can still perform IPC and in particular use D-Bus, the Internet connection and hardware devices by default.</p>
+<p>Without any options, the sandbox isolates the application from others (using a PID namespace) and only allows it to write to the user's home directory, /tmp and /var (using a mount namespace). Applications can still perform IPC and in particular use D-Bus, the Internet connection and hardware devices by default.</p>
 
-<p>As it starts up, Firejail tries to find a security profile based on the name of the application. For instance, Mozilla Firefox will use the <TODO>firefox</TODO> profile by default. If an appropriate profile is not found, Firejail will use a default profile. The default profile is quite restrictive. In case the application doesn't work, use --noprofile option to disable it. For more information, please see <a href="TODO">SECURITY PROFILES</a> section.</p>
+<p>As it starts up, Firejail tries to find a security profile based on the name of the application. For instance, Mozilla Firefox will use the <code>firefox</code> profile by default. If an appropriate profile is not found, Firejail will use a default profile. The default profile is quite restrictive. In case the application doesn't work, use <a href="#o-noprofile">--noprofile</a> option to disable it. For more information, please see <a href="#sec-profiles">SECURITY PROFILES</a> section.</p>
 
-<p>If a program argument is not specified, Firejail starts <TODO>/bin/bash</TODO> shell. Examples:</p>
+<p>If a program argument is not specified, Firejail starts <code>/bin/bash</code> shell. Examples:</p>
 
 <ol class="list-group">
     <li class="list-group-item"><pre><span class="fa fa-angle-right fa-fw"></span>firejail [OPTIONS]                # starting a /bin/bash shell</pre></li>
     <li class="list-group-item"><pre><span class="fa fa-angle-right fa-fw"></span>firejail [OPTIONS] firefox        # starting Mozilla Firefox</pre></li>
 </ol>
 
-<p>Multiple commands can be run in sandbox using regular bash logic operators. In the following example, "sleep inf" command is required in order to keep the session open for the daemon program:</p>
+<p>Multiple commands can be run in sandbox using regular bash logic operators. In the following example, <span class="fa fa-gear fa-fw"></span>"sleep inf" command is required in order to keep the session open for the daemon program:</p>
 
 <ol class="list-group">
-    <li class="list-group-item"><pre><span class="fa fa-angle-right fa-hashtag"></span>firejail [OPTIONS] "/etc/init.d/nginx start && sleep inf"</pre></li>
+    <li class="list-group-item"><pre><span class="fa fa-hashtag fa-fw">#</span>firejail [OPTIONS] "/etc/init.d/nginx start && sleep inf"</pre></li>
 </ol>
 
 
+<a name="sec-protected"></a>
+<h3>Protected Files and Xfce</h3>
+In the study version of Firejail, files and directories can be marked as protected. Protected files are associated with a list of authorised programs and security profiles. When a file is protected, it is available only to:
 
+<ol>
+  <li>Unsandboxed programs</li>
+  <li>Firejail instances that were launched directly with the file as a parameter</li>
+  <li>Programs whose absolute path and security profile match the policy of the file</li>
+</ol>
+
+Unauthorised sandboxed programs can see the protected files and directories, but they cannot read their contents or modify them. When an unauthorised sandboxed program tries to open a file using a third-party program, the execution is prevented. Instead, the user is proposed to execute the third-party program in a new sandbox or to execute it unsandboxed. This allows users to manipulate protected files transparently from within an untrusted viewer application or terminal emulator.
+
+<h4>Protecting files</h4>
+Files can be mark as protected (or unprotected) using the <span class="fa fa-gear fa-fw"></span> Thunar File Manager, by right clicking on the file and using the corresponding menu option. A prompt will appear, asking which programs should be used to open the protected file. The prompt will also ask which <a href="#o-profiles">security profiles</a> must be applied to the program. This allows, for instance, to open files inside a directory only with applications that are disconnected from the Internet, or that do not have access to other specific directories. Several combinations of program and profile can be provided.
+
+Protected files are displayed with a special emblem. When Thunar is located inside a protected directory, the location bar or location buttons will use a special colour or icon to indicate the protected status. By default, Thunar opens protected files in a sandbox with their corresponding programs and profiles.
+
+<h4>Executing sandboxed application</h4>
+The <span class="fa fa-gear fa-fw"></span>Xfce Application Finder has a new button allowing users to execute applications in a sandbox with a profile of their choosing. The <span class="fa fa-gear fa-fw"></span>Xfce Window Manager uses special decorations (compatible themes: Default and Numix) in order to help users recognise sandboxed applications. Normal sandboxed applications will use a red decoration and the keyword "Untrusted" will be added to their window title. Applications that handle protected files will use a green decoration and contain the keyword "Protected".
+
+
+<a name="sec-options"></a>
 <h3>Options</h3>
 
+<p>Below is an exhaustive list of the available options. Some important options are highlighted.</p>
+
 <ol class="list-group">
-    <li class="list-group-item"><h5>--</h5>Signal the end of options and disables further option processing.</li>
+    <li class="list-group-item"><h5>--</h5><p>Signal the end of options and disables further option processing.</p></li>
 
-    <li class="list-group-item"><h5>--bandwidth=name</h5>Set bandwidth limits for the sandbox identified by name, see TRAFFIC SHAPING section for more details.</li>
+    <li class="list-group-item"><h5>--bandwidth=name</h5><p>Set bandwidth limits for the sandbox identified by name, see TRAFFIC SHAPING section for more details.</p></li>
 
-    <li class="list-group-item"><h5>--bandwidth=pid</h5>Set bandwidth limits for the sandbox identified by PID, see TRAFFIC SHAPING section for more details.</li>
+    <li class="list-group-item"><h5>--bandwidth=pid</h5><p>Set bandwidth limits for the sandbox identified by PID, see TRAFFIC SHAPING section for more details.</p></li>
 
-    <li class="list-group-item"><h5>--bind=dirname1,dirname2</h5>Mount-bind dirname1 on top of dirname2. This option is only available when running the sandbox as root.
-    <br />
-    Example:
-    <pre><span class="fa fa-angle-right fa-hashtag"></span>firejail --bind=/config/www,/var/www</pre></li>
+    <li class="list-group-item"><h5>--bind=dirname1,dirname2</h5><p>Mount-bind dirname1 on top of dirname2. This option is only available when running the sandbox as root.</p>
+    <pre><span class="fa fa-hashtag fa-fw">#</span>firejail --bind=/config/www,/var/www</pre></li>
 
-    <li class="list-group-item"><h5>--bind=filename1,filename2</h5>Mount-bind filename1 on top of filename2. This option is only available when running as root.
-    <br />
-    Example:
-    <pre><span class="fa fa-angle-right fa-hashtag"></span>firejail --bind=/config/etc/passwd,/etc/passwd</pre></li>
+    <li class="list-group-item"><h5>--bind=filename1,filename2</h5><p>Mount-bind filename1 on top of filename2. This option is only available when running as root.</p>
+    <pre><span class="fa fa-hashtag fa-fw">#</span>firejail --bind=/config/etc/passwd,/etc/passwd</pre></li>
 
-    <li class="list-group-item"><h5>--blacklist=dirname_or_filename</h5>Blacklist directory or file.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--blacklist=dirname_or_filename</h5><p>Blacklist directory or file.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --blacklist=/sbin --blacklist=/usr/sbin</pre>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --blacklist=~/.mozilla</pre>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail "--blacklist=My Virtual Machines"</pre></li>
 
-    <li class="list-group-item"><h5>-c</h5>Execute command and exit.</li>
+    <li class="list-group-item"><a name="o-c"></a><h5>-c</h5><p>Execute command and exit.</p></li>
 
-    <li class="list-group-item"><h5>--caps</h5><p>Linux capabilities is a kernel feature designed to split up the root privilege into a set of distinct privileges. These privileges can be enabled or disabled independently, thus restricting what a process running as root can do in the system.</p>
+    <li class="list-group-item"><h5>--caps</h5>
+    <p>Linux capabilities is a kernel feature designed to split up the root privilege into a set of distinct privileges. These privileges can be enabled or disabled independently, thus restricting what a process running as root can do in the system.</p>
     <p>By default root programs run with all capabilities enabled. --caps option disables the following capabilities: CAP_SYS_MODULE, CAP_SYS_RAWIO, CAP_SYS_BOOT, CAP_SYS_NICE, CAP_SYS_TTY_CONFIG, CAP_SYSLOG, CAP_MKNOD, CAP_SYS_ADMIN. The filter is applied to all processes started in the sandbox.</p>
-    Example:
     <pre><span class="fa fa-angle-right fa-fw"></span>sudo firejail --caps "/etc/init.d/nginx start && sleep inf"</pre></li>
 
     <li class="list-group-item"><h5>--caps.drop=all</h5>
-Drop all capabilities for the processes running in the sandbox. This option is recommended for running GUI programs
+<p>Drop all capabilities for the processes running in the sandbox. This option is recommended for running GUI programs
 or any other program that doesn't require root privileges. It is a must-have option for sandboxing untrusted programs
-installed from unofficial sources - such as games, Java programs, etc.
-    <br />
-    Example:
+installed from unofficial sources - such as games, Java programs, etc.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --caps.drop=all warzone2100</pre></li>
 
-    <li class="list-group-item"><h5>--caps.drop=capability,capability,capability</h5>Define a custom blacklist Linux capabilities filter.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--caps.drop=capability,capability,capability</h5><p>Define a custom blacklist Linux capabilities filter.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --caps.keep=net_broadcast,net_admin,net_raw</pre></li>
 
-    <li class="list-group-item"><h5>--caps.keep=capability,capability,capability</h5>Define a custom whitelist Linux capabilities filter.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--caps.keep=capability,capability,capability</h5><p>Define a custom whitelist Linux capabilities filter.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>sudo firejail --caps.keep=chown,net_bind_service,setgid,setuid "/etc/init.d/nginx start && sleep inf"</pre></li>
 
-
-
-
-
-
-
-
-
-
-
-    <li class="list-group-item"><h5>--caps.print=name
-Print the caps filter for the sandbox identified by name.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--caps.print=name</h5><p>Print the caps filter for the sandbox identified by name.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --name=mygame --caps.drop=all warzone2100 &
-
 [...]
-
 <span class="fa fa-angle-right fa-fw"></span>firejail --caps.print=mygame</pre></li>
-    <li class="list-group-item"><h5>--caps.print=pid</h5>Print the caps filter for a sandbox identified by PID.
-    <br />
-    Example:
+
+    <li class="list-group-item"><h5>--caps.print=pid</h5><p>Print the caps filter for a sandbox identified by PID.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --list
-
 3272:netblue:firejail --private firefox
+<span class="fa fa-angle-right fa-fw"></span>firejail --caps.print=3272</pre></li>
 
-<span class="fa fa-angle-right fa-fw"></span>firejail --caps.print=3272
-</li>
+    <li class="list-group-item"><h5>--cgroup=tasks-file</h5><p>Place the sandbox in the specified control group. tasks-file is the full path of cgroup tasks file.</p>
+    <pre><span class="fa fa-hashtag fa-fw">#</span>firejail --cgroup=/sys/fs/cgroup/g1/tasks</pre></li>
 
-
-
-
-
-
-
-
-
-
-
-    <li class="list-group-item"><h5>--cgroup=tasks-file</h5>Place the sandbox in the specified control group. tasks-file is the full path of cgroup tasks file.
-    <br />
-    Example:
-    <pre><span class="fa fa-angle-right fa-hashtag"></span>firejail --cgroup=/sys/fs/cgroup/g1/tasks</pre></li>
-
-    <li class="list-group-item"><h5>--chroot=dirname</h5>Chroot the sandbox into a root filesystem. If the sandbox is started as a regular user, default seccomp and capabilities filters are enabled.
-    <br />
-    Example:
+    <li class="list-group-item"><a name="o-chroot"></a><h5>--chroot=dirname</h5><p>Chroot the sandbox into a root filesystem. If the sandbox is started as a regular user, default seccomp and capabilities filters are enabled.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --chroot=/media/ubuntu warzone2100</pre></li>
 
-    <li class="list-group-item"><h5>--cpu=cpu-number,cpu-number,cpu-number</h5>Set CPU affinity.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--cpu=cpu-number,cpu-number,cpu-number</h5><p>Set CPU affinity.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --cpu=0,1 handbrake</pre></li>
 
-    <li class="list-group-item"><h5>--csh</h5>Use <TODO>/bin/csh</TODO> as default user shell.</li>
+    <li class="list-group-item"><a name="o-csh"></a><h5>--csh</h5><p>Use <code>/bin/csh</code> as default user shell.</p></li>
 
-    <li class="list-group-item"><h5>--debug</h5>Print debug messages.
-    <br />
-    Example:
-    <pre><span class="fa fa-angle-right fa-fw"></span>firejail --debug firefox</pre></li>
+    <li class="list-group-item"><h5>--debug</h5><p>Print debug messages.</p></li>
 
-    <li class="list-group-item"><h5>--debug-syscalls</h5>Print all recognized system calls in the current Firejail software build and exit.
-    <br />
-    Example:
-    <pre><span class="fa fa-angle-right fa-fw"></span>firejail --debug-syscalls</pre></li>
+    <li class="list-group-item"><h5>--debug-syscalls</h5><p>Print all recognized system calls in the current Firejail software build and exit.</p></li>
 
-    <li class="list-group-item"><h5>--debug-caps</h5>Print all recognized capabilities in the current Firejail software build and exit.
-    <br />
-    Example:
-    <pre><span class="fa fa-angle-right fa-fw"></span>firejail --debug-caps</pre></li>
+    <li class="list-group-item"><h5>--debug-caps</h5><p>Print all recognized capabilities in the current Firejail software build and exit.</p></li>
 
-    <li class="list-group-item"><h5>--defaultgw=address</h5>Use this address as default gateway in the new network namespace.
-    <br />
-    Example:
+    <li class="list-group-item"<a name="o-defaultgw"></a>><h5>--defaultgw=address</h5><p>Use this address as default gateway in the new network namespace.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --net=eth0 --defaultgw=10.10.20.1 firefox</pre></li>
 
-    <li class="list-group-item"><h5>--dns=address</h5>Set a DNS server for the sandbox. Up to three DNS servers can be defined. Use this option if you don't trust the DNS setup on your network.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--dns=address</h5><p>Set a DNS server for the sandbox. Up to three DNS servers can be defined. Use this option if you don't trust the DNS setup on your network.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --dns=8.8.8.8 --dns=8.8.4.4 firefox</pre></li>
 
-
-
-
-
-
-
-    <li class="list-group-item"><h5>--dns.print=name</h5>Print DNS configuration for a sandbox identified by name.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--dns.print=name</h5><p>Print DNS configuration for a sandbox identified by name.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --name=mygame --caps.drop=all warzone2100 &
-
 [...]
-
 <span class="fa fa-angle-right fa-fw"></span>firejail --dns.print=mygame</pre></li>
 
-    <li class="list-group-item"><h5>--dns.print=pid</h5>Print DNS configuration for a sandbox identified by PID.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--dns.print=pid</h5><p>Print DNS configuration for a sandbox identified by PID.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --list
-
 3272:netblue:firejail --private firefox
-
 <span class="fa fa-angle-right fa-fw"></span>firejail --dns.print=3272</pre></li>
 
-    <li class="list-group-item"><h5>--env=name=value</h5>Set environment variable in the new sandbox.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--env=name=value</h5><p>Set environment variable in the new sandbox.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --env=LD_LIBRARY_PATH=/opt/test/lib</pre></li>
 
-    <li class="list-group-item"><h5>-?, --help</h5>Print options end exit.</li>
+    <li class="list-group-item"><h5>-?, --help</h5><p>Print options end exit.</p></li>
 
-    <li class="list-group-item"><h5>--ip=address</h5>Assign IP addresses to the last network interface defined by a <TODO>--net</TODO> option. A default gateway is assigned by default.
-    <br />
-    Example:
+    <li class="list-group-item bs-callout-list-item bs-callout-info"><a name="o-helper"></a><h5>--helper</h5><p>Configures the program to forward exec* system calls to the firejail daemon if they match specific
+combinations of programs and file names as defined in <code>/etc/firejail/protected-{apps,files}.policy</code>.
+This option requires a running instance of the fireexecd daemon. See also the <a href="#o-wlapps">--whitelist-apps</a> and
+<a href="#o-wlfiles"--whitelist-files</a> options to bypass individual policy rules if necessary. Implies <a href="#o-shell">--shell=none</a>.
+</p></li>
+
+    <li class="list-group-item"><a name="o-ip"></a><h5>--ip=address</h5><p>Assign IP addresses to the last network interface defined by a <a href="#o-net">--net</a> option. A default gateway is assigned by default.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --net=eth0 --ip=10.10.20.56 firefox</pre></li>
 
-    <li class="list-group-item"><h5>--ip=none</h5>No IP address and no default gateway are configured for the last interface defined bya <TODO>--net</TODO> option. Use this option in case you intend to start an external DHCP client in the sandbox.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--ip=none</h5><p>No IP address and no default gateway are configured for the last interface defined bya <a href="#o-net">--net</a> option. Use this option in case you intend to start an external DHCP client in the sandbox.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --net=eth0 --ip=none</pre></li>
 
-    <li class="list-group-item"><h5>--iprange=address,address</h5>Assign an IP address in the provided range to the last network interface defined bya <TODO>--net</TODO> option. A default gateway is assigned by default.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--iprange=address,address</h5><p>Assign an IP address in the provided range to the last network interface defined bya <a href="#o-net">--net</a> option. A default gateway is assigned by default.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --net=eth0 --\iprange=192.168.1.100,192.168.1.150</pre></li>
 
-    <li class="list-group-item"><h5>--ipc-namespace</h5>Enable  a new IPC namespace if the sandbox was started as a regular user. IPC namespace is enabled by default for sandboxes started as root.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--ipc-namespace</h5><p>Enable  a new IPC namespace if the sandbox was started as a regular user. IPC namespace is enabled by default for sandboxes started as root.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --ipc-namespace firefox</pre></li>
 
-    <li class="list-group-item"><h5>--join=name</h5>Join the sandbox identified by name. By default a <TODO>/bin/bash</TODO> shell is started after joining the sandbox. If a program is specified, the program is run in the sandbox.
-    <br />
-    Example:
+    <li class="list-group-item bs-callout-list-item bs-callout-info"><h5>--join=name</h5><p>oin the sandbox identified by name. By default a <code>/bin/bash</code> shell is started after joining the sandbox. If a program is specified, the program is run in the sandbox.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --name=mygame --caps.drop=all warzone2100 &
-
 [...]
-
 <span class="fa fa-angle-right fa-fw"></span>firejail --join=mygame</pre></li>
 
-    <li class="list-group-item"><h5>--join=pid</h5>Join the sandbox identified by PID. By default a <TODO>/bin/bash</TODO> shell is started after joining the sandbox.
-If a program is specified, the program is run in the sandbox.
-    <br />
-    Example:
+    <li class="list-group-item bs-callout-list-item bs-callout-info"><h5>--join=pid</h5><p>Join the sandbox identified by PID. By default a <code>/bin/bash</code> shell is started after joining the sandbox.
+    If a program is specified, the program is run in the sandbox.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --list
-
 3272:netblue:firejail --private firefox
-
 <span class="fa fa-angle-right fa-fw"></span>firejail --join=3272</pre></li>
 
-    <li class="list-group-item"><h5>--list</h5>List all sandboxes, see MONITORING section for more details.
-    <br />
-    Example:
+    <li class="list-group-item"><a name="o-list" ></a><h5>--list</h5><p>List all sandboxes, see MONITORING section for more details.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --list
-
 7015:netblue:firejail firefox 
-
 7056:netblue:firejail --net=eth0 transmission-gtk 
-
 7064:netblue:firejail --noroot xterm</pre></li>
 
-    <li class="list-group-item"><h5>--mac=address</h5>Assign MAC addresses to the last network interface defined bya <TODO>--net</TODO> option.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--mac=address</h5><p>Assign MAC addresses to the last network interface defined bya <a href="#o-net">--net</a> option.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --net=eth0 --mac=00:11:22:33:44:55 firefox</pre></li>
 
-    <li class="list-group-item"><h5>--name=name</h5>Set sandbox hostname. Several options, such as --join and --shutdown, can use this name to identify a sandbox.
-    <br />
-    Example:
+    <li class="list-group-item bs-callout-list-item bs-callout-info"><a name="o-name"></a><h5>--name=name</h5><p>Set sandbox hostname. Several options, such as --join and --shutdown, can use this name to identify a sandbox.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --name=mybrowser firefox</pre></li>
 
-    <li class="list-group-item"><h5>--net=bridge_interface</h5>
-Enable a new network namespace and connect it to this bridge interface.
-Unless specified with option <TODO>--ip</TODO> and <TODO>--defaultgw</TODO>, an IP address and a default gateway will be assigned
+    <li class="list-group-item"><a name="o-net"></a><h5>--net=bridge_interface</h5>
+<p>Enable a new network namespace and connect it to this bridge interface.
+Unless specified with option <a href="#o-ip">--ip</a> and <a href="#o-defaultgw">--defaultgw</a>, an IP address and a default gateway will be assigned
 automatically to the sandbox. The IP address is verified using ARP before assignment. The address
-configured as default gateway is the bridge device IP address. Up to four <TODO>--net</TODO>
-bridge devices can be defined. Mixing bridge and macvlan devices is allowed.
-    <br />
-    Example:
-    <pre><span class="fa fa-angle-right fa-fw"></span>sudo brctl addbr br0
-
+configured as default gateway is the bridge device IP address. Up to four <a href="#o-net">--net</a>
+bridge devices can be defined. Mixing bridge and macvlan devices is allowed.</p>
+<pre><span class="fa fa-angle-right fa-fw"></span>sudo brctl addbr br0
 <span class="fa fa-angle-right fa-fw"></span>sudo ifconfig br0 10.10.20.1/24
-
 <span class="fa fa-angle-right fa-fw"></span>sudo brctl addbr br1
-
 <span class="fa fa-angle-right fa-fw"></span>sudo ifconfig br1 10.10.30.1/24
-
 <span class="fa fa-angle-right fa-fw"></span>firejail --net=br0 --net=br1
 </pre></li>
 
     <li class="list-group-item"><h5>--net=ethernet_interface</h5>
-Enable a new network namespace and connect it
+<p>Enable a new network namespace and connect it
 to this ethernet interface using the standard Linux macvlan
-driver. Unless specified with option <TODO>--ip</TODO> and <TODO>--defaultgw</TODO>, an
+driver. Unless specified with option <a href="#o-ip">--ip</a> and <a href="#o-defaultgw">--defaultgw</a>, an
 IP address and a default gateway will be assigned automatically
 to the sandbox. The IP address is verified using ARP before
 assignment. The address configured as default gateway is the
-default gateway of the host. Up to four <TODO>--net</TODO> devices can
-be defined. Mixing bridge and macvlan devices is allowed.
-    <br />
-    Example:
+default gateway of the host. Up to four <a href="#o-net">--net</a> devices can
+be defined. Mixing bridge and macvlan devices is allowed.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --net=eth0 --ip=192.168.1.80 --dns=8.8.8.8 firefox</pre></li>
 
-    <li class="list-group-item"><h5>--net=none
-Enable a new, unconnected network namespace. The only interface
+    <li class="list-group-item"><h5>--net=none</h5>
+<p>Enable a new, unconnected network namespace. The only interface
 available in the new namespace is a new loopback interface (lo).
 Use this option to deny
-network access to programs that don't really need network access.
-
-    Example:
+network access to programs that don't really need network access.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --net=none vlc</pre></li>
 
-    <li class="list-group-item"><h5>--netfilter</h5>
-Enable a default client network filter in the new network namespace.
-New network namespaces are created using <TODO>--net</TODO> option. If a new network namespaces is not created,
-<TODO>--netfilter</TODO> option does nothing. The default filter is as follows:
+    <li class="list-group-item"><a name="o-netfilter"></a><h5>--netfilter</h5>
+<p>Enable a default client network filter in the new network namespace.
+New network namespaces are created using <a href="#o-net">--net</a> option. If a new network namespaces is not created,
+<a href="#o-netfilter">--netfilter</a> option does nothing. The default filter is as follows:</p>
 
-  <ul>
-    <li>*filter</li>
-    <li>:INPUT DROP [0:0]</li>
-    <li>:FORWARD DROP [0:0]</li>
-    <li>:OUTPUT ACCEPT [0:0]</li>
-    <li>-A INPUT -i lo -j ACCEPT</li>
-    <li>-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</li>
-    <li>-A INPUT -p icmp --icmp-type destination-unreachable -j ACCEPT</li>
-    <li>-A INPUT -p icmp --icmp-type time-exceeded -j ACCEPT</li>
-    <li>-A INPUT -p icmp --icmp-type echo-request -j ACCEPT</li>
-    <li>COMMIT</li>
-  <ul>
+<pre>*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp --icmp-type destination-unreachable -j ACCEPT
+-A INPUT -p icmp --icmp-type time-exceeded -j ACCEPT
+-A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+COMMIT</pre>
 
-    <br />
-    Example:
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --net=eth0 --netfilter firefox</pre></li>
 
     <li class="list-group-item"><h5>--netfilter=filename</h5>
-Enable the network filter specified by filename in the new network namespace. The filter file format
-is the format of iptables-save and iptable-restore commands.
-New network namespaces are created using <TODO>--net</TODO> option. If a new network namespaces is not created,
-<TODO>--netfilter</TODO> option does nothing.
-    <br />
-    Example:
+<p>Enable the network filter specified by filename in the new network namespace. The filter file format
+is the format of <span class="fa fa-gear fa-fw"></span>iptables-save and <span class="fa fa-gear fa-fw"></span>iptable-restore commands.
+New network namespaces are created using <a href="#o-net">--net</a> option. If a new network namespaces is not created,
+<a href="#o-netfilter">--netfilter</a> option does nothing.
+</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --net=eth0 --netfilter=myfile firefox</pre></li>
-    <li class="list-group-item"><h5>--netstats</h5>Monitor network namespace statistics, see MONITORING section for more details.
-    <br />
-    Example:
+
+    <li class="list-group-item"><a name="o-netstats"></a><h5>--netstats</h5><p>Monitor network namespace statistics, see MONITORING section for more details.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --netstats
-
 PID  User    RX(KB/s) TX(KB/s) Command
-
 1294 netblue 53.355   1.473    firejail --net=eth0 firefox
-
 7383 netblue 9.045    0.112    firejail --net=eth0 transmission</pre></li>
 
-    <li class="list-group-item"><h5>--nogroups</h5>Disable supplementary groups. Without this option, supplementary groups are enabled for the user starting the
-sandbox. For root user supplementary groups are always disabled.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--nogroups</h5><p>Disable supplementary groups. Without this option, supplementary groups are enabled for the user starting the
+    sandbox. For root user supplementary groups are always disabled.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>id
-
 uid=1000(netblue) gid=1000(netblue) groups=1000(netblue),24(cdrom),25(floppy),27(sudo),29(audio)
-
 <span class="fa fa-angle-right fa-fw"></span>firejail --nogroups
-
 Parent pid 8704, child pid 8705
-
 Child process initialized
-
 <span class="fa fa-angle-right fa-fw"></span>id
-
 uid=1000(netblue) gid=1000(netblue) groups=1000(netblue)</pre></li>
 
-    <li class="list-group-item"><h5>--noprofile</h5>Do not use a security profile. 
-    <br />
-    Example:
+    <li class="list-group-item"><a name="o-noprofile"></a><h5>--noprofile</h5><p>Do not use a security profile. </p>
+
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail
-
 Reading profile /etc/firejail/generic.profile
-
 Parent pid 8553, child pid 8554
-
 Child process initialized
-
 [...] 
-
 <span class="fa fa-angle-right fa-fw"></span>firejail --noprofile
-
 Parent pid 8553, child pid 8554
-
 Child process initialized
-
 [...]</pre></li>
 
-    <li class="list-group-item"><h5>--noroot</h5>Install a user namespace with a single user - the current user.
-root user does not exist in the new namespace. This option
-requires a Linux kernel version 3.8 or newer. The option
-is not supported for <TODO>--chroot</TODO> and <TODO>--overlay</TODO> configurations,
-or for sandboxes started as root.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--noroot</h5><p>Install a user namespace with a single user - the current user.
+    root user does not exist in the new namespace. This option
+    requires a Linux kernel version 3.8 or newer. The option
+    is not supported for <a href="#o-chroot">--chroot</a> and <a href="#o-overlay">--overlay</a> configurations,
+    or for sandboxes started as root.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --noroot
-
 Parent pid 8553, child pid 8554
-
 Child process initialized
-
 <span class="fa fa-angle-right fa-fw"></span>ping google.com
-
 ping: icmp open socket: Operation not permitted
-
 </pre></li>
 
-    <li class="list-group-item"><h5>--output=logfile</h5>stdout logging and log rotation. Copy stdout to logfile, and keep the size of the file under 500KB using log rotation. Five files with prefixes .1 to .5 are used in rotation.
-    <br />
-    Example:
+    <li class="list-group-item"><h5>--output=logfile</h5><p>stdout logging and log rotation. Copy stdout to logfile, and keep the size of the file under 500KB using log rotation. Five files with prefixes .1 to .5 are used in rotation.</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --output=sandboxlog /bin/bash
-
 [...]
-
 <span class="fa fa-angle-right fa-fw"></span>ls -l sandboxlog*
 -rw-r--r-- 1 netblue netblue 333890 Jun  2 07:48 sandboxlog
 -rw-r--r-- 1 netblue netblue 511488 Jun  2 07:48 sandboxlog.1
@@ -434,130 +330,86 @@ ping: icmp open socket: Operation not permitted
 -rw-r--r-- 1 netblue netblue 511488 Jun  2 07:48 sandboxlog.4
 -rw-r--r-- 1 netblue netblue 511488 Jun  2 07:48 sandboxlog.5</pre></li>
 
-    <li class="list-group-item"><h5>--overlay</h5>Mount a filesystem overlay on top of the current filesystem. All filesystem modifications go into the overlay.
-The overlay is stored in $HOME/.firejail directory.
-<br />
-<br />
-
-OverlayFS support is required in Linux kernel for this option to work.
-OverlayFS was officially introduced in Linux kernel version 3.18
-    <br />
-    Example:
+    <li class="list-group-item bs-callout-list-item bs-callout-info"><a name="o-overlay"></a><h5>--overlay</h5><p>Mount a filesystem overlay on top of the current filesystem. All filesystem modifications go into the overlay. The overlay is stored in $HOME/.firejail directory.</p>
+<p>OverlayFS support is required in Linux kernel for this option to work. OverlayFS was officially introduced in Linux kernel version 3.18</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --overlay firefox</pre>
 </li>
 
     <li class="list-group-item"><h5>--overlay-tmpfs</h5>
-Mount a filesystem overlay on top of the current filesystem. All filesystem modifications go into the overlay,
-and are discarded when the sandbox is closed.
-<br />
-<br />
-
-OverlayFS support is required in Linux kernel for this option to work.
-OverlayFS was officially introduced in Linux kernel version 3.18
-    <br />
-    Example:
+<p>Mount a filesystem overlay on top of the current filesystem. All filesystem modifications go into the overlay,
+and are discarded when the sandbox is closed.</p>
+<p>OverlayFS support is required in Linux kernel for this option to work.OverlayFS was officially introduced in Linux kernel version 3.18</p>
     <pre><span class="fa fa-angle-right fa-fw"></span>firejail --overlay-tmpfs firefox</pre></li>
 
-    <li class="list-group-item"><h5>--private</h5>
-Mount new /root and /home/user directories in temporary
+    <li class="list-group-item bs-callout-list-item bs-callout-info"><h5>--private</h5>
+<p>Mount new /root and /home/user directories in temporary
 filesystems. All modifications are discarded when the sandbox is
-closed.
-<br />
-Example:
+closed.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --private firefox</pre></li>
 
-    <li class="list-group-item"><h5>--private=directory</h5>Use directory as user home.
-<br />
-Example:
+    <li class="list-group-item"><h5>--private=directory</h5><p>Use directory as user home.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --private=/home/netblue/firefox-home firefox</pre></li>
 
-    <li class="list-group-item"><h5>--private-home=file,directory</h5>Build a new user home in a temporary
-filesystem, and copy the files and directories in the list in the
-new home. All modifications are discarded when the sandbox is
-closed.
-<br />
-Example:
+    <li class="list-group-item bs-callout-list-item bs-callout-info"><h5>--private-home=file,directory</h5><p>Build a new user home in a temporary
+    filesystem, and copy the files and directories in the list in the
+    new home. All modifications are discarded when the sandbox is
+    closed.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --private-home=.mozilla firefox</pre></li>
 
-    <li class="list-group-item"><h5>--private-dev</h5>Create a new /dev directory. Only null, full, zero, tty, pts, ptmx, random, urandom and shm devices are available.
-<br />
-Example:
+    <li class="list-group-item"><h5>--private-dev</h5><p>Create a new /dev directory. Only null, full, zero, tty, pts, ptmx, random, urandom and shm devices are available.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --private-dev
-
 Parent pid 9887, child pid 9888
-
 Child process initialized
-
 <span class="fa fa-angle-right fa-fw"></span>ls /dev
-
 full  null  ptmx  pts  random  shm  tty  urandom  zero</pre></li>
 
     <li class="list-group-item"><h5>--private-etc=file,directory</h5>
-Build a new <TODO>/etc</TODO> in a temporary
+<p>Build a new <code>/etc</code> in a temporary
 filesystem, and copy the files and directories in the list.
 All modifications are discarded when the sandbox is closed.
-<br />
-Example:
+</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --private-etc=group,hostname,localtime, \\
-
 nsswitch.conf,passwd,resolv.conf</li>
 
-    <li class="list-group-item"><h5>--profile=filename</h5>
-Load a custom security profile from filename. For filename use an absolute path or a path relative to the current path.
-For more information, see <a href="TODO">SECURITY PROFILES</a> section below.
-<br />
-Example:
-<pre><span class="fa fa-angle-right fa-fw"></span>firejail --profile=myprofile</pre></li>
+    <li class="list-group-item bs-callout-list-item bs-callout-info"><a name="o-profile"></a><h5>--profile=filename</h5>
+<p>Load a custom security profile from filename. For filename use an absolute path or a path relative to the current path.
+For more information, see <a href="#sec-profiles">SECURITY PROFILES</a> section below.
+</p>
+<pre><span class="fa fa-angle-right fa-fw"></span>firejail --profile=/path/to/profile/firefox.profile firefox</pre></li>
 
-    <li class="list-group-item"><h5>--read-only=dirname_or_filename</h5>Set directory or file read-only.
-<br />
-Example:
+    <li class="list-group-item"><h5>--read-only=dirname_or_filename</h5><p>Set directory or file read-only.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --read-only=~/.mozilla firefox</li>
 
-    <li class="list-group-item"><h5>--rlimit-fsize=number</h5>Set the maximum file size that can be created by a process.</li>
+    <li class="list-group-item"><h5>--rlimit-fsize=number</h5><p>Set the maximum file size that can be created by a process.</p></li>
 
-    <li class="list-group-item"><h5>--rlimit-nofile=number</h5>Set the maximum number of files that can be opened by a process.</li>
+    <li class="list-group-item"><h5>--rlimit-nofile=number</h5><p>Set the maximum number of files that can be opened by a process.</p></li>
 
-    <li class="list-group-item"><h5>--rlimit-nproc=number</h5>Set the maximum number of processes that can be created for the real user ID of the calling process.</li>
+    <li class="list-group-item"><h5>--rlimit-nproc=number</h5><p>Set the maximum number of processes that can be created for the real user ID of the calling process.</p></li>
 
-    <li class="list-group-item"><h5>--rlimit-sigpending=number</h5>Set the maximum number of pending signals for a process.</li>
+    <li class="list-group-item"><h5>--rlimit-sigpending=number</h5><p>Set the maximum number of pending signals for a process.</p></li>
 
-    <li class="list-group-item"><h5>--scan</h5>ARP-scan all the networks from inside a network namespace. This makes it possible to detect macvlan kernel device drivers running on the current host.
-<br />
-Example:
+    <li class="list-group-item"><h5>--scan</h5><p>ARP-scan all the networks from inside a network namespace. This makes it possible to detect macvlan kernel device drivers running on the current host.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --net=eth0 --scan</pre></li>
 
     <li class="list-group-item"><h5>--seccomp</h5>
-Enable seccomp filter and blacklist the syscalls in the default list. The default list is as follows:
+<p>Enable seccomp filter and blacklist the syscalls in the default list. The default list is as follows:
 mount, umount2, ptrace, kexec_load, open_by_handle_at, init_module, finit_module, delete_module,
 iopl, ioperm, swapon, swapoff, syslog, process_vm_readv and process_vm_writev,
-sysfs,_sysctl, adjtimex, clock_adjtime, lookup_dcookie, perf_event_open, fanotify_init and kcmp.
-<br />
-Example:
+sysfs,_sysctl, adjtimex, clock_adjtime, lookup_dcookie, perf_event_open, fanotify_init and kcmp.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --seccomp</prpe></li>
 
-    <li class="list-group-item"><h5>--seccomp=syscall,syscall,syscall</h5>Enable seccomp filter, blacklist the default list and the syscalls specified by the command.
-<br />
-Example:
+    <li class="list-group-item"><h5>--seccomp=syscall,syscall,syscall</h5><p>Enable seccomp filter, blacklist the default list and the syscalls specified by the command.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --seccomp=utime,utimensat,utimes firefox</pre></li>
 
-    <li class="list-group-item"><h5>--seccomp.drop=syscall,syscall,syscall</h5>Enable seccomp filter, and blacklist the syscalls specified by the command.
-<br />
-Example:
+    <li class="list-group-item"><h5>--seccomp.drop=syscall,syscall,syscall</h5><p>Enable seccomp filter, and blacklist the syscalls specified by the command.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --seccomp.drop=utime,utimensat,utimes</pre></li>
 
-    <li class="list-group-item"><h5>--seccomp.keep=syscall,syscall,syscall</h5>Enable seccomp filter, and whitelist the syscalls specified by the command.
-<br />
-Example:
+    <li class="list-group-item"><h5>--seccomp.keep=syscall,syscall,syscall</h5><p>Enable seccomp filter, and whitelist the syscalls specified by the command.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --shell=none --seccomp.keep=poll,select,[...] transmission-gtk</pre></li>
 
-    <li class="list-group-item"><h5>--seccomp.print=name</h5>Print the seccomp filter for the sandbox started using <TODO>--name</TODO> option.
-<br />
-Example:
+    <li class="list-group-item"><h5>--seccomp.print=name</h5><p>Print the seccomp filter for the sandbox started using <a href="#o-name">--name</a> option.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --name=browser firefox &
-
 <span class="fa fa-angle-right fa-fw"></span>firejail --seccomp.print=browser
-
 SECCOMP Filter:
   VALIDATE_ARCHITECTURE
   EXAMINE_SYSCAL
@@ -585,14 +437,10 @@ SECCOMP Filter:
   BLACKLIST 300 fanotify_init
   RETURN_ALLOW</pre></li>
   
-    <li class="list-group-item"><h5>--seccomp.print=pid</h5>Print the seccomp filter for the sandbox specified by process ID. Use <TODO>--list</TODO> option to get a list of all active sandboxes.
-<br />
-Example:
+    <li class="list-group-item"><h5>--seccomp.print=pid</h5><p>Print the seccomp filter for the sandbox specified by process ID. Use <a href="#o-list">--list</a> option to get a list of all active sandboxes.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --list
-
 10786:netblue:firejail --name=browser firefox 
 <span class="fa fa-angle-right fa-fw"></span>firejail --seccomp.print=10786
-
 SECCOMP Filter:
   VALIDATE_ARCHITECTURE
   EXAMINE_SYSCAL
@@ -620,52 +468,34 @@ SECCOMP Filter:
   BLACKLIST 300 fanotify_init
   RETURN_ALLOW</pre></li>
 
-    <li class="list-group-item"><h5>--shell=none</h5>Run the program directly, without a user shell.
-<br />
-Example:
+    <li class="list-group-item"><a name="o-shell" ></a><h5>--shell=none</h5><p>Run the program directly, without a user shell.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --shell=none script.sh</pre></li>
 
     <li class="list-group-item"><h5>--shell=program</h5>
-Set default user shell. Use this shell to run the application using <TODO>-c</TODO> shell option.
+<p>Set default user shell. Use this shell to run the application using <a href="#o-c">-c</a> shell option.
 For example "firejail --shell=/bin/dash firefox" will start Mozilla Firefox as "/bin/dash -c firefox".
-By default Bash shell (<TODO>/bin/bash</TODO>) is used. Options such as <TODO>--zsh</TODO> and <TODO>--csh</TODO> can also set the default
-shell.
-<br />
-Example:
+By default Bash shell (<code>/bin/bash</code>) is used. Options such as <a href="#o-zsh">--zsh</a> and <a href="#o-csh">--csh</a> can also set the default
+shell.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --shell=/bin/dash script.sh</pre></li>
 
-    <li class="list-group-item"><h5>--shutdown=name</h5>Shutdown the sandbox started using <TODO>--name</TODO> option.
-<br />
-Example:
+    <li class="list-group-item"><h5>--shutdown=name</h5><p>Shutdown the sandbox started using <a href="#o-name">--name</a> option.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --name=mygame --caps.drop=all warzone2100 &
-
 [...]
-
 <span class="fa fa-angle-right fa-fw"></span>firejail --shutdown=mygame</pre></li>
 
     <li class="list-group-item"><h5>--shutdown=pid</h5>
-Shutdown the sandbox specified by process ID. Use <TODO>--list</TODO> option to get a list of all active sandboxes.
-<br />
-Example:
+<p>Shutdown the sandbox specified by process ID. Use <a href="#o-list">--list</a> option to get a list of all active sandboxes.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --list
-
 3272:netblue:firejail --private firefox
-
 <span class="fa fa-angle-right fa-fw"></span>firejail --shutdown=3272</pre></li>
 
-    <li class="list-group-item"><h5>--tmpfs=dirname</h5>Mount a tmpfs filesystem on directory dirname.
-<br />
-Example:
+    <li class="list-group-item"><h5>--tmpfs=dirname</h5><p>Mount a tmpfs filesystem on directory dirname.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --tmpfs=/var</pre></li>
 
-    <li class="list-group-item"><h5>--top</h5>Monitor the most CPU-intensive sandboxes, see MONITORING section for more details.
-<br />
-Example:
+    <li class="list-group-item"><a name="o-top" ></a><h5>--top</h5><p>Monitor the most CPU-intensive sandboxes, see MONITORING section for more details.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --top</pre></li>
 
-    <li class="list-group-item"><h5>--trace</h5>Trace open, access and connect system calls.
-<br />
-Example:
+    <li class="list-group-item"><h5>--trace</h5><p>Trace open, access and connect system calls.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --trace wget -q www.debian.org
 Parent pid 11793, child pid 11794
 Child process initialized
@@ -680,9 +510,7 @@ Child process initialized
 parent is shutting down, bye...</pre></li>
 
     <li class="list-group-item"><h5>--tree</h5>
-Print a tree of all sandboxed processes, see MONITORING section for more details.
-<br />
-Example:
+<p>Print a tree of all sandboxed processes, see MONITORING section for more details.</p>
 <pre><span class="fa fa-angle-right fa-fw"></span>firejail --tree
 11903:netblue:firejail iceweasel
   11904:netblue:iceweasel 
@@ -690,245 +518,391 @@ Example:
 11969:netblue:firejail --net=eth0 transmission-gtk 
   11970:netblue:transmission-gtk</pre></li>
 
-    <li class="list-group-item"><h5>--version</h5>Print program version and exit.</li>
+    <li class="list-group-item"><h5>--version</h5><p>Print program version and exit.</p></li>
 
-    <li class="list-group-item"><h5>--zsh</h5>Use <TODO>/usr/bin/zsh</TODO> as default user shell.</li>
+    <li class="list-group-item bs-callout-list-item bs-callout-info"><a name="o-wlapps" ></a><h5>--whitelist-apps</h5><p>List of paths to binaries, separated by a ":",
+which will always be executable from within the sandbox even if they are normally protected applications. Use in conjuction with <a href="#o-helper">--helper</a>.</p>
+<pre><span class="fa fa-angle-right fa-fw"></span>firejail --whitelist-apps="/usr/local/bin/vlc:/usr/bin/vlc-cache-gen"
+</pre></li>
+
+    <li class="list-group-item bs-callout-list-item bs-callout-info"><a name="o-wlfiles" ></a><h5>--whitelist-files</h5><p>List of paths, separated by a ":", to files
+that are always reachable within the sandbox, even if they are normally protected files. Includes sub-folders. Use in conjuction with <a href="#o-helper">--helper</a>.</p>
+<pre><span class="fa fa-angle-right fa-fw"></span>firejail --whitelist-files="~/Private/:/tmp/secret.png"
+</pre></li>
+
+    <li class="list-group-item"><a name="o-zsh"></a><h5>--zsh</h5><p>Use <code>/usr/bin/zsh</code> as default user shell.</p></li>
 </ol>
 
 
 
+
+<a name="sec-traffic"></a>
 <h3>Traffic Shaping</h3>
-Network bandwidth is an expensive resource shared among all sandboxes running on a system.
+<p>Network bandwidth is an expensive resource shared among all sandboxes running on a system.
 Traffic shaping allows the user to increase network performance by controlling
-the amount of data that flows into and out of the sandboxes.
+the amount of data that flows into and out of the sandboxes.</p>
 
-Firejail implements a simple rate-limiting shaper based on Linux command tc.
-The shaper works at sandbox level, and can be used only for sandboxes configured with new network namespaces.
+<p>Firejail implements a simple rate-limiting shaper based on Linux command <span class="fa fa-gear fa-fw"></span>tc.
+The shaper works at sandbox level, and can be used only for sandboxes configured with new network namespaces.</p>
 
-Set rate-limits:
+  <ol class="list-group">
+    <li class="list-group-item">Set rate-limits:
+      <pre><span class="fa fa-angle-right fa-fw"></span>firejail --bandwidth={name|pid} set network download upload</pre>
+    </li>
+    <li class="list-group-item">Clear rate-limits:
+      <pre><span class="fa fa-angle-right fa-fw"></span>firejail --bandwidth={name|pid} clear network</pre>
+    </li>
+    <li class="list-group-item">Status:
+      <pre><span class="fa fa-angle-right fa-fw"></span>firejail --bandwidth={name|pid} status</pre>
+    </li>
+    <li class="list-group-item">
+      <ul>
+        <li>name - sandbox name</li>
+        <li>pid - sandbox pid</li>
+        <li>network - network interface as used by <a href="#o-net">--net</a> option</li>
+        <li>download - download speed in KB/s (kilobyte per second)</li>
+        <li>upload - upload speed in KB/s (kilobyte per second)</li>
+      </ul>
+    </li>
+  </ol>
 
-	firejail --bandwidth={name|pid} set network download upload
+<p>Example:</p>
+<pre><span class="fa fa-angle-right fa-fw"></span>firejail --name=mybrowser --net=eth0 firefox &
+<span class="fa fa-angle-right fa-fw"></span>firejail --bandwidth=mybrowser set eth0 80 20
+<span class="fa fa-angle-right fa-fw"></span>firejail --bandwidth=mybrowser status
+<span class="fa fa-angle-right fa-fw"></span>firejail --bandwidth=mybrowser clear eth0</pre>
 
-Clear rate-limits:
-
-	firejail --bandwidth={name|pid} clear network
-
-Status:
-
-	firejail --bandwidth={name|pid} status
-
-where:
-
-	name - sandbox name
-
-	pid - sandbox pid
-
-	network - network interface as used by <TODO>--net</TODO> option
-
-	download - download speed in KB/s (kilobyte per second)
-
-	upload - upload speed in KB/s (kilobyte per second)
-
-Example:
-
-	<span class="fa fa-angle-right fa-fw"></span>firejail --name=mybrowser --net=eth0 firefox &
-
-	<span class="fa fa-angle-right fa-fw"></span>firejail --bandwidth=mybrowser set eth0 80 20
-
-	<span class="fa fa-angle-right fa-fw"></span>firejail --bandwidth=mybrowser status
-
-	<span class="fa fa-angle-right fa-fw"></span>firejail --bandwidth=mybrowser clear eth0
-
+<a name="sec-monitoring"></a>
 <h3>Monitoring</h3>
-Option --list prints a list of all sandboxes. The format
-for each process entry is as follows:
+<p>Options <a href="#o-list">--list</a> and <a href="#o-tree">--tree</a> print a list of all sandboxes and a tree of processes running in a sandbox, respectively. The format for each process entry is as follows:</p>
+<pre>PID:USER:Command</pre>
 
-	PID:USER:Command
+<p>Option <a href="#o-top">--top</a> is similar to the UNIX <span class="fa fa-gear fa-fw"></span>top command, however it applies only to sandboxes. Option <a href="#o-netstats">--netstats</a> prints network statistics for active sandboxes installing new network namespaces. Listed below are the available fields (columns) in alphabetical order for <a href="#o-netstats">--top</a> and <a href="#o-netstats">--netstat</a> options:</p>
 
-Option --tree prints the tree of processes running in the sandbox. The format
-for each process entry is as follows:
-
-	PID:USER:Command
-
-Option --top is similar to the UNIX top command, however it applies only to
-sandboxes.
-
-Option --netstats prints network statistics for active sandboxes installing new network namespaces.
-
-
-Listed below are the available fields (columns) in alphabetical
-order for --top and --netstat options:
-
-.TP
-Command
-Command used to start the sandbox.
-.TP
-CPU%
-CPU usage, the sandbox share of the elapsed CPU time since the
-last screen update
-.TP
-PID
-Unique process ID for the task controlling the sandbox.
-.TP
-Prcs
-Number of processes running in sandbox, including the controlling process.
-.TP
-RES
-Resident Memory Size (KiB), sandbox non-swapped physical memory.
-It is a sum of the RES values for all processes running in the sandbox.
-.TP
-RX(KB/s)
-Network receive speed.
-.TP
-SHR
-Shared Memory Size (KiB), it reflects memory shared with other
+<ol class="list-group">
+<li class="list-group-item">
+<h5>Command</h5> Command used to start the sandbox.
+</li>
+<li class="list-group-item">
+<h5>CPU%</h5> CPU usage, the sandbox share of the elapsed CPU time since the last screen update
+</li>
+<li class="list-group-item">
+<h5>PID</h5> Unique process ID for the task controlling the sandbox.
+</li>
+<li class="list-group-item">
+<h5>Prcs</h5> Number of processes running in sandbox, including the controlling process.
+</li>
+<li class="list-group-item">
+<h5>RES</h5> Resident Memory Size (KiB), sandbox non-swapped physical memory. It is a sum of the RES values for all processes running in the sandbox.
+</li>
+<li class="list-group-item">
+<h5>RX(KB/s)</h5> Network receive speed.
+</li>
+<li class="list-group-item">
+<h5>SHR</h5> Shared Memory Size (KiB), it reflects memory shared with other
 processes. It is a sum of the SHR values for all processes running
 in the sandbox, including the controlling process.
-.TP
-TX(KB/s)
-Network transmit speed.
-.TP
-Uptime
-Sandbox running time in hours:minutes:seconds format.
-.TP
-User
-The owner of the sandbox.
+</li>
+<li class="list-group-item">
+<h5>TX(KB/s)</h5> Network transmit speed.
+</li>
+<li class="list-group-item">
+<h5>Uptime</h5> Sandbox running time in hours:minutes:seconds format.
+</li>
+<li class="list-group-item">
+<h5>User</h5> The owner of the sandbox.
+</li>
+</ol>
 
+
+
+
+<a name="sec-profiles"></a>
 <h3>Security Profiles</h3>
-Several command line options can be passed to the program using
-profile files. Firejail chooses the profile file as follows:
+<p>Several command line options can be passed to the program using profile files. Firejail chooses the profile file as follows:</p>
 
-1. If a profile file is provided by the user with --profile option, the profile file is loaded.
-Example:
-</p>
+<ol class="list-group">
+  <li class="list-group-item">
+  <p><h5>1.</h5> If a profile file is provided by the user with <a href="#o-profile">--profile</a> option, the profile file is loaded.</p>
 
-<p>
-.RS
-<span class="fa fa-angle-right fa-fw"></span>firejail --profile=/home/netblue/icecat.profile icecat
-
+  <pre><span class="fa fa-angle-right fa-fw"></span>firejail --profile=/home/netblue/icecat.profile icecat
 Reading profile /home/netblue/icecat.profile
+[...]</pre></li>
 
-[...]
-.RE
+  <li class="list-group-item">
+  <p><h5>2.</h5> If a profile file with the same name as the application is present in <code>~/.config/firejail</code> directory or
+in <code>/etc/firejail</code>, the profile is loaded. <code>~/.config/firejail</code> takes precedence over <code>/etc/firejail</code>.</p>
 
-2. If a profile file with the same name as the application is present in ~/.config/firejail directory or
-in /etc/firejail, the profile is loaded. ~/.config/firejail takes precedence over /etc/firejail. Example:
-</p>
-
-<p>
-.RS
-<span class="fa fa-angle-right fa-fw"></span>firejail icecat
-
+  <pre><span class="fa fa-angle-right fa-fw"></span>firejail icecat
 Command name #icecat#
-
 Found icecat profile in /home/netblue/.config/firejail directory
-
 Reading profile /home/netblue/.config/firejail/icecat.profile
-
 [...]
-.RE
+</pre></li>
 
-3. Use a default.profile file if the sandbox
-is started by a regular user, or a server.profile file if the sandbox
-is started by root. Firejail looks for these files in ~/.config/firejail directory, followed by /etc/firejail directory.
-To disable default profile loading, use --noroot command option. Example:
+  <li class="list-group-item">
+  <p><h5>3.</h5> Use a <code>generic.profile</code> file if the sandbox is started by a regular user, or a <code>server.profile</code> file if the sandbox is started by root. Firejail looks for these files in <code>~/.config/firejail</code> directory, followed by <code>/etc/firejail</code> directory.
+To disable default profile loading, use <a href="#o-noprofile">--noprofile</a> command option.</p></li>
+</ol>
+
+
+
+
+<a name="sec-syntax"></a>
+<h3>Firejail Profile Syntax</h3>
+<p>You can write your own profiles and add them to the <code>/etc/firejail</code> directory. They must use the extension <code>.profile</code>. This section describe the syntax of the profile files.</p>
+
+<h4>Scripting</h4>
+<p>Include and comment support:</p>
+<ol class="list-group">
+  <li class="list-group-item">
+    <pre>include other.profile</pre>
+    <p>Includes the <code>other.profile</code> file. Example: <code>"include /etc/firejail/disable-common.inc"</code>
+        loads the <code>disable-common.inc</code> file. Note: if you want to include an existing file but cancel one of its own <code>blacklist</code> commands, use the <code>noblacklist</code>afterwards.</p>
+    
+    <p><code>other.profile</code> file name can be prefixed with <code>${HOME}</code>. This will force Firejail to look for the file in user home directory. Example: <code>"include ${HOME}/myprofiles/profile1"</code> will load <code>"~/myprofiles/profile1"</code> file.</p>
+  </li>
+
+  <li class="list-group-item">
+    <pre># this is a comment</pre>
+  </li>
+</ol>
+
+<h4>Filesystem</h4>
+<p>These profile entries define a chroot filesystem built on top of the existing
+host filesystem. Each line describes a file element that is removed from
+the filesystem (<code>blacklist</code>), a read-only file or directory (<code>read-only</code>),
+a filter for finer control of blacklisting (<code>noblacklist</code>),
+a tmpfs mounted on top of an existing directory (<code>tmpfs</code>),
+or mount-bind a directory  or file on top of another directory or file (<code>bind</code>).
+Use <code>private</code> to set private mode. File globbing is supported, and PATH and HOME directories are searched.</p>
+
+<p>Examples:</p>
+
+<ol class="list-group">
+  <li class="list-group-item">
+    <pre>blacklist /usr/bin</pre>
+    <p>Remove the <code>/usr/bin</code> directory.</p>
+  </li>
+
+  <li class="list-group-item">
+    <pre>blacklist /etc/password</pre>
+    <p>Remove the <code>/etc/password</code> file.</p>
+  </li>
+
+  <li class="list-group-item">
+    <pre>read-only /etc/password</pre>
+    <p>Only allow reading the <code>/etc/password</code> file.</p>
+  </li>
+
+  <li class="list-group-item">
+    <pre>tmpfs /etc</pre>
+    <p>Mount an empty tmpfs filesystem on top of the <code>/etc</code> directory.</p>
+  </li>
+
+  <li class="list-group-item">
+    <pre>bind /root/config/ssh,/etc/ssh</pre>
+    <p>Mount-bind <code>/root/config/ssh</code> on <code>/etc/ssh</code>.</p>
+  </li>
+
+  <li class="list-group-item">
+    <pre>blacklist /usr/bin/gcc*</pre>
+    <p>Remove all gcc files in <code>/usr/bin</code> (file globbing).</p>
+  </li>
+
+  <li class="list-group-item">
+    <pre>blacklist ${PATH}/ifconfig</pre>
+    <p>Remove <code>ifconfig</code> command from the regular path directories.</p>
+  </li>
+
+  <li class="list-group-item">
+    <pre>blacklist ${HOME}/.ssh</pre>
+    <p>Remove <code>.ssh</code> directory from user home directory.</p>
+  </li>
+
+  <li class="list-group-item">
+    <pre>noblacklist ${HOME}/.config/evince</pre>
+    <p>Prevent any new blacklist commands from blacklisting
+<cocde>.config/evince</code> in the user home directory. Useful for defining
+exceptions before including a large blacklist from a file. Note
+that blacklisting <code>${HOME}/.config</code> can still make
+<code>${HOME}/.config/evince</code> effectively unreachable through filesystem
+traversal.
 </p>
+  </li>
 
-<p>
-.RS
-<span class="fa fa-angle-right fa-fw"></span>firejail
+  <li class="list-group-item">
+    <pre>private</pre>
+    <p>Mount new /root and /home/user directories in temporary
+      filesystems. All modifications are discarded when the sandbox is
+      closed.
+    </p>
+  </li>
 
-Reading profile /etc/firejail/generic.profile
+  <li class="list-group-item">
+    <pre>private directory</pre>
+    <p>Use <code>directory</code> as user home.</p>
+  </li>
 
-Parent pid 8553, child pid 8554
+  <li class="list-group-item">
+    <pre>private-home file,directory</pre>
+    <p>Build a new user home in a temporary
+filesystem, and copy the files and directories in the list in the
+new home. All modifications are discarded when the sandbox is
+closed. Contrarily to the <code>private</code> option, this lets
+you keep some of the original files in home available for reading. </p>
+  </li>
 
-Child process initialized
+  <li class="list-group-item">
+    <pre>private-dev</pre>
+    <p>Create a new <code>/dev</code> directory. Only null, full, zero, tty, pts, ptmx, random, urandom and shm devices are available.</p>
+  </li>
 
-[...] 
+  <li class="list-group-item">
+    <pre>private-etc file,directory</pre>
+    <p>Build a new <code>/etc</code> in a temporary
+filesystem, and copy the files and directories in the list.
+All modifications are discarded when the sandbox is closed. </p>
+  </li>
+</ol>
+
+<h4>User Namespace</h4>
+<p>For advanced users. Use <code>noroot</code> to enable an user namespace. The namespace has only one user, the current user. There is no root account defined in the namespace. This makes the sandbox more secure, because it prevents some root privilege escalation exploits from working.</p>
+
+<ol class="list-group">
+  <li class="list-group-item">
+    <pre>noroot</pre>
+    <p>Enable an user namespace without root user defined.</p>
+  </li>
+</ol>
+
+<h4>Resource Limits</h4>
+<p>These profile entries define the limits on system resources (rlimits) for the processes inside the sandbox.
+The limits can be modified inside the sandbox using the regular <code>ulimit</code> command. Limiting resources
+can be useful to prevent a buggy or malicious program from having a longstanding impact on the system. Such a
+program may attempt to fill the disk by writing repeatedly to a file, for instance. Examples:</p>
+
+<ol class="list-group">
+  <li class="list-group-item">
+    <pre>limit-fsize 1024</pre>
+    <p>Set the maximum file size that can be created by a process to 1024 bytes.</p>
+  </li>
+  <li class="list-group-item">
+    <pre>limit-nproc 1000</pre>
+    <p>Set the maximum number of processes that can be created for the real user ID of the calling process to 1000.</p>
+  </li>
+  <li class="list-group-item">
+    <pre>limit-nofile 500</pre>
+    <p>Set the maximum number of files that can be opened by a process to 500.</p>
+  </li>
+  <li class="list-group-item">
+    <pre>limit-sigpending 200</pre>
+    <p>Set the maximum number of processes that can be created for the real user ID of the calling process to 200.</p>
+  </li>
+  <li class="list-group-item">
+    <pre>limit-fsize 1024</pre>
+    <p>Set the maximum file size that can be created by a process to 1024 bytes.</p>
+  </li>
+</ol>
 
 
+<h4>CPU Affinity</h4>
+<p>Set the CPU cores available for this sandbox. Examples:</p>
 
-<span class="fa fa-angle-right fa-fw"></span>firejail --noprofile
+<ol class="list-group">
+  <li class="list-group-item">
+    <pre>cpu 1,2,3</pre>
+    <p>Use only CPU cores 0, 1 and 2.</p>
+  </li>
+</ol>
 
-Parent pid 8553, child pid 8554
 
-Child process initialized
+<h4>CPU Affinity</h4>
+<p>Set the CPU cores available for this sandbox. Examples:</p>
 
-[...]
-.RE
+<ol class="list-group">
+  <li class="list-group-item">
+    <pre>cpu 1,2,3</pre>
+    <p>Use only CPU cores 0, 1 and 2.</p>
+  </li>
+</ol>
 
-See man 5 firejail-profile for profile file syntax information.
+
+<h4>Control Groups</h4>
+<p>For advanced users. Place the sandbox in an existing control group specified by the full path of the task file. Example:</p>
+
+<ol class="list-group">
+  <li class="list-group-item">
+    <pre>cgroup /sys/fs/cgroup/g1/tasks</pre>
+    <p>The sandbox is placed in <code>g1</code> control group.</p>
+  </li>
+</ol>
+
+
+<h4>Networking</h4>
+<ol class="list-group">
+  <li class="list-group-item">
+    <pre>netfilter</pre>
+    <p>If a new network namespace is created, enabled default network filter.</p>
+  </li>
+  
+  <li class="list-group-item">
+    <pre>netfilter filename</pre>
+    <p>If a new network namespace is created, enabled the network filter in filename.</p>
+  </li>
+  
+  <li class="list-group-item">
+    <pre>net none</pre>
+    <p>Enable  a new, unconnected network namespace. The only interface
+available in the new namespace is a new loopback interface (lo).
+Use  this  option  to deny network access to programs that don't
+really need network access.</p>
+  </li>
+  
+  <li class="list-group-item">
+    <pre>address</pre>
+    <p>Set a DNS server for the sandbox. Up to three DNS servers can be defined.</p>
+  </li>
+</ol>
+
+
+<h4>Misc Environment Options</h4>
+<ol class="list-group">
+  <li class="list-group-item">
+    <pre>env LD_LIBRARY_PATH=/opt/test/lib</pre>
+    <p>Set an environment variable inside the sandbox.</p>
+  </li>
+  
+  <li class="list-group-item">
+    <pre>nogroups</pre>
+    <p>Disable supplementary user groups.</p>
+  </li>
+  
+  <li class="list-group-item">
+    <pre>shell none</pre>
+    <p>Run the program directly, without a shell.</p>
+  </li>
+</ol>
+
+
 	
+<a name="sec-shell"></a>
 <h3>Restricted Shell</h3>
-To configure a restricted shell, replace /bin/bash with /usr/bin/firejail in
-/etc/password file for each user that needs to be restricted. Alternatively,
-you can specify /usr/bin/firejail  in adduser command:
-
-adduser --shell /usr/bin/firejail username
-
-Additional arguments passed to firejail executable upon login are declared in /etc/firejail/login.users file.
-
-<h3>Examples</h3>
-.TP
-\f\firejail
-Start a regular /bin/bash session in sandbox.
-.TP
-\f\firejail firefox
-Start Mozilla Firefox.
-.TP
-\f\firejail --seccomp firefox
-Start Mozilla Firefox in a seccomp sandbox.
-.TP
-\f\firejail --caps firefox
-Start Mozilla Firefox in a Linux capabilities sandbox.
-.TP
-\f\firejail --debug firefox
-Debug Firefox sandbox.
-.TP
-\f\firejail --private
-Start a /bin/bash session with a new tmpfs home directory.
-.TP
-\f\firejail --net=br0 ip=10.10.20.10
-Start a /bin/bash session in a new network namespace. The session is
-connected to the main network using br0 bridge device. An IP address
-of 10.10.20.10 is assigned to the sandbox.
-.TP
-\f\firejail --net=br0 --net=br1 --net=br2
-Start a /bin/bash session in a new network namespace and connect it
-to br0, br1, and br2 host bridge devices.
-.TP
-\f\firejail --list
-List all sandboxed processes.
-<h3>License</h3>
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+<p>To configure a restricted shell, replace <code>/bin/bash</code> with <code>/usr/bin/firejail</code> in
+<code>/etc/password</code> file for each user that needs to be restricted. Alternatively, you can specify <code>/usr/bin/firejail</code> to the <span class="fa fa-gear fa-fw"></span>adduser command:
 </p>
 
-<p>
-Homepage: http://firejail.sourceforge.net
-<h3>See Also</h3>
-\&\flfireexecd\fR\|(1),
-\&\flfiremon\fR\|(1),
-\&\flfirejail-profile\fR\|(5),
-\&\flfirejail-login\fR\|(5)
+<pre><span class="fa fa-hashtag fa-fw">#</span>adduser --shell /usr/bin/firejail username</pre>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<p>Additional arguments passed to firejail executable upon login are declared in <code>/etc/firejail/login.users</code> file.</p>
 
 
 
 {% endblock %}
 
 {% block article_appendix %}
+<hr>
+<p class="bs-callout bs-callout-danger">If you need clarification, do not hesitate to get assistance either with the researchers or on the forum.<br />Firejail is a complex program and we are aware that some of its options are very obscure.</p>
+  <a href="{% if space is defined and space == 'application_space' %}{{ url('ucl_study_app_contact') }}{% else %}{{ url('ucl_study_contact') }}{% endif %}" title="{{ 'Contact the researchers behind this project' | trans }}" class="btn btn-lg btn-default">{{ 'Contact the Researchers' | trans }}</a>
+  <a href="{{ path('ucl_study_part_forum', {'_part': '2'}) }}" title="{{ 'Go to the forum' | trans }}" class="btn btn-lg btn-default">{{ 'Ask for Help on Forum' | trans }}</a>
 {% endblock %}
