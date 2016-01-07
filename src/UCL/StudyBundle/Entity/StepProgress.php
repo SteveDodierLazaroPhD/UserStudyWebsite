@@ -86,7 +86,6 @@ class StepProgress
 
   public function setProgress($progress)
   {
-      $this->clearPreviousFile();
       $this->progress = $progress;
   }
 
