@@ -30,4 +30,16 @@ Things to do:
   # chown apache:<somedevgroup> app/store
 - [tweak app/config/ further if necessary, normally you don't need to]
 - go to src/UCL/StudyBundle/Resources/config/ and hack your project into shape!
+- if not using the forum, remove the web/forum directory, else read below
 - when done hacking, modify web/app_dev.php to remove developer mode
+
+If using the forum:
+- Complete the install by moving conf-defaults to conf and following the website's instructions:
+  $ mv web/forum/conf-defaults web/forum/conf
+  CREATE DATABASE `yourforumname`;
+  CREATE USER 'yourforumname'@'localhost' IDENTIFIED BY 'yourGENERATEDandLONGpassword';
+  GRANT ALL PRIVILEGES ON `yourforumname`.* TO 'yourforumname'@'localhost' WITH GRANT OPTION;
+  (go to website and fill the install form)
+- Integrate the forum with your website
+
+
