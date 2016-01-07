@@ -35,3 +35,7 @@ vendor/swiftmailer
 vendor/symfony
 vendor/twbs
 vendor/twig
+web/forum/cache
+web/forum/uploads
+web/forum/conf
+web/forum/conf/config-defaults.php
