@@ -45,6 +45,7 @@
 <h2>{{ '3. Install the study extension into your browser' | trans }}</h2>
 <h3>{{ 'Google Chrome' | trans }}</h3>
   <ol class="list-group">
+    <li class="list-group-item"><span class="alert-danger">{{ 'If you are using the proprietary Google Chrome:</span> please be aware Chrome cannot run properly if the environment variable <code>LD_PRELOAD</code> is set. The package <code>libpreload-logger</code> sets this variable for your whole system. You will need to use a script to launch Chrome, that unsets the variable. Please adapt the script provided at <code>/usr/local/bin/chromium-browser</code> to point to the path of your real browser (e.g. /opt/google/chrome/chrome). You can then run your Chrome browser by typing <kbd><strong>chromium-browser</strong></kbd> in the Xfce App Finder or in a terminal.' | trans | raw }}</li>
     <li class="list-group-item">{{ 'Open your Chrome Web browser, and visit our <a href="https://chrome.google.com/webstore/detail/ucl-study-zeitgeist-plugi/hhccdfafffjclmgjdokgijhccpcjcehd">Chrome Web Store page</a>.' | trans | raw }}</li>
     <li class="list-group-item">{{ 'On that page, click on the <button class="btn btn-primary btn-sm disabled text-uppercase" disabled><i class="fa fa-plus"></i> Add to Chrome</button> button.' | trans | raw }}</li>
   </ol>
@@ -54,7 +55,7 @@
 <hr />
 <h2>{{ '4. Download the study diary' | trans }}</h2>
   <ol class="list-group">
-    <li class="list-group-item">{{ 'Download <a href="https://study.cs.ucl.ac.uk/multitasking/media/study-diary.pdf">our study diary</a>, and remember to keep track of your activities during the data collection.' | trans | raw }}</li>
+    <li class="list-group-item">{{ 'Download our study diary <a href="https://study.cs.ucl.ac.uk/multitasking/media/study-diary.odt">(ODT format)</a>  <a href="https://study.cs.ucl.ac.uk/multitasking/media/study-diary.pdf">(PDF format)</a>, and remember to keep track of your activities during the data collection.' | trans | raw }}</li>
   </ol>
 
 {% endblock %}
