@@ -1,0 +1,16 @@
+{% extends 'UCLStudyBundle::base.html.twig' %}
+
+{% block body %}
+
+    <p class="lead">{{ 'You are now ready for a debriefing interview.' | trans }}</p>
+    <p>{{ 'In order to organise a debriefing interview, we need to know about your availabilities and about how to contact you. Please contact us via our <a href="%contactUrl%">contact form</a>, or directly via email (to <a href="mailto:%email%">%email%</a>) and indicate your availabilities for the week to come. We are able to inverview in three different ways, depending on your preferences:' | trans({'%contactUrl%':url('ucl_study_contact'), '%email%':site.author_email}) | raw }}</p>
+    
+    <ul>
+      <li>In person, at UCL's Computer Science Department,</li>
+      <li>Via Skype (please indicate your Skype ID),</li>
+      <li>Via Google Hangout (please indicate your Google ID)</li>
+    </ul>
+    
+    <p class="bs-callout bs-callout-default small">{{ 'If you wish to interrupt your participation in the study before the debriefing interview, please send us an email so we can arrange your payment and inform you about the purpose of our research.' | trans() }}</p>
+    
+{% endblock %}
