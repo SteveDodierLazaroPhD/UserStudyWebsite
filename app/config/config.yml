@@ -80,7 +80,8 @@ doctrine:
         #   2. Uncomment database_path in parameters.yml.dist
         #   3. Uncomment next line:
         #     path:     "%database_path%"
-
+        mapping_types:
+            enum: string
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
@@ -92,6 +93,10 @@ swiftmailer:
     username:  "%mail_username%"
     password:  "%mail_password%"
     spool:     { type: memory }
+
+# Forum Configuration
+tga_forum:
+    vanilla_dir: %kernel.root_dir%/../web/forum
 
 #vich_uploader:
 #    db_driver: orm

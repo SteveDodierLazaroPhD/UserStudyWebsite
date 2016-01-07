@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new Bmatzner\FontAwesomeBundle\BmatznerFontAwesomeBundle(),
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
             new UCL\StudyBundle\UCLStudyBundle(),
+            new Tga\ForumBundle\TgaForumBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

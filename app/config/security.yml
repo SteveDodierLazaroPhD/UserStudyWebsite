@@ -36,9 +36,11 @@ security:
                 csrf_parameter: _csrf_token
                 csrf_provider: security.csrf.token_manager
                 intention:      authenticate
+                success_handler: tga_forum.authentication_success_handler
             logout:
                 path:   ucl_study_app_logout
                 target: ucl_study_app_login
+                success_handler: tga_forum.logout_success_handler
             security: true
             provider: entity_provider
             remember_me:
@@ -58,9 +60,11 @@ security:
                 csrf_parameter: _csrf_token
                 csrf_provider: security.csrf.token_manager
                 intention:      authenticate
+                success_handler: tga_forum.authentication_success_handler
             logout:
                 path:   ucl_study_logout
                 target: ucl_study_logged_out
+                success_handler: tga_forum.logout_success_handler
             security: true
             provider: entity_provider
             remember_me:

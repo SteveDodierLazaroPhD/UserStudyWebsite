@@ -31,13 +31,14 @@
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "~3.0",
         "incenteev/composer-parameter-handler": "~2.1",
-        "bmatzner/fontawesome-bundle": "~4.4",
+        "bmatzner/fontawesome-bundle": "^4.4",
         "twbs/bootstrap": "~3.3",
         "jquery/jquery":  "1.11.*",
         "braincrafted/bootstrap-bundle": "2.1.*",
         "symfony/yaml": "~2.7",
         "commerceguys/addressing": "^0.7.1",
-        "symfony/intl": "^2.7"
+        "symfony/intl": "^2.7",
+        "tga/forum-bundle": "^0.1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.5"
