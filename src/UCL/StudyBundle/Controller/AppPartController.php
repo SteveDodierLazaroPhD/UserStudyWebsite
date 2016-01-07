@@ -107,14 +107,14 @@ class AppPartController extends UCLStudyController
       return $this->render('UCLStudyBundle:App:status.html.twig', $params);
     }
     
-    protected function abortUploadJob(UploadJob $uploadjob, $_part, $cause=null, $extraData=null)
+    protected function abortUploadJob(UploadJob $uploadjob, $cause=null, $extraData=null)
     {
       $cause = ($cause===null ? $this->get('translator')->trans('Aborting the job') : $cause);
       $this->removeObject($uploadjob);
       if (empty($extraData))
-        return $this->jResponse('"Uploading":"Failure","FailureCause":"'.$cause.'}');
+        return $this->jResponse('"Uploading":"Failure","FailureCause":"'.$cause.'"}');
       else
-        return $this->jResponse('"Uploading":"Failure","FailureCause":"'.$cause.','.$extraData.'}');
+        return $this->jResponse('"Uploading":"Failure","FailureCause":"'.$cause.','.$extraData.'"}');
     }
     
     protected function parseUploadingInit(UploadJob $uploadjob, $_part, Request $request)
