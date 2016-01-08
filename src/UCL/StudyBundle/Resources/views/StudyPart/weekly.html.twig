@@ -1,0 +1,22 @@
+{% set layout = "article" %}
+{% extends 'UCLStudyBundle::base.html.twig' %}
+
+{% if site.participant_space['part_' ~ _part].gains.running.post.max_days is defined %}
+  {% set wc = site.participant_space['part_' ~ _part].gains.running.post.max_days / 7 | round %}
+{% else %}
+  {% set wc = 1 %}
+{% endif %}
+
+
+
+{% block article_details %}
+<div id="status">
+  <ol class="progtrckr" data-progtrckr-steps="{{ wc }}"><!--
+  {% for s in 1..wc %}
+    --><li class="progtrckr-{% if s < _week %}done{% elseif (s == _week) %}current{% else %}todo{% endif %}">
+         <a href="{{ path('ucl_study_part_weekly', {'_part': '2', '_week': s}) }}">{{ 'Week %w%' | trans({'%w%': s }) }}</a>
+       </li><!--
+  {% endfor %}
+  --></ol>
+</div>
+{% endblock %}

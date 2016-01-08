@@ -1,0 +1,33 @@
+{% extends 'UCLStudyBundle:StudyPart:weekly.html.twig' %}
+
+{% block article_details %}
+{{ parent() }}
+  <p class="bs-callout bs-callout-success lead">{{ 'Share your experiences of security problems' | trans }}</p>
+{% endblock %}
+
+{% block article_body %}
+<h3>1. Introduction</h3>
+<p>Welcome back into the study! To get started, please make sure that you've <a href="{{ path('ucl_study_part_install', {'_part': '2'}) }}">updated the study software</a>. Remember to download a new study diary.</p>
+
+<p>You can then have a quick glimpse at the <a href="{{ path('ucl_study_part_forum', {'_part': '2'}) }}">forum</a> we will use to discuss together. Why not post a quick introductory post for the other participants?</p>
+
+<h3>2. Share your security stories</h3>
+<p>It's now time to post your experiences of security. Remember the last two questions of the interview?</p>
+<ol>
+  <li>Remember a time when you realised that performing some activity implied a risk for you. What did you do in order to mitigate this risk?</li>
+  <li>Remember a time when you wanted to do something and did not know how to do it securely? What did you do instead?</li>
+</ol>
+
+<p>The idea of sharing your stories with others is to help us identify common problems with the security of your apps and documents, and to identify more specialised needs. Once we have all shared one or two (or more!) stories, we will be able to discuss together to find similarities between our different situations and to identify solutions.</p>
+
+<h3>3. Comment on each others' stories</h3>
+
+<p>comment on each other's story: did you experience something similar? did you have another solution?</p>
+    
+<h3>4. Discuss what should happen for every story</h3>
+<p>try and describe how your computer should behave, ideally, so that those security story problems don't exist</p>
+
+<h3>5. (optional) Try and use the sandbox to perform the stories' tasks securely</h3>
+<p>read basic intro to the sandbox, and/or full manual</p>
+    
+{% endblock %}

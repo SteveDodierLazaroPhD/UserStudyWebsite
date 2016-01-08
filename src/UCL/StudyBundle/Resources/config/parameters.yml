@@ -183,11 +183,11 @@ parameters:
               caption: "Information Sheet"
               tooltip: "Refresh your memory about the project"
         part_2:
-          name: "Co-Design"
-          title: 'Sandbox Co-Design'
+          name: "Sandbox Design"
+          title: 'Sandbox Design'
           enabled_steps: [waiting_enrollment, consent, install, running, debriefing, done]
           #additional_pages: [manual, weekly, information]
-          default_visible: [consent, install, running, weekly, manual, information]
+          default_visible: [consent, install, weekly, running, manual, information]
           gains:
             running:
               pre: 0
@@ -229,13 +229,13 @@ parameters:
               href_params:
                 _part: 2
                 _week: 1
-              caption: "Weekly Schedule"
+              caption: "Weekly Instructions"
               tooltip: "What happens every week"
             running:
               href: "ucl_study_part_forum"
               href_params:
                 _part: 2
-              caption: "Participate in Discussion"
+              caption: "Forum"
               tooltip: "Provide feedback, discuss with others, report issues"
             debriefing:
               href: "ucl_study_part_debriefing"
@@ -244,7 +244,7 @@ parameters:
               caption: "Schedule Debriefing"
               tooltip: "When you've finished every task assigned to you"
               # Having "running" here means the participant can still check their status and upload a new tarball
-              visible_steps: [consent, install, running, weekly, debriefing, manual, information]
+              visible_steps: [consent, install, weekly, running, debriefing, manual, information]
             done:
               href: "ucl_study_part_done"
               href_params:

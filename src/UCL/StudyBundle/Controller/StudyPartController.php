@@ -195,7 +195,8 @@ class StudyPartController extends UCLStudyController
     public function weeklyAction($_part, $_week, Request $request)
     {
       $params = $this->setupParameters($request, true, 'running', $_part);
-      $params['page'] = array('title' => $this->get('translator')->trans('Weekly Schedule'));
+      $params['page'] = array('title' => $this->get('translator')->trans('Instructions for Week %w%', array('%w%' => $_week)));
+      $params['_week'] = $_week;
       return $this->render('UCLStudyBundle:StudyPart:weekly-p'.$_part.'-w'.$_week.'.html.twig', $params);
     }
     
