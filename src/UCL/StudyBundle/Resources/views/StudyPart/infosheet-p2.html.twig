@@ -1,0 +1,78 @@
+{% extends 'UCLStudyBundle:StudyPart:infosheet.html.twig' %}
+
+{% block article_details %}
+{{ parent() }}
+{% endblock %}
+
+{% block article_body %}
+<p>{{ 'Thank you for your interest in our research project. It is up to you to decide if you would like to proceed. This document will explain what the research is about so you can make an informed decision whether you want to proceed. This project contains 2 parts. You have already completed part 1. You are now invited to participate in part 2.' | trans }}</p>
+
+<h3>{{ 'Details of Study' | trans }}</h3>
+<p>{{ 'In this part, I am interested in observing how you will decide to use a security tool to protect your computer and your data from attackers. A sandbox is a tool that allows you to run a program in a constrained environment, like a jail or an observation ward. When the program runs in a sandbox, it is unable to modify the rest of the operating system and it is unable to make persistent changes to your system. You can also configure it to prevent the program from reading your files or using your Internet connection. You can also use the sandbox for smaller-scale changes such as limiting the Internet bandwidth a program is allowed to use or hiding specific files from it.' | trans }}</p>
+
+<p>{{ 'I will provide you with a rudimentary sandboxing tool, and you will be able to use it, when you want to, for the next 5 weeks (or longer if you want to continue using the tool after you reached the maximum reward for this part of the study). If you feel that the tool is not useful, you do not have to use it to obtain your reward. It is entirely up to you to decide when you want to use it, rather than up to me. You can also choose to use some of the many options of the tool and to ignore other options you don\t need or want to use.' | trans }}</p>
+
+<p>{{ 'You can contact me at any time to share your impressions, suggestions and problems with the tool. I will regularly contact you and discuss your use of the tool with you. I will also ask you to continue filling a diary of the activities you perform on your computer during this period. I will introduce a group communication medium, so you can communicate with the other participants if you want to. This medium should be used to write about what the sandbox can be used for, like you would explain someone how to use a tool they have never used before. Again, your participation is optional and up to you. ' | trans }}</p>
+
+<p>{{ 'After 5 weeks, I will invite you for a 1-hour interview about how you use your computer. The interview will be done at UCL, or via Skype or Google Hangout based on your preferences. I will record and transcribe the interview, as a standard research practice to avoid missing or misinterpreting your answers. Recordings will be transferred to a UCL server which is only accessible to me and deleted from the devices right after the interview. I will erase those recordings after the transcription has taken place and transcripts will also be kept on a private server at UCL.' | trans }}</p>
+
+<h3>{{ 'To be eligible, you must:' | trans }}</h3>
+<ul>
+<li>{{ 'be an independent adult at least 18 years old' | trans }}</li>
+<li>{{ 'Speak English fluently and be a EU resident' | trans }}</li>
+<li>{{ 'actively use the computer used for the study for 3 weeks, at least 5 hours per week (you will be paid for each day when the collection software was active)' | trans }}</li>
+<li>{{ 'use Ubuntu (15.04 or 15.10) as a Linux distribution' | trans }}</li>
+<li>{{ 'use Xfce (Xfwm, Xfce4 App Finder and Thunar) and Google Chrome/Chromium Browser' | trans }}</li>
+<li>{{ 'have participated in Part 1 of the same study' | trans }}</li>
+</ul>
+
+<h3>{{ 'What data do I collect?' | trans }}</h3>
+<p>{{ 'The data collection app will still be running. Here is a reminder of what it records: the which applications you use and the filenames of documents you open and save; which windows are open at the same time and how you switch between them; the titles of open windows and visited web pages; clipboard metadata. PreloadLogger, the tool that records system calls made by applications (and that was incompatible with a few individual programs) has been disabled.' | trans | raw }}</p>
+<p>{{ 'We also record metadata about the sandbox usage. We record the options you pass to the sandbox, the name of the program and any error that occurs when launching the sandbox. We also record when sandboxed applications delegate the opening of a protected file to the system.' | trans | raw }}</p>
+
+<h3>{{ 'How to control what gets collected?' | trans }}</h3>
+{% set studyJournal = 'UCL Study Journal' | trans %}
+{% set privacySettings = 'UCL Study Privacy Settings' | trans %}
+{% set studyManager = 'UCL Study Manager App' | trans %}
+{% if space is defined and space == "application_space" %}
+  {% set studyJournal = '<a href="app://ucl-study-journal">' ~ studyJournal ~ '</a>' %}
+  {% set privacySettings = '<a href="app://ucl-study-log-manager">' ~ privacySettings ~ '</a>' %}
+  {% set studyManager = '<a href="app://ucl-study-manager">' ~ studyManager ~ '</a>' %}
+{% endif %}
+<p>{{ 'The data is collected locally on your computer, and you are provided with an application (the <span class="fa fa-gear fa-fw"></span>%studyJournal%) to view and delete events at any time prior to sending it over to UCL. You can also use the <span class="fa fa-gear fa-fw"></span>%privacySettings% to temporarily or permanently suspend the collection of data related to a file or app you don\'t want us to know about. You can also delete previous collected data.' | trans({'%privacySettings%': privacySettings, '%studyJournal%': studyJournal}) | raw }}</p>
+
+<p>{{ 'If you share your computer with other people, the data collection software will impact the performance of the system when they use it, because it collects data. The data is collected separately for each user, so you will not be able to send and I will not be able to obtain other users\' data. You can prevent the performance impact for other users by making them turn off data collection using the <span class="fa fa-gear fa-fw"></span>%privacySettings%.' | trans({'%privacySettings%': privacySettings}) | raw }}</p>
+
+<p>{{ 'You can send the collected data to UCL by using the <span class="fa fa-gear fa-fw"></span>%studyManager%. It will tell you how many days you have completed and how many more days before you can send the data. The connection is encrypted.' | trans({'%studyManager%': studyManager}) | raw }}</p>
+
+<p class="bs-callout bs-callout-danger">{{ 'Note that you will not be able to visualise, edit or remove the data collected about the sandbox settings directly from the UCL apps. This is because the sandbox tool will change over the course of the study depending on your feedback. I cannot predict the changes that you and the other participants will ask me to do, and so I will be unable to adapt the other apps in real time. You will be able to remove some data manually by emailing me instructions to delete.' | trans }}</p>
+
+<p class="bs-callout bs-callout-warning">{{ 'Your data will only be consulted by the researchers involved with this project, and by people mandated by UCL for PhD examination purposes. I may invite future collaborators from other academic institutions to help me with the analysis, but your data will never be shared with businesses or with non-academic institutions.' | trans }}</p>
+
+<p class="bs-callout bs-callout-warning">{{ 'If the data I collect contains evidence of illegal activities, I will not report such activities except for two cases. Under the UK Terrorism Act 2000, I have a duty to report on the preparation or performance of terrorist activities. I will report evidence of ongoing activities or plans to commit activities that put people in immediate danger (such as ongoing domestic abuse, or plans to rape or assault someone). In situations where nobody is in danger any longer, I will not report on any illegal activity.' | trans }}</p>
+
+
+
+<h3>{{ 'What happens to your collected data?' | trans }}</h3>
+<p>{{ 'The data is stored at all times on a private server in a location accessible only from within the UCL network. The data collected on your computer is sent via an encrypted connection to that server (via our participant website), and the data collected during interviews is manually transferred to the server right after the interview (and all recording equipment wiped). Only I and a handful of colleagues have the necessary credentials to access this server and read your data. The data will be deleted as soon as the research project is over and its results have been published. It will be kept until June 2017 at the latest. If you decide that you want to withdraw from the study earlier than this data, you can contact me to have me delete your data.' | trans }}</p>
+
+<h3>{{ 'Benefits of the study for you' | trans }}</h3>
+{{ 'You will be able to keep using the application after part 2. I will provide you with advice, based on your uses, on how to best use the sandbox to stay secure. I will help you identify threats that you are exposed to and propose you countermeasures based on my security expertise.' | trans }}</p>
+
+<h3>{{ 'Remuneration' | trans }}</h3>
+<ul>
+  <li>{{ '£1.5 per day during tool use (up to £40)' | trans }}</li>
+  <li>{{ '£10 for coming to the debriefing interview' | trans }}</li>
+</ul>
+
+<h3>{{ 'Opting out' | trans }}</h3>
+{% set contactUrl = (space is defined and space == 'application_space')? url('ucl_study_app_contact') : url('ucl_study_contact') %}
+<p>{{ 'If you change your mind and want to quit at any point, it will not affect how you are treated as a participant and will not affect the promised reward for your participation so far (I will pay you for each day of data that you decide to send me – if you decide to send no data I will pay you a minimum compensation of £5). If you change your mind and would like me to remove some of your collected data, or to withdraw entirely from the study, you can do so at any time by sending me an email at <a href="mailto:%authorEmail%">%authorEmail%</a>. You do not have to provide any justification, although it would be helpful to improve future studies and appreciated.' | trans({'%contactUrl%': contactUrl, '%authorEmail%': site.author_email}) | raw }}</p>
+
+<p class="bs-callout bs-callout-warning">{{ 'Please note that I cannot delete results that were published in academic venues and based on your data, however these results will never contain personally identifiable information.' | trans }}</p>
+
+<h3>{% if infosheet_prospective is defined %}{{ 'Instructions given to participants who proceed' | trans }}{% else %}{{ 'How to proceed' | trans }}{% endif %}</h3>
+<p>{{ 'Instructions on how to install the sandbox tool are available online on the study website. <a href="%contactUrl%">Contact me</a> if you experience difficulties.' | trans({'%contactUr%': contactUrl}) | raw }}</li>
+
+{% endblock %}
+

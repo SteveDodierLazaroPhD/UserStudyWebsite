@@ -1,0 +1,39 @@
+{% extends 'UCLStudyBundle:StudyPart:install.html.twig' %}
+
+{% block article_details %}
+{{ parent() }}
+    <p class="lead">{{ 'This page explains how to update the study software for part 2 of the study.' | trans }}</span></p>
+{% endblock %}
+
+{% block article_body %}
+<h2>{{ '1. Update your packages' | trans }}</h2>
+    <div class="bs-callout bs-callout-default"><p class="small">{{ 'The update will introduce a modified version of the Xfce4 App Finder, as well as the Firejail sandbox.' | trans }}</p></div>
+    <ol class="list-group">
+      <li class="list-group-item">{{ 'Open a terminal and type the following commands:' | trans }}
+          <pre><span class="fa fa-angle-right fa-fw"></span>sudo apt-get update<br /><span class="fa fa-angle-right fa-fw"></span>sudo apt-get upgrade<br /><span class="fa fa-angle-right fa-fw"></span>sudo apt-get autoremove</pre>
+      <li class="list-group-item">{{ 'For the participants who manually installed PreloadLogger, you might need to manually delete it too.<br />If apt-get autoremove removed nothing, please type:' | trans | raw }}
+          <pre><span class="fa fa-angle-right fa-fw"></span>sudo apt-get remove libpreload-logger1 libpreload-logger-dev</pre>
+    </ol>
+  
+
+<hr />
+<h2>{{ '2. Reboot your session' | trans }}</h2>
+  <ol class="list-group">
+    <li class="list-group-item">{{ 'This will make sure that the newly installed applications are all running as expected.' | trans }}</li>
+  </ol>
+<hr />
+<h2>{{ '3. Download a new study diary if necessary' | trans }}</h2>
+  <ol class="list-group">
+    <li class="list-group-item">{{ 'Download our study diary <a href="https://study.cs.ucl.ac.uk/multitasking/media/study-diary.odt">(ODT format)</a>  <a href="https://study.cs.ucl.ac.uk/multitasking/media/study-diary.pdf">(PDF format)</a>, and remember to keep track of your activities during the data collection.' | trans | raw }}</li>
+  </ol>
+
+{% endblock %}
+
+{% block article_appendix %}
+{% if user.hasDoneStep(_part, 'install', enabledSteps) %}
+<hr />
+{% set kudos_message %}{{ 'Congratulations! Your computer is ready. Read the <a href="%sched%">schedule</a> to continue with the study.' | trans({'%sched%': path('ucl_study_part_weekly', {'_part': '2'})}) | raw }}{% endset %}
+{% include ('UCLStudyBundle::kudos.html.twig') %}
+{% endif %}
+{% endblock %}
+

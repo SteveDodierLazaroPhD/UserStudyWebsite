@@ -2,7 +2,7 @@
 {% extends 'UCLStudyBundle::base.html.twig' %}
 
 {% block article_details %}
-{% if user.hasDoneStep(_part, 'install', enabledSteps) %}
+{% if user.hasDoneStep(_part, 'install', enabledSteps) and _part == 1 %}
 {% set kudos_message %}{{ 'You have already activated the study application, but you can use the instructions below to reinstall it if necessary.' | trans }}{% endset %}
 {% include ('UCLStudyBundle::kudos.html.twig') %}
 {% endif %}
