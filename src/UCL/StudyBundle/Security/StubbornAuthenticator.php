@@ -9,7 +9,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\HttpUtils;
-use Tga\ForumBundle\Security\AuthenticationSuccessHandler;
 use Tga\ForumBundle\Vanilla\Kernel;
 
 //TODO check isActive and refuse auth if its set to 0
@@ -20,14 +19,13 @@ use Tga\ForumBundle\Vanilla\Kernel;
    recommended that you keep it, and hack it to find out what oddities Symfony
    is putting you through */
 
-class StubbornAuthenticator extends AuthenticationSuccessHandler implements SimpleFormAuthenticatorInterface
+class StubbornAuthenticator implements SimpleFormAuthenticatorInterface
 {
   private $encoder;
 
-  public function __construct(UserPasswordEncoderInterface $encoder)
+  public function __construct(Kernel $vanillaKernel, HttpUtils $httpUtils, UserPasswordEncoderInterface $encoder)
   {
     $this->encoder = $encoder;
-    parent::__construct($vanillaKernel, $httpUtils, array());
   }
 
   public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)

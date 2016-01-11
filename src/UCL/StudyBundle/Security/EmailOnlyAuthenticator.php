@@ -9,22 +9,19 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\HttpUtils;
-use Tga\ForumBundle\Security\AuthenticationSuccessHandler;
-use Tga\ForumBundle\Security\LogoutSuccessHandler;
 use Tga\ForumBundle\Vanilla\Kernel;
 
 /* This class does not verify the password typed by the user, only their
    identity, which in UCL Study Bundles correspond to users' email addresses.
  */
 
-class EmailOnlyAuthenticator extends AuthenticationSuccessHandler implements SimpleFormAuthenticatorInterface
+class EmailOnlyAuthenticator implements SimpleFormAuthenticatorInterface
 {
   private $encoder;
 
   public function __construct(Kernel $vanillaKernel, HttpUtils $httpUtils, UserPasswordEncoderInterface $encoder)
   {
     $this->encoder = $encoder;
-    parent::__construct($vanillaKernel, $httpUtils, array());
   }
 
   public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
