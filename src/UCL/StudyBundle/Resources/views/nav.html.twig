@@ -7,13 +7,6 @@
     {% set menu_space = 'participant_space' %}
   {% endif %}
 
-  {# Get the menu for the current part, since authenticated spaces have parts #}
-  {# We should normally use _part instead of user.getCurrentPart but we currently don't support showing multiple parts #}
-  {% set current_part_menu = 'part_#' | replace('#', user.getCurrentPart) %}
-  {% set current_part_steps = site[menu_space][current_part_menu].enabled_steps %}
-  {% set completed_steps_str %}{% for step in current_part_steps %}{% if step == user.getCurrentStep %}{% set seen_current = true %}{% endif %}{% if seen_current is not defined %}{{ step }},{% endif %}{% endfor %}{% endset %}
-  {% set completed_steps = completed_steps_str | split(',') %}
-
 {# Anonymous users get the anonymous space, with links to login, contact us, etc. #}
 {% else %}
   {% set menu_space = 'anonymous_space' %}
@@ -39,42 +32,69 @@
   {% set always_visible_steps_for_route = site[menu_space][always_visible_menu].default_visible %}
 {% endif %}
 
-{# Get the part-relevant menu items, for authenticated users only #}
-{% if current_part_menu is defined %}
-  {% if site[menu_space][current_part_menu].navigation[current_step].visible_steps is defined %}
-    {% set current_part_steps_for_route = site[menu_space][current_part_menu].navigation[current_step].visible_steps %}
-  {% else %}
-    {% set current_part_steps_for_route = site[menu_space][current_part_menu].default_visible %}
+
+
+
+
+{% for part in user.getCurrentPart..1 %}
+
+  {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+    {# Get the menu for the current part, since authenticated spaces have parts #}
+    {# We should normally use _part instead of user.getCurrentPart but we currently don't support showing multiple parts #}
+    {% set current_part_menu = 'part_#' | replace('#', part) %}
+    {% set current_part_steps = site[menu_space][current_part_menu].enabled_steps %}
+    {% set completed_steps_str %}{% for step in current_part_steps %}{% if step == user.getCurrentStep or part < user.getCurrentPart %}{% set seen_current = true %}{% endif %}{% if seen_current is not defined %}{{ step }},{% endif %}{% endfor %}{% endset %}
+    {% set completed_steps = completed_steps_str | split(',') %}
   {% endif %}
 
-  {% if current_part_steps_for_route is not empty %}
-    <div class="menu">
-      {% if site[menu_space][current_part_menu].name is defined %}
-      <h1>{{ site[menu_space][current_part_menu].name }}</h1>
+
+  {# Get the part-relevant menu items, for authenticated users only #}
+  {% if current_part_menu is defined %}
+    {% if site[menu_space][current_part_menu].navigation[current_step].visible_steps is defined and part == user.getCurrentPart %}
+      {% set current_part_steps_for_route = site[menu_space][current_part_menu].navigation[current_step].visible_steps %}
+    {% elseif part < user.getCurrentPart %}
+      {% if site[menu_space][current_part_menu].navigation['done'].visible_steps is defined %}
+        {% set current_part_steps_for_route = site[menu_space][current_part_menu].navigation['done'].visible_steps %}
+      {% else %}
+        {% set current_part_steps_for_route = site[menu_space][current_part_menu].default_visible %}
       {% endif %}
-      <ul>
+    {% else %}
+      {% set current_part_steps_for_route = site[menu_space][current_part_menu].default_visible %}
+    {% endif %}
 
-        {% for page_name in current_part_steps_for_route %}
-        {% set item = site[menu_space][current_part_menu].navigation[page_name] %}
-          {% set before_current_user_step = (page_name in current_part_steps and page_name in completed_steps) %}
-          {% set current_item = (_route | split(item.href) | first == '') %}
-          {% set user_current_step = (page_name == user.getCurrentStep) and (current_part_menu == 'part_#' | replace('#', user.getCurrentPart)) %}
-          {% if item.href is defined and item.caption is defined %} {# undefined for when we just want the visible pages for the current route #}
-          <li {% if current_item %} id="current-page"{% endif %}{% if user_current_step %} class="user-current-step"{% endif %}>{% if before_current_user_step and not current_item %}<s>{% endif %}
-            <{% if current_item %}span{% else %}a href="{% if item.href_params is defined %}{{ url(item.href, item.href_params) }}{% else %}{{ url(item.href) }}{% endif %}"{% endif %}{% if item.tooltip %} title="{{ item.tooltip }}"{% endif %}>{{ item.caption }}</{% if current_item %}span{% else %}a{% endif %}>
-            {#{% if item.tooltip is defined %}<span class="navtooltip">{{ item.tooltip }}</span>{% endif %}#}
-          {% if before_current_user_step and current_item %}<div class="menu-icon disabled"><i class="fa fa-check fa-fw"></i></div>
-          {% elseif before_current_user_step %}</s><div class="menu-icon disabled"><i class="fa fa-check fa-fw"></i></div>
-          {% endif %}
-          </li>
-          {% endif %}
-        {% endfor %}
+    {% if current_part_steps_for_route is not empty %}
+      <div class="menu">
+        {% if site[menu_space][current_part_menu].name is defined %}
+        <h1>{{ site[menu_space][current_part_menu].name }}</h1>
+        {% endif %}
+        <ul>
 
-      
-      </ul>
-    </div>
+          {% for page_name in current_part_steps_for_route %}
+            {% if part == user.getCurrentPart or page_name != 'done' %}
+              {% set item = site[menu_space][current_part_menu].navigation[page_name] %}
+              {% set before_current_user_step = (page_name in current_part_steps and page_name in completed_steps) or (part < user.getCurrentPart) %}
+              {% set current_item = (_route | split(item.href) | first == '') %}
+              {% set user_current_step = (page_name == user.getCurrentStep) and (current_part_menu == 'part_#' | replace('#', user.getCurrentPart)) %}
+              {% if item.href is defined and item.caption is defined %} {# undefined for when we just want the visible pages for the current route #}
+              <li {% if current_item %} id="current-page"{% endif %}{% if user_current_step %} class="user-current-step"{% endif %}>{% if before_current_user_step and not current_item %}<s>{% endif %}
+                <{% if current_item %}span{% else %}a href="{% if item.href_params is defined %}{{ url(item.href, item.href_params) }}{% else %}{{ url(item.href) }}{% endif %}"{% endif %}{% if item.tooltip %} title="{{ item.tooltip }}"{% endif %}>{{ item.caption }}</{% if current_item %}span{% else %}a{% endif %}>
+                {#{% if item.tooltip is defined %}<span class="navtooltip">{{ item.tooltip }}</span>{% endif %}#}
+              {% if before_current_user_step and current_item %}<div class="menu-icon disabled"><i class="fa fa-check fa-fw"></i></div>
+              {% elseif before_current_user_step %}</s><div class="menu-icon disabled"><i class="fa fa-check fa-fw"></i></div>
+              {% endif %}
+              </li>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+
+        
+        </ul>
+      </div>
+    {% endif %}
   {% endif %}
-{% endif %}
+  
+{% endfor %}
+
 
 {% if always_visible_steps_for_route is not empty %}
   <div class="menu">
