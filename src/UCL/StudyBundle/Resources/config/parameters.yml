@@ -93,8 +93,8 @@ parameters:
           # will be broken!
           # TODO, move payment_info towards debriefing when done
           enabled_steps: [waiting_enrollment, consent, install, running, debriefing, payment_info, done]
-          #additional_pages: [manual, information]
-          default_visible: [consent, manual, information]
+          #additional_pages: [information]
+          default_visible: [consent, information]
           # The gains of participants for reaching the step (pre) or completing it (post)
           # e.g. participants gain £5 for having successfully installed the app (reaching
           # the 'running' step), and up to £30 for completing it. If the pre and post gains
@@ -145,7 +145,7 @@ parameters:
                 _part: 1
               caption: "Install the Software"
               tooltip: "Instructions about the data collection software"
-              visible_steps: [consent, install, manual, information]
+              visible_steps: [consent, install, information]
             running:
               href: "ucl_study_part_running"
               href_params:
@@ -153,7 +153,7 @@ parameters:
               caption: "Data Collection Progress"
               progress_caption: "Collect & Upload Data"
               tooltip: "Record your process and check what your next task is"
-              visible_steps: [consent, install, running, manual, information]
+              visible_steps: [consent, install, running, information]
             debriefing:
               href: "ucl_study_part_debriefing"
               href_params:
@@ -161,7 +161,7 @@ parameters:
               caption: "Schedule Debriefing"
               tooltip: "When you've finished every task assigned to you"
               # Having "running" here means the participant can still check their status and upload a new tarball
-              visible_steps: [consent, install, running, debriefing, manual, information]
+              visible_steps: [consent, install, running, debriefing, information]
             done:
               href: "ucl_study_part_done"
               href_params:
@@ -169,13 +169,7 @@ parameters:
               caption: "Continue to Next Part"
               progress_caption: "Part Completed"
               tooltip: "Review what happened in this part of the study"
-              visible_steps: [consent, install, running, debriefing, payment_info, done, manual, information]
-            manual:
-              href: "ucl_study_part_manual"
-              href_params:
-                _part: 1
-              caption: "App Manuals"
-              tooltip: "For the data collection, data upload and privacy protection apps"
+              visible_steps: [consent, install, running, debriefing, payment_info, done, information]
             information:
               href: "ucl_study_part_information"
               href_params:
