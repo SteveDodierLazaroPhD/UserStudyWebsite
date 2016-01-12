@@ -2,16 +2,11 @@
 {% extends 'UCLStudyBundle::base.html.twig' %}
 
 {% block article_details %}
-{% if user.hasDoneStep(_part, 'payment-info', enabledSteps) %}
-<hr />
-{% set kudos_message %}{{ 'Congratulations! We have your payment details stored in our servers. You can still use this form to update them. For security reasons, your current bank details are not accessible from this website and are not visible on this form.' | trans }}{% endset %}
-{% include ('UCLStudyBundle::kudos.html.twig') %}
-{% endif %}
 {% endblock %}
 
 {% block article_body %}
 {% if user.hasDoneStep(_part, 'payment_info', enabledSteps) %}
-{% set kudos_message %}{{ 'You have already provided your payment details, and they have been transferred to UCL. You can use the form below to submit updated payment details.' | trans }}{% endset %}
+{% set kudos_message %}{{ 'Your payment details have already been transferred to UCL. You can use the form below to submit updated details. The current details are not accessible from the website for security reasons.' | trans }}{% endset %}
 {% include ('UCLStudyBundle::kudos.html.twig') %}
 {% endif %}
 <p>{{ 'In order to pay you, we need to transfer your contact details and bank account information to UCL. UCL will then transfer your reward to your bank account using this information. The data you type is directly transferred into a file store where UCL researchers will perform the necessary paperwork, and is not stored on this website.' | trans }}</p>
