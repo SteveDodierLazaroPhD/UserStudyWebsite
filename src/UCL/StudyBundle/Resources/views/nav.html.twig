@@ -36,17 +36,15 @@
 
 
 
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 {% for part in user.getCurrentPart..1 %}
 
-  {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-    {# Get the menu for the current part, since authenticated spaces have parts #}
-    {# We should normally use _part instead of user.getCurrentPart but we currently don't support showing multiple parts #}
-    {% set current_part_menu = 'part_#' | replace('#', part) %}
-    {% set current_part_steps = site[menu_space][current_part_menu].enabled_steps %}
-    {% set completed_steps_str %}{% for step in current_part_steps %}{% if step == user.getCurrentStep or part < user.getCurrentPart %}{% set seen_current = true %}{% endif %}{% if seen_current is not defined %}{{ step }},{% endif %}{% endfor %}{% endset %}
-    {% set completed_steps = completed_steps_str | split(',') %}
-  {% endif %}
-
+  {# Get the menu for the current part, since authenticated spaces have parts #}
+  {# We should normally use _part instead of user.getCurrentPart but we currently don't support showing multiple parts #}
+  {% set current_part_menu = 'part_#' | replace('#', part) %}
+  {% set current_part_steps = site[menu_space][current_part_menu].enabled_steps %}
+  {% set completed_steps_str %}{% for step in current_part_steps %}{% if step == user.getCurrentStep or part < user.getCurrentPart %}{% set seen_current = true %}{% endif %}{% if seen_current is not defined %}{{ step }},{% endif %}{% endfor %}{% endset %}
+  {% set completed_steps = completed_steps_str | split(',') %}
 
   {# Get the part-relevant menu items, for authenticated users only #}
   {% if current_part_menu is defined %}
@@ -92,8 +90,9 @@
       </div>
     {% endif %}
   {% endif %}
-  
+
 {% endfor %}
+{% endif %}
 
 
 {% if always_visible_steps_for_route is not empty %}
