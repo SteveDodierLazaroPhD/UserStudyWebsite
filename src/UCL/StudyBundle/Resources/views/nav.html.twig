@@ -71,7 +71,7 @@
             {% if part == user.getCurrentPart or page_name != 'done' %}
               {% set item = site[menu_space][current_part_menu].navigation[page_name] %}
               {% set before_current_user_step = (page_name in current_part_steps and page_name in completed_steps) or (part < user.getCurrentPart) %}
-              {% set current_item = (_route | split(item.href) | first == '') %}
+              {% set current_item = (_route | split(item.href) | first == '') and part == _part %}
               {% set user_current_step = (page_name == user.getCurrentStep) and (current_part_menu == 'part_#' | replace('#', user.getCurrentPart)) %}
               {% if item.href is defined and item.caption is defined %} {# undefined for when we just want the visible pages for the current route #}
               <li {% if current_item %} id="current-page"{% endif %}{% if user_current_step %} class="user-current-step"{% endif %}>{% if before_current_user_step and not current_item %}<s>{% endif %}
