@@ -17,9 +17,11 @@
       </fieldset>
   {{ form_end(form) }}
 {% elseif not partsLeft %}
-  Already completed the study, total kudos
+  {% set kudos_message %} Congratulations, you completed the entire study! Thanks again for giving us your time.{% endset %}
+  {% include ('UCLStudyBundle::kudos.html.twig') %}
 {% else %}{# userBeyond is true #}
-  Already completed this part, basic kudos
+  {% set kudos_message %} Congratulations, Part {{ _part }} is over. Please use the menu on the left to navigate to Part {{ _part + 1 }}.{% endset %}
+  {% include ('UCLStudyBundle::kudos.html.twig') %}  
 {% endif %}
 
 {% endblock %}

@@ -215,7 +215,7 @@ class StudyPartController extends UCLStudyController
       if (!$partsLeft)
       {
         $params['page'] = array('title' => $this->get('translator')->trans('You Completed the Study', array()));
-        return $this->render('UCLStudyBundle:StudyPart:consent.html.twig', $params);  // no form processing needed, render now
+        return $this->render('UCLStudyBundle:StudyPart:done.html.twig', $params);  // no form processing needed, render now
       }
 
       $partName = $this->get('translator')->trans($this->site['participant_space']['part_'.$_part]['name']);
@@ -225,7 +225,7 @@ class StudyPartController extends UCLStudyController
       $userBeyond = ($_part < $this->getUser()->getCurrentPart());
       if ($userBeyond)
       {
-        return $this->render('UCLStudyBundle:StudyPart:consent.html.twig', $params);  // no form processing needed, render now
+        return $this->render('UCLStudyBundle:StudyPart:done.html.twig', $params);  // no form processing needed, render now
       }
 
       /* Add a form to continue to the next part */
